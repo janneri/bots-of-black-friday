@@ -5,14 +5,19 @@ import java.util.*;
 public class GameState {
 
     public final Set<Player> players = new HashSet<>();
+    public int round = 1;
 
     public void addPlayer(final Player player) {
-        boolean nameReserved = players.stream().anyMatch(p -> p.name == player.name);
+        boolean nameReserved = players.stream().anyMatch(p -> p.name.equals(player.name));
         if ( nameReserved ) {
             throw new IllegalArgumentException("Player already exists.");
         }
 
         this.players.add(player);
+    }
+
+    public void newRound() {
+        round += 1;
     }
 
     public Player getPlayer(UUID playerId) {

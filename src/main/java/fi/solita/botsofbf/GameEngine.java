@@ -4,6 +4,7 @@ import fi.solita.botsofbf.dto.*;
 import fi.solita.botsofbf.events.GameStateChanged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -25,6 +26,8 @@ public final class GameEngine {
     }
 
     public GameState movePlayer(UUID playerId, Move move) {
+        // todo vuoro kasite: salli vain yksi siirto per vuoro
+        // todo tapa pelaaja, jos se lahettaa liikaa siirtoja per vuoro
         currentState.movePlayer(playerId, move);
 
         notifyUi(currentState.getPlayer(playerId).name + " moved", currentState);
@@ -33,6 +36,11 @@ public final class GameEngine {
 
     public void say(UUID playerId, String message) {
         notifyUi(currentState.getPlayer(playerId).name + ": " + message, currentState);
+    }
+
+    public void startNewRound() {
+        currentState.newRound();
+        notifyUi("starting new round", currentState);
     }
 
     @Autowired

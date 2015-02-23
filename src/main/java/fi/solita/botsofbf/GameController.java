@@ -7,6 +7,7 @@ import fi.solita.botsofbf.dto.RegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 
@@ -15,16 +16,17 @@ public class GameController {
 
     @Autowired
     private GameEngine gameEngine;
-    
+
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public RegisterResponse register(@RequestBody String playerName) {
         return gameEngine.registerPlayer(playerName);
     }
 
     @RequestMapping("/map")
-    public @ResponseBody Map getMap() {
-        Map response = new Map();
-        return response;
+    public @ResponseBody Map getMap() throws IOException {
+       return Map.fromFile("classpath://small_map.txt");
+        // classpath?
     }
 
     @RequestMapping(value = "/{playerId}/say", method = RequestMethod.POST)
