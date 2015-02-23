@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello WebSocket</title>
+    <script src="sockjs-0.3.4.js"></script>
+    <script src="stomp.js"></script>
+    <script type="text/javascript">
+        var stompClient = null;
+        
+        function setConnected(connected) {
+            document.getElementById('connect').disabled = connected;
+            document.getElementById('disconnect').disabled = !connected;
+            document.getElementById('conversation').style.visibility = connected ? 'visible' : 'hidden';
+            document.getElementById('events').innerHTML = '';
+        }
+        
+        function connect() {
+            var socket = new SockJS('/hello');
+            stompClient = Stomp.over(socket);            
+            stompClient.connect({}, function(frame) {
+                setConnected(true);
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/events', function(greeting){
+                    //JSON.parse(greeting.body);
+                    handleGameEvent(greeting.body);
+                });
+            });
+        }
+        
+        function disconnect() {
+            stompClient.disconnect();
+            setConnected(false);
+            console.log("Disconnected");
+        }
+
+        function handleGameEvent(message) {
+            var response = document.getElementById('events');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(message));
+            response.appendChild(p);
+        }
+
+    </script>
+    <script type="application/javascript">
+        function drawMap() {
+            var canvas = document.getElementById("canvas");
+            if (canvas.getContext) {
+                var ctx = canvas.getContext("2d");
+
+                ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+                ctx.fillRect (0, 0, 1000, 600);
+
+                // todo pelaajat
+                ctx.fillStyle = "#FF0000";
+                ctx.fillRect (0, 0, 10, 10);
+                ctx.fillStyle = "#00ff00";
+                ctx.fillRect (50, 50, 10, 10);
+
+            }
+        }
+    </script>
+</head>
+<body onload="drawMap(); connect();">
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div>
+    <div id="conversation">
+        <p id="events"></p>
+    </div>
+    <canvas style="float:left" id="canvas" width="1000" height="600"></canvas>
+    <div id="player-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Points</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span style="display: inline-block; height: 10px; width:10px; background-color: #ff0000"></span>Janne</td>
+                    <td>100</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td><span style="display: inline-block; height: 10px; width:10px; background-color: #00ff00"></span>Harri</td>
+                    <td>50</td>
+                    <td>Retired</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="clear:both">
+        <button id="connect" onclick="connect();">Connect</button>
+        <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+    </div>
+</div>
+</body>
+</html>
