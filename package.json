@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "jsx-loader": "~0.12.0",
+    "json-loader": "0.5.1",
+    "react": "^0.12.0",
+    "react-art": "0.12.1",
+    "webpack": "~1.0.0",
+    "stompjs": "~2.3.3"
+  },
+  "scripts": {
+    "build": "webpack src/main/resources/static/app.js src/main/resources/static/bundle.js"
+  }
+}
