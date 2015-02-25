@@ -25,6 +25,22 @@ var Rectangle = React.createClass({
   }
 });
 
+var G = React.createClass({
+  render: function() {
+    return this.transferPropsTo(
+      <g>{this.props.children}</g>
+    );
+  }
+});
+
+var Text = React.createClass({
+  render: function() {
+    return this.transferPropsTo(
+      <text>{this.props.children}</text>
+    );
+  }
+});
+
 var MapWidget = React.createClass({
 
   getInitialState: function() {
@@ -54,14 +70,22 @@ var MapWidget = React.createClass({
   render: function() {
 
     var drawPlayer = function(player) {
-      return <Rectangle
-        key={player.id}
-        x={player.position.x}
-        y={player.position.y}
-        width="10"
-        height="10"
-        fill="#ff0000"
-        />
+      return (
+      <G key={player.id}>
+        <Rectangle
+          x={player.position.x}
+          y={player.position.y}
+          width="10"
+          height="10"
+          fill="#ff0000"/>
+        <Text
+          x={player.position.x}
+          y={player.position.y - 10}
+          fill="#000000">
+          {player.name}
+        </Text>
+      </G>
+      );
     };
 
     return (
@@ -74,9 +98,6 @@ var MapWidget = React.createClass({
           height={MAP_HEIGHT}
           fill="none"
           stroke="crimson">
-
-
-
         </Rectangle>
 
         {this.state.players.map(drawPlayer)}
