@@ -2,8 +2,10 @@
 
 var SockJS = require('./sockjs-0.3.4.js');
 var Stomp = require('stompjs');
+var MapWidget = require('./MapWidget.js')
 
 var stompClient = null;
+var mapWidget = null;
 
 var Socket = {
 
@@ -14,7 +16,7 @@ var Socket = {
     document.getElementById('events').innerHTML = '';
   },
 
-  connect: function() {
+  connect: function(map) {
     var socket = new SockJS('/hello');
     stompClient = Stomp.over(socket);
     var self = this;
@@ -26,6 +28,7 @@ var Socket = {
         self.handleGameEvent(greeting.body);
       });
     });
+    mapWidget = map;
   },
 
   disconnect: function() {
@@ -40,6 +43,7 @@ var Socket = {
     p.style.wordWrap = 'break-word';
     p.appendChild(document.createTextNode(message));
     //response.appendChild(p);
+    mapWidget.setState(JSON.parse(message).gameState);
   }
 
 };

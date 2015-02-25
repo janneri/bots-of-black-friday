@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import fi.solita.botsofbf.dto.Move;
 
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -14,7 +16,12 @@ public final class GameEngine {
 
     private GameState currentState = new GameState();
 
-    private GameEngine() {}
+    private GameEngine() {
+        // todo pois
+        currentState = currentState.addPlayer(Player.create("foo", new Position(100, 100)))
+                .addPlayer(Player.create("bar", new Position(200, 200)))
+                .addPlayer(Player.create("plaa", new Position(300, 300)));
+    }
 
     public RegisterResponse registerPlayer(String playerName) {
         Position randomValidPosition = Position.ORIGIN; // TODO
@@ -28,7 +35,7 @@ public final class GameEngine {
     public GameState movePlayer(UUID playerId, Move move) {
         // todo vuoro kasite: salli vain yksi siirto per vuoro
         // todo tapa pelaaja, jos se lahettaa liikaa siirtoja per vuoro
-        currentState.movePlayer(playerId, move);
+        currentState = currentState.movePlayer(playerId, move);
 
         notifyUi(currentState.getPlayer(playerId).name + " moved", currentState);
         return currentState;
@@ -39,7 +46,9 @@ public final class GameEngine {
     }
 
     public void startNewRound() {
-        currentState.newRound();
+        // todo pois
+        randomMoves();
+        currentState = currentState.newRound();
         notifyUi("starting new round", currentState);
     }
 
@@ -48,6 +57,14 @@ public final class GameEngine {
 
     private void notifyUi(String reason, GameState newGameState) {
         template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState));
+    }
+
+    private void randomMoves() {
+        final Move[] moveArray = {Move.LEFT, Move.RIGHT, Move.UP, Move.DOWN};
+
+        for (Player p: currentState.players) {
+            currentState = movePlayer(p.id, moveArray[new Random().nextInt(moveArray.length)]);
+        }
     }
 
 }
