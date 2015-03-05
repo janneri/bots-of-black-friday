@@ -6,10 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Map {
+
+    public static final int DEFAULT_HEIGHT = 800;
+    public static final int DEFAULT_WIDTH = 800;
 
     public final int width;
     public final int height;
@@ -23,6 +27,10 @@ public class Map {
         this.cells = cells;
     }
 
+    public static Map createDefault() {
+        return new Map(DEFAULT_WIDTH, DEFAULT_HEIGHT, "");
+    }
+
     public static Map fromFile(String mapFilePath) throws IOException {
 
         Stream<String> lines = Files.lines(Paths.get(URI.create(mapFilePath)));
@@ -34,5 +42,14 @@ public class Map {
                 .collect(Collectors.joining());
 
         return new Map(width, height, cells);
+    }
+
+    public static Position randomPosition(Map map) {
+        return new Position(randInt(0, map.width), randInt(0, map.height));
+    }
+
+    public static int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 }

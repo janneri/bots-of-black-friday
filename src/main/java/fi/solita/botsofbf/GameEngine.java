@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import fi.solita.botsofbf.dto.Move;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Random;
 import java.util.UUID;
@@ -18,15 +19,15 @@ public final class GameEngine {
 
     private GameEngine() {
         // todo pois
-        currentState = currentState.addPlayer(Player.create("foo", new Position(100, 100)))
-                .addPlayer(Player.create("bar", new Position(200, 200)))
-                .addPlayer(Player.create("plaa", new Position(300, 300)));
+        //currentState = currentState.addPlayer(Player.create("foo", "localhost:3000/testapi", new Position(100, 100, currentState.map)))
+          //      .addPlayer(Player.create("bar", "localhost:3000/testapi", new Position(200, 200, currentState.map)))
+            //    .addPlayer(Player.create("plaa", "localhost:3000/testapi", new Position(300, 300, currentState.map)));
     }
 
-    public RegisterResponse registerPlayer(String playerName) {
-        Position randomValidPosition = Position.ORIGIN; // TODO
-        Player player = Player.create(playerName, randomValidPosition);
-        currentState.addPlayer(player);
+    public RegisterResponse registerPlayer(String playerName, String url) {
+        Position randomValidPosition = Map.randomPosition(currentState.map); // TODO
+        Player player = Player.create(playerName, url, randomValidPosition);
+        currentState = currentState.addPlayer(player);
 
         notifyUi(playerName + " registered", currentState);
         return new RegisterResponse(player, currentState);
@@ -49,6 +50,7 @@ public final class GameEngine {
         // todo pois
         randomMoves();
         currentState = currentState.newRound();
+        notifyPlayers();
         notifyUi("starting new round", currentState);
     }
 
@@ -57,6 +59,14 @@ public final class GameEngine {
 
     private void notifyUi(String reason, GameState newGameState) {
         template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState));
+    }
+
+    private void notifyPlayers() {
+        final RestTemplate rt = new RestTemplate();
+        for (Player p: currentState.players) {
+            final Move move = rt.postForObject(p.url, GameStateChanged.create("new turn", currentState), Move.class);
+            movePlayer(p.id, move);
+        }
     }
 
     private void randomMoves() {

@@ -1,9 +1,6 @@
 package fi.solita.botsofbf;
 
-import fi.solita.botsofbf.dto.GameState;
-import fi.solita.botsofbf.dto.Map;
-import fi.solita.botsofbf.dto.Move;
-import fi.solita.botsofbf.dto.RegisterResponse;
+import fi.solita.botsofbf.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +14,9 @@ public class GameController {
     @Autowired
     private GameEngine gameEngine;
 
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public RegisterResponse register(@RequestBody String playerName) {
-        return gameEngine.registerPlayer(playerName);
+    public RegisterResponse register(@RequestBody Registration registration) {
+        return gameEngine.registerPlayer(registration.playerName, registration.url);
     }
 
     @RequestMapping("/map")
