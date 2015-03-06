@@ -47,9 +47,8 @@ public final class GameEngine {
     }
 
     public void startNewRound() {
-        // todo pois
-        randomMoves();
         currentState = currentState.newRound();
+
         notifyPlayers();
         notifyUi("starting new round", currentState);
     }
@@ -65,7 +64,6 @@ public final class GameEngine {
         final RestTemplate rt = new RestTemplate();
         for (Player p: currentState.players) {
             final Move move = rt.postForObject(p.url, GameStateChanged.create("new turn", currentState), Move.class);
-            movePlayer(p.id, move);
         }
     }
 

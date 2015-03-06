@@ -42,7 +42,7 @@ public class GameState {
 
     public GameState movePlayer(UUID playerId, Move move) {
         final Player player = getPlayer(playerId);
-        final Player newPlayer = player.move(player.position.move(move, map));
+        final Player newPlayer = player.move(player.position.move(move, map), round);
         final Set<Player> otherPlayers = players.stream().filter(p -> !p.id.equals(playerId)).collect(Collectors.toSet());
         otherPlayers.add(newPlayer);
         return new GameState(map, round, otherPlayers);
