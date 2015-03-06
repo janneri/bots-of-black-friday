@@ -3,10 +3,12 @@ package fi.solita.botsofbf;
 import fi.solita.botsofbf.dto.*;
 import fi.solita.botsofbf.events.GameStateChanged;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import fi.solita.botsofbf.dto.Move;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Random;
@@ -61,9 +63,10 @@ public final class GameEngine {
     }
 
     private void notifyPlayers() {
-        final RestTemplate rt = new RestTemplate();
+        final AsyncRestTemplate rt = new AsyncRestTemplate();
         for (Player p: currentState.players) {
-            final Move move = rt.postForObject(p.url, GameStateChanged.create("new turn", currentState), Move.class);
+            final HttpEntity<GameStateChanged> he = new HttpEntity<>(GameStateChanged.create("new turn", currentState));
+            rt.postForEntity(p.url, he, Move.class);
         }
     }
 

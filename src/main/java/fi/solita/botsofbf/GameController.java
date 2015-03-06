@@ -31,7 +31,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/move", method = RequestMethod.POST)
-    public @ResponseBody GameState move2(@RequestBody PlayerMove move) {
+    public @ResponseBody GameState move(@RequestBody PlayerMove move) {
         return gameEngine.movePlayer(UUID.fromString(move.id), move.move);
     }
 
