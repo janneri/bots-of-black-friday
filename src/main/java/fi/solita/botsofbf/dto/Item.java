@@ -14,4 +14,23 @@ public class Item {
         return new Item(price,  position);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (price != item.price) return false;
+        if (position != null ? !position.equals(item.position) : item.position != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = price;
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        return result;
+    }
 }

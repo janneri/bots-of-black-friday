@@ -59,7 +59,10 @@ public class GameState {
 
         final Set<Player> otherPlayers = players.stream().filter(p -> !p.id.equals(playerId)).collect(Collectors.toSet());
         otherPlayers.add(newPlayer);
-        return new GameState(map, round, otherPlayers, items);
+
+        final Set<Item> newItems = removePicked(newPlayer); // Hivenen monimutkainen tapa noukkia.
+
+        return new GameState(map, round, otherPlayers, newItems);
     }
 
     public GameState spawnItems() {
@@ -76,5 +79,13 @@ public class GameState {
 
     private Set<Player> filterLivingPlayers(final Set<Player> players) {
         return players.stream().filter(this::playerAlive).collect(Collectors.toSet());
+    }
+
+    private Set<Item> removePicked(final Player picker) {
+        if (picker.lastItem.isPresent()) {
+            return items.stream().filter(i -> !i.equals(picker.lastItem.get())).collect(Collectors.toSet());
+        } else {
+            return items;
+        }
     }
 }

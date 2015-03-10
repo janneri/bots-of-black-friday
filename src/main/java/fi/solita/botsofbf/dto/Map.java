@@ -48,8 +48,12 @@ public class Map {
         return new Position(randInt(0, width), randInt(0, height));
     }
 
-    public static int randInt(int min, int max) {
+    private static int randInt(int min, int max) {
         Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
+        return roundUp(rand.nextInt((max - min) + 1) + min, 10);
+    }
+
+    private static int roundUp(double i, int v){
+        return (int)Math.round(i/v) * v;
     }
 }

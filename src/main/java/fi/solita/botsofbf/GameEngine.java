@@ -62,14 +62,14 @@ public final class GameEngine {
     private SimpMessagingTemplate template;
 
     private void notifyUi(String reason, GameState newGameState) {
-        template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState));
+        template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState, null));
     }
 
     private void notifyPlayers() {
         final AsyncRestTemplate rt = new AsyncRestTemplate();
         for (Player p: currentState.players) {
             System.out.println("Notify player " + p.name);
-            final HttpEntity<GameStateChanged> he = new HttpEntity<>(GameStateChanged.create("new turn", currentState));
+            final HttpEntity<GameStateChanged> he = new HttpEntity<>(GameStateChanged.create("new turn", currentState, p));
             rt.postForEntity(p.url, he, Move.class);
         }
     }
