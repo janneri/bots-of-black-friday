@@ -33,7 +33,11 @@ public class GameState {
     }
 
     public GameState newRound() {
-        return new GameState(map, round + 1, players);
+        final Set<Player> alive = filterLivingPlayers(players);
+        if (alive.size() < players.size()) {
+            System.out.println(players.size() - alive.size() + " players died.");
+        }
+        return new GameState(map, round + 1, alive);
     }
 
     public Player getPlayer(UUID playerId) {
@@ -46,5 +50,13 @@ public class GameState {
         final Set<Player> otherPlayers = players.stream().filter(p -> !p.id.equals(playerId)).collect(Collectors.toSet());
         otherPlayers.add(newPlayer);
         return new GameState(map, round, otherPlayers);
+    }
+
+    private boolean playerAlive(final Player p) {
+        return p.movedOnRound == 0 || p.movedOnRound > round - 10;
+    }
+
+    private Set<Player> filterLivingPlayers(final Set<Player> players) {
+        return players.stream().filter(this::playerAlive).collect(Collectors.toSet());
     }
 }
