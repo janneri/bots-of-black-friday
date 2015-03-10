@@ -7,18 +7,21 @@ public class GameState {
 
     public final Map map;
     public final Set<Player> players;
+    public final Set<Item> items;
     public final int round;
 
-    public GameState(final Map map, final int round, final Set<Player> players) {
+    public GameState(final Map map, final int round, final Set<Player> players, final Set<Item> items) {
         this.map = map;
         this.round = round;
         this.players = players;
+        this.items = items;
     }
 
     public GameState() {
         this.map = Map.createDefault();
         this.round = 1;
         this.players = new HashSet<>();
+        this.items = new HashSet<>();
     }
 
     public GameState addPlayer(final Player player) {
@@ -29,7 +32,13 @@ public class GameState {
 
         Set<Player> newPlayers = new HashSet<>(players);
         newPlayers.add(player);
-        return new GameState(map, round, newPlayers);
+        return new GameState(map, round, newPlayers, items);
+    }
+
+    public GameState addItem(final Item item) {
+        Set<Item> newItems = new HashSet<>(items);
+        newItems.add(item);
+        return new GameState(map, round, players, newItems);
     }
 
     public GameState newRound() {
@@ -37,7 +46,7 @@ public class GameState {
         if (alive.size() < players.size()) {
             System.out.println(players.size() - alive.size() + " players died.");
         }
-        return new GameState(map, round + 1, alive);
+        return new GameState(map, round + 1, alive, items);
     }
 
     public Player getPlayer(UUID playerId) {
@@ -46,10 +55,19 @@ public class GameState {
 
     public GameState movePlayer(UUID playerId, Move move) {
         final Player player = getPlayer(playerId);
-        final Player newPlayer = player.move(player.position.move(move, map), round);
+        final Player newPlayer = move == Move.PICK ? player.pickItem(this) : player.move(player.position.move(move, map), round);
+
         final Set<Player> otherPlayers = players.stream().filter(p -> !p.id.equals(playerId)).collect(Collectors.toSet());
         otherPlayers.add(newPlayer);
-        return new GameState(map, round, otherPlayers);
+        return new GameState(map, round, otherPlayers, items);
+    }
+
+    public GameState spawnItems() {
+        if (Math.random() > 0.9) {
+            return addItem(Item.create(100, map.randomPosition()));
+        } else {
+            return this;
+        }
     }
 
     private boolean playerAlive(final Player p) {

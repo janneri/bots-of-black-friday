@@ -3,25 +3,6 @@
 <head>
     <title>Hello WebSocket</title>
     <script src="bundle.js"></script>
-    <script type="application/javascript">
-        function drawMap() {
-            var canvas = document.getElementById("canvas");
-            if (canvas.getContext) {
-                var ctx = canvas.getContext("2d");
-
-                ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-                ctx.fillRect (0, 0, 1000, 600);
-
-                // todo pelaajat
-                ctx.fillStyle = "#FF0000";
-                ctx.fillRect (0, 0, 10, 10);
-                ctx.fillStyle = "#00ff00";
-                ctx.fillRect (50, 50, 10, 10);
-
-            }
-        }
-
-    </script>
 </head>
 <body>
 <noscript>
@@ -33,29 +14,6 @@
     </div>
     <div id="map"></div>
     <canvas style="float:left" id="canvas" width="1000" height="600"></canvas>
-    <div id="player-list">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Points</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span style="display: inline-block; height: 10px; width:10px; background-color: #ff0000"></span>Janne</td>
-                    <td>100</td>
-                    <td>Active</td>
-                </tr>
-                <tr>
-                    <td><span style="display: inline-block; height: 10px; width:10px; background-color: #00ff00"></span>Harri</td>
-                    <td>50</td>
-                    <td>Retired</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
     <div style="clear:both">
         <button id="connect" onclick="connect();">Connect</button>

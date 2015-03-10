@@ -30,7 +30,7 @@ public final class GameEngine {
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
-        Position randomValidPosition = Map.randomPosition(currentState.map); // TODO
+        Position randomValidPosition = currentState.map.randomPosition();
         Player player = Player.create(playerName, url, randomValidPosition, currentState.round);
         currentState = currentState.addPlayer(player);
         System.out.println("Registered " + playerName + " " + url);
@@ -53,7 +53,7 @@ public final class GameEngine {
 
     public void startNewRound() {
         currentState = currentState.newRound();
-
+        currentState = currentState.spawnItems();
         notifyPlayers();
         notifyUi("starting new round", currentState);
     }

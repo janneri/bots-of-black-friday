@@ -4,5 +4,6 @@ public enum Move {
     UP,
     DOWN,
     RIGHT,
-    LEFT
+    LEFT,
+    PICK
 }

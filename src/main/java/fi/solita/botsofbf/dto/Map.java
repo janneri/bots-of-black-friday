@@ -44,8 +44,8 @@ public class Map {
         return new Map(width, height, cells);
     }
 
-    public static Position randomPosition(Map map) {
-        return new Position(randInt(0, map.width), randInt(0, map.height));
+    public Position randomPosition() {
+        return new Position(randInt(0, width), randInt(0, height));
     }
 
     public static int randInt(int min, int max) {

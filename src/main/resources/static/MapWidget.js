@@ -41,10 +41,18 @@ var Text = React.createClass({
   }
 });
 
+var Circle = React.createClass({
+  render: function() {
+    return this.transferPropsTo(
+      <circle>{this.props.children}</circle>
+    );
+  }
+});
+
 var MapWidget = React.createClass({
 
   getInitialState: function() {
-    return {players: []};
+    return {players: [], items: []};
   },
 
   /**
@@ -88,21 +96,65 @@ var MapWidget = React.createClass({
       );
     };
 
+    var drawItem = function(item) {
+      return (
+        <G key={item.position.x + "." + item.position.y}>
+          <Circle
+            cx={item.position.x}
+            cy={item.position.y}
+            r={5}
+            fill="#00ff00"/>
+          <Text
+            x={item.position.x}
+            y={item.position.y - 10}
+            fill="#000000">
+          {item.price}
+          </Text>
+        </G>
+      );
+    };
+
+    var printPlayer = function(player) {
+      return (
+        <tr>
+          <td>{player.name}</td>
+          <td>{player.score}</td>
+        </tr>
+      );
+    }
+
     return (
-      <SVGComponent height="800" width="800">
-        <Rectangle
-          key="store"
-          x="0"
-          y="0"
-          width={MAP_WIDTH}
-          height={MAP_HEIGHT}
-          fill="none"
-          stroke="crimson">
-        </Rectangle>
+      <div>
+        <SVGComponent height="800" width="800">
+          <Rectangle
+            key="store"
+            x="0"
+            y="0"
+            width={MAP_WIDTH}
+            height={MAP_HEIGHT}
+            fill="none"
+            stroke="crimson">
+          </Rectangle>
 
-        {this.state.players.map(drawPlayer)}
-
+          <G>
+          {this.state.items.map(drawItem)}
+          {this.state.players.map(drawPlayer)}
+          </G>
         </SVGComponent>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody>
+          {this.state.players.map(printPlayer)}
+          </tbody>
+        </table>
+      </div>
+
     );
   }
 
