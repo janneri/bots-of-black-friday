@@ -5,17 +5,16 @@ import fi.solita.botsofbf.events.GameStateChanged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import fi.solita.botsofbf.dto.Move;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.SocketTimeoutException;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 @Component
 public final class GameEngine {
@@ -51,11 +50,9 @@ public final class GameEngine {
         notifyUi(currentState.getPlayer(playerId).name + ": " + message, currentState);
     }
 
-    public void startNewRound() {
-        currentState = currentState.newRound();
-        currentState = currentState.spawnItems();
-        notifyPlayers();
-        notifyUi("starting new round", currentState);
+    public void tick() {
+        playRound();
+        endRound();
     }
 
     @Autowired
@@ -65,13 +62,35 @@ public final class GameEngine {
         template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState, null));
     }
 
-    private void notifyPlayers() {
-        final AsyncRestTemplate rt = new AsyncRestTemplate();
-        for (Player p: currentState.players) {
-            System.out.println("Notify player " + p.name);
-            final HttpEntity<GameStateChanged> he = new HttpEntity<>(GameStateChanged.create("new turn", currentState, p));
-            rt.postForEntity(p.url, he, Move.class);
+    private void playRound() {
+        final RestTemplate restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory rf =
+                (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+        rf.setReadTimeout(100);
+        rf.setConnectTimeout(100);
+
+        for ( Player player : currentState.players ) {
+
+            System.out.println("Notify player " + player.name);
+
+            try {
+                final HttpEntity<GameStateChanged> he = new HttpEntity<>(GameStateChanged.create("new turn", currentState, player));
+                ResponseEntity<Move> response = restTemplate.postForEntity(player.url, he, Move.class);
+                System.out.println(player.name + " action: " + response.getBody());
+
+                currentState = currentState.movePlayer(player.id, response.getBody());
+                notifyUi(player.name + " moved", currentState);
+
+            } catch (Exception e) {
+                System.out.println(player.name + " is fucking up");
+            }
         }
+    }
+
+    private void endRound() {
+        currentState = currentState.newRound();
+        currentState = currentState.spawnItems();
+        notifyUi("starting new round", currentState);
     }
 
     private void randomMoves() {

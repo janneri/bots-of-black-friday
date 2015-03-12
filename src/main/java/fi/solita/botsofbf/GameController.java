@@ -30,9 +30,11 @@ public class GameController {
         gameEngine.say(UUID.fromString(playerId), message);
     }
 
+    /*
     @RequestMapping(value = "/move", method = RequestMethod.POST)
     public @ResponseBody GameState move(@RequestBody PlayerMove move) {
         return gameEngine.movePlayer(UUID.fromString(move.id), move.move);
     }
+    */
 
 }

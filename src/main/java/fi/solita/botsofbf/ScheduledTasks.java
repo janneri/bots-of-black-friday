@@ -17,7 +17,7 @@ public class ScheduledTasks {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     @Scheduled(fixedRate = 1000)
-    public void reportCurrentTime() {
-        gameEngine.startNewRound();
+    public void tick() {
+        gameEngine.tick();
     }
 }
