@@ -19,14 +19,11 @@ import java.util.UUID;
 @Component
 public final class GameEngine {
 
+    public static final int ROUND_DURATION_MILLIS = 1000;
+
     private GameState currentState = new GameState();
 
-    private GameEngine() {
-        // todo pois
-        //currentState = currentState.addPlayer(Player.create("foo", "localhost:3000/testapi", new Position(100, 100, currentState.map)))
-          //      .addPlayer(Player.create("bar", "localhost:3000/testapi", new Position(200, 200, currentState.map)))
-            //    .addPlayer(Player.create("plaa", "localhost:3000/testapi", new Position(300, 300, currentState.map)));
-    }
+    private GameEngine() {}
 
     public RegisterResponse registerPlayer(String playerName, String url) {
         Position randomValidPosition = currentState.map.randomPosition();
@@ -55,26 +52,23 @@ public final class GameEngine {
         endRound();
     }
 
-    @Autowired
-    private SimpMessagingTemplate template;
-
-    private void notifyUi(String reason, GameState newGameState) {
-        template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState, null));
-    }
-
     private void playRound() {
         final RestTemplate restTemplate = new RestTemplate();
         SimpleClientHttpRequestFactory rf =
                 (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
-        rf.setReadTimeout(100);
-        rf.setConnectTimeout(100);
+
+        int timeout = ROUND_DURATION_MILLIS / (currentState.players.size() == 0 ? 1 : currentState.players.size());
+        rf.setReadTimeout(timeout);
+        rf.setConnectTimeout(timeout);
 
         for ( Player player : currentState.players ) {
 
             System.out.println("Notify player " + player.name);
 
             try {
-                final HttpEntity<GameStateChanged> he = new HttpEntity<>(GameStateChanged.create("new turn", currentState, player));
+                final HttpEntity<GameStateChanged> he =
+                        new HttpEntity<>(GameStateChanged.create("new turn", currentState, player));
+
                 ResponseEntity<Move> response = restTemplate.postForEntity(player.url, he, Move.class);
                 System.out.println(player.name + " action: " + response.getBody());
 
@@ -82,7 +76,8 @@ public final class GameEngine {
                 notifyUi(player.name + " moved", currentState);
 
             } catch (Exception e) {
-                System.out.println(player.name + " is fucking up");
+                System.out.println(player.name + " is fucking up: " + e.getMessage());
+                notifyUi(player.name + " is fucking up: " + e.getMessage(), currentState);
             }
         }
     }
@@ -93,12 +88,14 @@ public final class GameEngine {
         notifyUi("starting new round", currentState);
     }
 
-    private void randomMoves() {
-        final Move[] moveArray = {Move.LEFT, Move.RIGHT, Move.UP, Move.DOWN};
-
-        for (Player p: currentState.players) {
-            currentState = movePlayer(p.id, moveArray[new Random().nextInt(moveArray.length)]);
-        }
+    public void restart() {
+        currentState = new GameState();
     }
 
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    private void notifyUi(String reason, GameState newGameState) {
+        template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState, null));
+    }
 }

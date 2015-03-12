@@ -2,9 +2,7 @@ package fi.solita.botsofbf.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 public class Player {
@@ -15,6 +13,7 @@ public class Player {
     public final Position position;
     public final int movedOnRound;
     public final int score;
+    public final int money;
 
     @JsonIgnore
     public final Optional<Item> lastItem;
@@ -23,7 +22,7 @@ public class Player {
     // Pelaajan tilaksi retired, jos/kun tulee mitta täyteen?
     public final int actionCount;
 
-    private Player(UUID uuid, String name, String url, Position position, int actionCount, int movedOnRound, int score, Optional<Item> lastItem) {
+    private Player(UUID uuid, String name, String url, Position position, int actionCount, int movedOnRound, int score, int money, Optional<Item> lastItem) {
         this.id = uuid;
         this.name = name;
         this.url = url;
@@ -31,16 +30,17 @@ public class Player {
         this.actionCount = actionCount;
         this.movedOnRound = movedOnRound;
         this.score = score;
+        this.money = money;
         this.lastItem = lastItem;
     }
 
     public static Player create(String name, String url, Position position, int startRound) {
-        return new Player(UUID.randomUUID(), name, url, position, 0, startRound, 0, Optional.<Item>empty());
+        return new Player(UUID.randomUUID(), name, url, position, 0, startRound, 0, 5000, Optional.<Item>empty());
     }
 
     public Player move(Position position, int round) {
         if (round > movedOnRound) {
-            return new Player(this.id, this.name, this.url, position, this.actionCount + 1, round, this.score, Optional.<Item>empty());
+            return new Player(this.id, this.name, this.url, position, this.actionCount + 1, round, this.score, money, Optional.<Item>empty());
         }
         return this;
     }
@@ -48,8 +48,13 @@ public class Player {
     public Player pickItem(GameState state) {
         final Optional<Item> item = state.items.stream().filter(i -> i.position.equals(position)).findFirst();
 
-        if (state.round > movedOnRound && item.isPresent()) {
-            return new Player(this.id, this.name, this.url, position, this.actionCount + 1, state.round, this.score + item.get().price, item);
+        if (item.isPresent() && money < item.get().price) {
+            throw new IllegalStateException("No money left");
+        }
+
+        if (state.round > movedOnRound && item.isPresent() ) {
+            return new Player(this.id, this.name, this.url, position, this.actionCount + 1, state.round,
+                    this.score + item.get().price, money - item.get().price, item);
         }
         return this;
     }

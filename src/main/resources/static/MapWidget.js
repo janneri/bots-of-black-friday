@@ -5,6 +5,7 @@
 "use strict";
 
 var React = require('react');
+var _ = require('lodash');
 
 var MAP_WIDTH = 800;
 var MAP_HEIGHT = 800;
@@ -118,7 +119,8 @@ var MapWidget = React.createClass({
       return (
         <tr>
           <td>{player.name}</td>
-          <td>{player.score}</td>
+          <td>{player.money}&euro;</td>
+          <td>{player.score}&euro;</td>
         </tr>
       );
     }
@@ -146,11 +148,12 @@ var MapWidget = React.createClass({
           <thead>
             <tr>
               <th>Name</th>
-              <th>Points</th>
+              <th>Money left</th>
+              <th>Possession</th>
             </tr>
           </thead>
           <tbody>
-          {this.state.players.map(printPlayer)}
+          {_.sortBy(this.state.players, 'score').reverse().map(printPlayer)}
           </tbody>
         </table>
       </div>

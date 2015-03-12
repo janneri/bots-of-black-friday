@@ -23,9 +23,8 @@ var Socket = {
     stompClient.connect({}, function (frame) {
       self.setConnected(true);
       console.log('Connected: ' + frame);
-      stompClient.subscribe('/topic/events', function (greeting) {
-        //JSON.parse(greeting.body);
-        self.handleGameEvent(greeting.body);
+      stompClient.subscribe('/topic/events', function (gameStateChangedEvent) {
+        self.handleGameEvent(JSON.parse(gameStateChangedEvent.body));
       });
     });
     mapWidget = map;
@@ -37,13 +36,13 @@ var Socket = {
     console.log("Disconnected");
   },
 
-  handleGameEvent: function(message) {
+  handleGameEvent: function(event) {
     var response = document.getElementById('events');
     var p = document.createElement('p');
     p.style.wordWrap = 'break-word';
-    p.appendChild(document.createTextNode(message));
+    p.appendChild(document.createTextNode(event.reason));
     //response.appendChild(p);
-    mapWidget.setState(JSON.parse(message).gameState);
+    mapWidget.setState(event.gameState);
   }
 
 };

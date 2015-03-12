@@ -30,6 +30,11 @@ public class GameController {
         gameEngine.say(UUID.fromString(playerId), message);
     }
 
+    @RequestMapping(value = "/restart", method = RequestMethod.POST)
+    public void restart() {
+        gameEngine.restart();
+    }
+
     /*
     @RequestMapping(value = "/move", method = RequestMethod.POST)
     public @ResponseBody GameState move(@RequestBody PlayerMove move) {

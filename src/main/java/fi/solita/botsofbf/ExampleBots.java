@@ -14,7 +14,6 @@ public class ExampleBots {
 
     private RegisterResponse_ leftie;
     private RegisterResponse_ zombie;
-    private RegisterResponse_ hunter;
 
     @RequestMapping(value = "/startleftie", method = RequestMethod.POST)
     public void registerLeftie() {
@@ -26,15 +25,10 @@ public class ExampleBots {
         zombie = reg("zombie", "/zombie");
     }
 
-    @RequestMapping(value = "/starthunter", method = RequestMethod.POST)
-    public void registerHunter() {
-        hunter = reg("hunter", "/hunter");
-    }
-
-    @RequestMapping(value = "/startrandom", method = RequestMethod.POST)
-    public void registerRandomMovers(@RequestBody int num) {
+    @RequestMapping(value = "/starthunters", method = RequestMethod.POST)
+    public void registerHunter(@RequestBody int num) {
         for (int i = 0; i < num; i++) {
-            reg("random " + i, "/random");
+            reg("hunter " + i, "/hunter");
         }
     }
 
@@ -63,13 +57,15 @@ public class ExampleBots {
 
     @RequestMapping(value = "/hunter", method = RequestMethod.POST)
     public @ResponseBody Move moveHunter(@RequestBody GameStateChanged_ gameStateChanged) throws InterruptedException {
-        Player_ hunterInGame = gameStateChanged.gameState.players.stream().filter(p -> p.name.equals(hunter.player.name)).findFirst().get();
+        Player_ hunterInGame = gameStateChanged.playerState;
+
         Optional<Item_> huntedItem = gameStateChanged.gameState.items.stream()
                 .sorted(Comparator.comparing((Item_ item) -> item.position.distance(hunterInGame.position))
                         .thenComparing(Comparator.comparing((Item_ item) -> item.position.x + item.position.y)))
                 .findFirst();
 
-        System.out.println("hunter is at " + hunterInGame.position + " and hunting " + huntedItem.get().position);
+        System.out.println("hunter is at " + hunterInGame.position
+                + " and hunting " + (huntedItem.isPresent() ? huntedItem.get().position : null));
 
         if (huntedItem.isPresent()) {
 
@@ -92,11 +88,6 @@ public class ExampleBots {
         return null;
     }
 
-    @RequestMapping(value = "/random", method = RequestMethod.POST)
-    public Move moveRandom(@RequestBody GameState_ gameState) {
-        return Move.values()[new Random().nextInt(Move.values().length)];
-    }
-
 
     public static class RegisterResponse_ {
         public UUID id;
@@ -110,6 +101,7 @@ public class ExampleBots {
         public Position_ position;
         public int movedOnRound;
         public int score;
+        public int money;
     }
 
     public static class GameState_ {
