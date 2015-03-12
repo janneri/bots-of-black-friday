@@ -101,8 +101,8 @@ var MapWidget = React.createClass({
       return (
         <G key={item.position.x + "." + item.position.y}>
           <Circle
-            cx={item.position.x}
-            cy={item.position.y}
+            cx={item.position.x + 5}
+            cy={item.position.y + 5}
             r={5}
             fill="#00ff00"/>
           <Text
