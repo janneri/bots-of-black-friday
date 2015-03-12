@@ -19,13 +19,19 @@ var Socket = {
   connect: function(map) {
     var socket = new SockJS('/hello');
     stompClient = Stomp.over(socket);
+    stompClient.debug = null;
     var self = this;
     stompClient.connect({}, function (frame) {
       self.setConnected(true);
-      console.log('Connected: ' + frame);
+      //console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/chat', function (message) {
+        self.handleChatMessage(message.body);
+      });
+
       stompClient.subscribe('/topic/events', function (gameStateChangedEvent) {
         self.handleGameEvent(JSON.parse(gameStateChangedEvent.body));
       });
+
     });
     mapWidget = map;
   },
@@ -37,13 +43,14 @@ var Socket = {
   },
 
   handleGameEvent: function(event) {
-    var response = document.getElementById('events');
-    var p = document.createElement('p');
-    p.style.wordWrap = 'break-word';
-    p.appendChild(document.createTextNode(event.reason));
-    //response.appendChild(p);
     mapWidget.setState(event.gameState);
+  },
+
+  handleChatMessage: function(message) {
+    // todo display
+    console.log(message);
   }
+
 
 };
 module.exports = Socket;

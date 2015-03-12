@@ -44,7 +44,7 @@ public final class GameEngine {
     }
 
     public void say(UUID playerId, String message) {
-        notifyUi(currentState.getPlayer(playerId).name + ": " + message, currentState);
+        sendChatMessageToUi(currentState.getPlayer(playerId), message);
     }
 
     public void tick() {
@@ -97,5 +97,9 @@ public final class GameEngine {
 
     private void notifyUi(String reason, GameState newGameState) {
         template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState, null));
+    }
+
+    private void sendChatMessageToUi(Player player, String message) {
+        template.convertAndSend("/topic/chat", player.name + ": " + message);
     }
 }

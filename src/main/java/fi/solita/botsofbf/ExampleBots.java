@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @RestController
@@ -26,10 +28,17 @@ public class ExampleBots {
     }
 
     @RequestMapping(value = "/starthunters", method = RequestMethod.POST)
-    public void registerHunter(@RequestBody int num) {
+    public Set<RegisterResponse_> registerHunter(@RequestBody int num) {
+        return IntStream.rangeClosed(1, num)
+                .mapToObj(n -> reg("hunter " + n, "/hunter"))
+                .collect(Collectors.toSet());
+
+        /*
         for (int i = 0; i < num; i++) {
-            reg("hunter " + i, "/hunter");
+            RegisterResponse_ registerResponse = reg("hunter " + i, "/hunter");
+            System.out.println("hunter " + i + " registered and got id " + registerResponse.id);
         }
+        */
     }
 
     private RegisterResponse_ reg(String playerName, String url) {
