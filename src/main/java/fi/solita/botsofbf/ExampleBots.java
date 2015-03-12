@@ -83,10 +83,10 @@ public class ExampleBots {
                 return Move.RIGHT;
             }
             else if (hunterInGame.position.y > huntedItem.get().position.y) {
-                return Move.DOWN;
+                return Move.UP;
             }
             else if (hunterInGame.position.y < huntedItem.get().position.y) {
-                return Move.UP;
+                return Move.DOWN;
             }
         }
         return null;
