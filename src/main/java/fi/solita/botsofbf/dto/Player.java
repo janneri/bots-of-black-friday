@@ -14,6 +14,7 @@ public class Player {
     public final int movedOnRound;
     public final int score;
     public final int money;
+    public static final int INITIAL_MONEY_LEFT = 5000;
 
     @JsonIgnore
     public final Optional<Item> lastItem;
@@ -35,7 +36,7 @@ public class Player {
     }
 
     public static Player create(String name, String url, Position position, int startRound) {
-        return new Player(UUID.randomUUID(), name, url, position, 0, startRound, 0, 5000, Optional.<Item>empty());
+        return new Player(UUID.randomUUID(), name, url, position, 0, startRound, 0, INITIAL_MONEY_LEFT, Optional.<Item>empty());
     }
 
     public Player move(Position position, int round) {
@@ -48,13 +49,13 @@ public class Player {
     public Player pickItem(GameState state) {
         final Optional<Item> item = state.items.stream().filter(i -> i.position.equals(position)).findFirst();
 
-        if (item.isPresent() && money < item.get().price) {
+        if (item.isPresent() && money < (item.get().discountedPrice)) {
             throw new IllegalStateException("No money left");
         }
 
         if (state.round > movedOnRound && item.isPresent() ) {
             return new Player(this.id, this.name, this.url, position, this.actionCount + 1, state.round,
-                    this.score + item.get().price, money - item.get().price, item);
+                    this.score + item.get().price, money - item.get().discountedPrice, item);
         }
         return this;
     }

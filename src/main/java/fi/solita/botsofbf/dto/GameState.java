@@ -66,11 +66,18 @@ public class GameState {
     }
 
     public GameState spawnItems() {
+        Random random = new Random();
         if (Math.random() > 0.9) {
-            return addItem(Item.create(100, map.randomPosition()));
+            int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
+            int discountPercent = randomBetween(10, 90);
+            return addItem(Item.create(price, discountPercent, map.randomPosition()));
         } else {
             return this;
         }
+    }
+
+    private static int randomBetween(int min, int max) {
+        return new Random().nextInt(max - min + 1) + min;
     }
 
     private boolean playerAlive(final Player p) {

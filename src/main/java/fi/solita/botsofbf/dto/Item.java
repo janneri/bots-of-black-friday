@@ -1,17 +1,27 @@
 package fi.solita.botsofbf.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Item {
 
     public final int price;
+    public final int discountPercent;
     public final Position position;
+    @JsonIgnore
+    public final int discount;
+    @JsonIgnore
+    public final int discountedPrice;
 
-    private Item(int price, Position position) {
+    private Item(int price, int discountPercent, Position position) {
         this.price = price;
+        this.discountPercent = discountPercent;
+        this.discount = (int)(price * ((double)discountPercent/100));
+        this.discountedPrice = this.price - this.discount;
         this.position = position;
     }
 
-    public static Item create(int price, Position position) {
-        return new Item(price,  position);
+    public static Item create(int price, int discountPercent, Position position) {
+        return new Item(price, discountPercent, position);
     }
 
     @Override

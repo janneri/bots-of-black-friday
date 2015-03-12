@@ -109,7 +109,7 @@ var MapWidget = React.createClass({
             x={item.position.x}
             y={item.position.y - 10}
             fill="#000000">
-          {item.price}
+          {item.price + '€ - ' + item.discountPercent + '%'}
           </Text>
         </G>
       );
