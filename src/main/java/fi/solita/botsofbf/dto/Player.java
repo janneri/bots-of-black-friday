@@ -11,7 +11,6 @@ public class Player {
     public final String name;
     public final String url;
     public final Position position;
-    public final int movedOnRound;
     public final int score;
     public final int money;
     public static final int INITIAL_MONEY_LEFT = 5000;
@@ -23,41 +22,48 @@ public class Player {
     // Pelaajan tilaksi retired, jos/kun tulee mitta täyteen?
     public final int actionCount;
 
-    private Player(UUID uuid, String name, String url, Position position, int actionCount, int movedOnRound, int score, int money, Optional<Item> lastItem) {
+    @JsonIgnore
+    public final int invalidActionCount;
+
+    private Player(UUID uuid, String name, String url, Position position, int actionCount,
+                   int score, int money, Optional<Item> lastItem, int invalidActionCount) {
         this.id = uuid;
         this.name = name;
         this.url = url;
         this.position = position;
         this.actionCount = actionCount;
-        this.movedOnRound = movedOnRound;
         this.score = score;
         this.money = money;
         this.lastItem = lastItem;
+        this.invalidActionCount = invalidActionCount;
     }
 
-    public static Player create(String name, String url, Position position, int startRound) {
-        return new Player(UUID.randomUUID(), name, url, position, 0, startRound, 0, INITIAL_MONEY_LEFT, Optional.<Item>empty());
+    public static Player create(String name, String url, Position position) {
+        int invalidActionCount = 0;
+        int score = 0;
+
+        return new Player(UUID.randomUUID(), name, url, position, 0, score,
+                INITIAL_MONEY_LEFT, Optional.<Item>empty(), invalidActionCount);
     }
 
-    public Player move(Position position, int round) {
-        if (round > movedOnRound) {
-            return new Player(this.id, this.name, this.url, position, this.actionCount + 1, round, this.score, money, Optional.<Item>empty());
-        }
-        return this;
+    public Player move(Position position) {
+        return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
+                this.score, this.money, Optional.<Item>empty(), this.invalidActionCount);
     }
 
-    public Player pickItem(GameState state) {
-        final Optional<Item> item = state.items.stream().filter(i -> i.position.equals(position)).findFirst();
+    public Player incInvalidActions() {
+        return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
+                this.score, this.money, Optional.<Item>empty(), this.invalidActionCount + 1);
+    }
 
-        if (item.isPresent() && money < (item.get().discountedPrice)) {
+    public Player pickItem(Item item) {
+        if (this.money < item.discountedPrice) {
             throw new IllegalStateException("No money left");
         }
 
-        if (state.round > movedOnRound && item.isPresent() ) {
-            return new Player(this.id, this.name, this.url, position, this.actionCount + 1, state.round,
-                    this.score + item.get().price, money - item.get().discountedPrice, item);
-        }
-        return this;
+        return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
+                this.score + item.price, this.money - item.discountedPrice, Optional.of(item),
+                this.invalidActionCount);
     }
 
     @Override

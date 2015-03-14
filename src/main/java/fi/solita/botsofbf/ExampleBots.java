@@ -79,6 +79,7 @@ public class ExampleBots {
         if (huntedItem.isPresent()) {
 
             if ( hunterInGame.position.equals(huntedItem.get().position) ) {
+                System.out.println(String.format("%s picking up", hunterInGame.name));
                 return Move.PICK;
             }
             if (hunterInGame.position.x > huntedItem.get().position.x) {
@@ -94,7 +95,7 @@ public class ExampleBots {
                 return Move.DOWN;
             }
         }
-        return null;
+        return Move.UP;
     }
 
 

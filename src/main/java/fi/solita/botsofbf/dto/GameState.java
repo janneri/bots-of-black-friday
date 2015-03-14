@@ -9,6 +9,7 @@ public class GameState {
     public final Set<Player> players;
     public final Set<Item> items;
     public final int round;
+    public static final int MAX_INVALID_ACTIONS = 5;
 
     public GameState(final Map map, final int round, final Set<Player> players, final Set<Item> items) {
         this.map = map;
@@ -42,31 +43,59 @@ public class GameState {
     }
 
     public GameState newRound() {
-        final Set<Player> alive = filterLivingPlayers(players);
-        if (alive.size() < players.size()) {
-            System.out.println(players.size() - alive.size() + " players died.");
-        }
-        return new GameState(map, round + 1, alive, items);
+        return new GameState(map, round + 1, players, items);
     }
 
     public Player getPlayer(UUID playerId) {
         return players.stream().filter(p -> p.id.equals(playerId)).findFirst().get();
     }
 
+    public GameState addInvalidMove(Player player) {
+        Player newPlayer = player.incInvalidActions();
+        if ( newPlayer.invalidActionCount > MAX_INVALID_ACTIONS ) {
+            return new GameState(map, round, getOtherPlayers(newPlayer), items);
+        }
+        else {
+            return new GameState(map, round, replacePlayer(players, newPlayer), items);
+        }
+    }
+
+    private Set<Player> getOtherPlayers(Player removedPlayer) {
+        return players.stream().filter(p -> !p.id.equals(removedPlayer.id)).collect(Collectors.toSet());
+    }
+
+
     public GameState movePlayer(UUID playerId, Move move) {
         final Player player = getPlayer(playerId);
-        final Player newPlayer = move == Move.PICK ? player.pickItem(this) : player.move(player.position.move(move, map), round);
+        final Player newPlayer = move == Move.PICK ? pickItem(player) : player.move(player.position.move(move, map));
+        final Set<Player> newPlayers = replacePlayer(players, newPlayer);
+        final Set<Item> newItems = move == Move.PICK ? removeItem(player.position) : items;
 
-        final Set<Player> otherPlayers = players.stream().filter(p -> !p.id.equals(playerId)).collect(Collectors.toSet());
+        return new GameState(map, round, newPlayers, newItems);
+    }
+
+    public Set<Item> removeItem(Position position) {
+        return items.stream().filter(i -> !i.position.equals(position)).collect(Collectors.toSet());
+    }
+
+    public Player pickItem(Player player) {
+        final Optional<Item> item = items.stream().filter(i -> i.position.equals(player.position)).findFirst();
+
+        if ( !item.isPresent() ) {
+            throw new IllegalStateException(String.format("%s is trying to pick from invalid location", player.name));
+        }
+
+        return player.pickItem(item.get());
+    }
+
+    private Set<Player> replacePlayer(Set<Player> players, Player newPlayer) {
+        final Set<Player> otherPlayers = players.stream()
+                .filter(p -> !p.id.equals(newPlayer.id)).collect(Collectors.toSet());
         otherPlayers.add(newPlayer);
-
-        final Set<Item> newItems = removePicked(newPlayer); // Hivenen monimutkainen tapa noukkia.
-
-        return new GameState(map, round, otherPlayers, newItems);
+        return otherPlayers;
     }
 
     public GameState spawnItems() {
-        Random random = new Random();
         if (Math.random() > 0.9) {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
@@ -80,19 +109,4 @@ public class GameState {
         return new Random().nextInt(max - min + 1) + min;
     }
 
-    private boolean playerAlive(final Player p) {
-        return p.movedOnRound == 0 || p.movedOnRound > round - 10;
-    }
-
-    private Set<Player> filterLivingPlayers(final Set<Player> players) {
-        return players.stream().filter(this::playerAlive).collect(Collectors.toSet());
-    }
-
-    private Set<Item> removePicked(final Player picker) {
-        if (picker.lastItem.isPresent()) {
-            return items.stream().filter(i -> !i.equals(picker.lastItem.get())).collect(Collectors.toSet());
-        } else {
-            return items;
-        }
-    }
 }
