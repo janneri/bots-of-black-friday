@@ -8,7 +8,7 @@ var React = require('react');
 var _ = require('lodash');
 
 var MAP_WIDTH = 800;
-var MAP_HEIGHT = 800;
+var MAP_HEIGHT = 600;
 
 var SVGComponent = React.createClass({
   render: function() {
@@ -127,7 +127,7 @@ var MapWidget = React.createClass({
 
     return (
       <div>
-        <SVGComponent height="800" width="800">
+        <SVGComponent height={MAP_HEIGHT} width={MAP_WIDTH}>
           <Rectangle
             key="store"
             x="0"

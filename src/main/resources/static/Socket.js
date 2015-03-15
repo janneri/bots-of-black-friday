@@ -12,11 +12,9 @@ var Socket = {
   setConnected: function(connected) {
     document.getElementById('connect').disabled = connected;
     document.getElementById('disconnect').disabled = !connected;
-    document.getElementById('conversation').style.visibility = connected ? 'visible' : 'hidden';
-    document.getElementById('events').innerHTML = '';
   },
 
-  connect: function(map) {
+  connect: function(map, chat) {
     var socket = new SockJS('/hello');
     stompClient = Stomp.over(socket);
     stompClient.debug = null;
@@ -25,7 +23,7 @@ var Socket = {
       self.setConnected(true);
       //console.log('Connected: ' + frame);
       stompClient.subscribe('/topic/chat', function (message) {
-        self.handleChatMessage(message.body);
+        chat.handleChatMessage(message.body);
       });
 
       stompClient.subscribe('/topic/events', function (gameStateChangedEvent) {
@@ -45,11 +43,6 @@ var Socket = {
   handleGameEvent: function(event) {
     mapWidget.setState(event.gameState);
   },
-
-  handleChatMessage: function(message) {
-    // todo display
-    console.log(message);
-  }
 
 
 };

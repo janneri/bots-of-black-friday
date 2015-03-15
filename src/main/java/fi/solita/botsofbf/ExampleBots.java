@@ -69,6 +69,7 @@ public class ExampleBots {
         Player_ hunterInGame = gameStateChanged.playerState;
 
         Optional<Item_> huntedItem = gameStateChanged.gameState.items.stream()
+                .filter(i -> hunterInGame.money > i.price)
                 .sorted(Comparator.comparing((Item_ item) -> item.position.distance(hunterInGame.position))
                         .thenComparing(Comparator.comparing((Item_ item) -> item.position.x + item.position.y)))
                 .findFirst();
@@ -95,6 +96,11 @@ public class ExampleBots {
                 return Move.DOWN;
             }
         }
+
+        new RestTemplate().postForEntity(
+                String.format("http://localhost:8080/%s/say", gameStateChanged.playerId),
+                "Don't know what to do", Void.class);
+
         return Move.UP;
     }
 
@@ -125,6 +131,7 @@ public class ExampleBots {
         public String reason;
         public GameState_ gameState;
         public Player_ playerState;
+        public UUID playerId;
     }
 
     public static class Item_ {

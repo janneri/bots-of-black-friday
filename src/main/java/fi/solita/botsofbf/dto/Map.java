@@ -4,15 +4,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Map {
 
-    public static final int DEFAULT_HEIGHT = 800;
+    public static final int DEFAULT_HEIGHT = 600;
     public static final int DEFAULT_WIDTH = 800;
 
     public final int width;
