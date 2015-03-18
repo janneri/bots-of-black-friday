@@ -7,6 +7,10 @@
 var React = require('react');
 var _ = require('lodash');
 
+// easy to shift 3
+var TILE_WIDTH_IN_PIXELS = 8;
+var TILE_WIDTH_SHIFT_AMOUNT = 3;
+
 var SVGComponent = React.createClass({
   render: function() {
     return this.transferPropsTo(
@@ -79,14 +83,14 @@ var MapWidget = React.createClass({
       return (
       <G key={player.id}>
         <Rectangle
-          x={player.position.x}
-          y={player.position.y}
-          width="10"
-          height="10"
+          x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
+          y={player.position.y << TILE_WIDTH_SHIFT_AMOUNT}
+          width={TILE_WIDTH_IN_PIXELS}
+          height={TILE_WIDTH_IN_PIXELS}
           fill="#ff0000"/>
         <Text
-          x={player.position.x}
-          y={player.position.y - 10}
+          x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
+          y={(player.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
           fill="#000000">
           {player.name}
         </Text>
@@ -96,12 +100,12 @@ var MapWidget = React.createClass({
 
     var drawWall = function(wall) {
           return (
-          <G>
+          <G key={wall.upperLeftCorner.x + "." + wall.upperLeftCorner.y + "." + wall.width + "." + wall.height}>
             <Rectangle
-              x={wall.upperLeftCorner.x}
-              y={wall.upperLeftCorner.y}
-              width={wall.width}
-              height={wall.height}
+              x={wall.upperLeftCorner.x << TILE_WIDTH_SHIFT_AMOUNT}
+              y={wall.upperLeftCorner.y << TILE_WIDTH_SHIFT_AMOUNT}
+              width={wall.width << TILE_WIDTH_SHIFT_AMOUNT}
+              height={wall.height << TILE_WIDTH_SHIFT_AMOUNT}
               fill="#8C8C8C"/>
           </G>
           );
@@ -111,13 +115,13 @@ var MapWidget = React.createClass({
       return (
         <G key={item.position.x + "." + item.position.y}>
           <Circle
-            cx={item.position.x + 5}
-            cy={item.position.y + 5}
-            r={5}
+            cx={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
+            cy={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
+            r={TILE_WIDTH_IN_PIXELS >> 1}
             fill="#00ff00"/>
           <Text
-            x={item.position.x}
-            y={item.position.y - 10}
+            x={item.position.x << TILE_WIDTH_SHIFT_AMOUNT}
+            y={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
             fill="#000000">
           {item.price + '€ - ' + item.discountPercent + '%'}
           </Text>
@@ -137,13 +141,13 @@ var MapWidget = React.createClass({
 
     return (
       <div>
-        <SVGComponent height={this.state.map.height} width={this.state.map.width}>
+        <SVGComponent height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT} width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}>
           <Rectangle
             key="store"
             x="0"
             y="0"
-            width={this.state.map.width}
-            height={this.state.map.height}
+            width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}
+            height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT}
             fill="none"
             stroke="crimson">
           </Rectangle>

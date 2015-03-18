@@ -3,6 +3,7 @@ package fi.solita.botsofbf.dto;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Map {
 
@@ -24,19 +25,19 @@ public class Map {
     }
 
     public static Map siwa() {
-        return new Map(300, 300, Arrays.asList(
-                new Wall(Position.of(50, 100), 50, 10),
-                new Wall(Position.of(50, 190), 50, 10),
-                new Wall(Position.of(100, 50), 150, 10),
-                new Wall(Position.of(100, 240), 150, 10),
-                new Wall(Position.of(100, 60), 10, 50),
-                new Wall(Position.of(100, 190), 10, 50)));
+        return new Map(30, 30, Arrays.asList(
+                new Wall(Position.of(5, 10), 5, 1),
+                new Wall(Position.of(5, 19), 5, 1),
+                new Wall(Position.of(10, 5), 15, 1),
+                new Wall(Position.of(10, 24), 15, 1),
+                new Wall(Position.of(10, 6), 1, 5),
+                new Wall(Position.of(10, 19), 1, 5)));
     }
 
-    public Position randomValidPosition() {
+    public Position randomValidPosition(Stream<Position> excludedPositions) {
         for (int i = 0; i < 100; i++) {
             Position pos = randomPosition();
-            if ( isValidPosition(pos) ) {
+            if ( isValidPosition(pos) && excludedPositions.noneMatch(p -> p.equals(pos))) {
                 return pos;
             }
         }
@@ -44,7 +45,8 @@ public class Map {
     }
 
     public Position randomPosition() {
-        return new Position(randInt(0, width), randInt(0, height));
+        Random rand = new Random();
+        return new Position(rand.nextInt(width), rand.nextInt(height));
     }
 
     public boolean isValidPosition(Position pos) {
@@ -53,12 +55,4 @@ public class Map {
                !walls.stream().anyMatch(w -> w.containsPosition(pos));
     }
 
-    private static int randInt(int min, int max) {
-        Random rand = new Random();
-        return roundUp(rand.nextInt((max - min) + 1) + min, 10);
-    }
-
-    private static int roundUp(double i, int v){
-        return (int)Math.round(i/v) * v;
-    }
 }

@@ -25,10 +25,10 @@ public class Position {
 
     public Position move(Move move, int width, int height) {
         switch (move) {
-            case UP: return boundedPos(this.x, this.y - 10, width, height);
-            case RIGHT: return boundedPos(this.x + 10, this.y, width, height);
-            case LEFT: return boundedPos(this.x - 10, this.y, width, height);
-            default: return boundedPos(this.x, this.y + 10, width, height);
+            case UP: return boundedPos(this.x, this.y - 1, width, height);
+            case RIGHT: return boundedPos(this.x + 1, this.y, width, height);
+            case LEFT: return boundedPos(this.x - 1, this.y, width, height);
+            default: return boundedPos(this.x, this.y + 1, width, height);
         }
     }
 
