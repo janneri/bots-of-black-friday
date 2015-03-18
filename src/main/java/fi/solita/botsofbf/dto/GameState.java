@@ -110,7 +110,7 @@ public class GameState {
         if (Math.random() > 0.9) {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
-            return addItem(Item.create(price, discountPercent, map.randomPosition()));
+            return addItem(Item.create(price, discountPercent, map.randomValidPosition()));
         } else {
             return this;
         }

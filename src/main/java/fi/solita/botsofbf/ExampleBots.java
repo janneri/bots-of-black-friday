@@ -83,16 +83,20 @@ public class ExampleBots {
                 System.out.println(String.format("%s picking up", hunterInGame.name));
                 return Move.PICK;
             }
-            if (hunterInGame.position.x > huntedItem.get().position.x) {
+            if (hunterInGame.position.x > huntedItem.get().position.x &&
+                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.left())) {
                 return Move.LEFT;
             }
-            else if (hunterInGame.position.x < huntedItem.get().position.x) {
+            else if (hunterInGame.position.x < huntedItem.get().position.x &&
+                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.right()))  {
                 return Move.RIGHT;
             }
-            else if (hunterInGame.position.y > huntedItem.get().position.y) {
+            else if (hunterInGame.position.y > huntedItem.get().position.y &&
+                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.up())) {
                 return Move.UP;
             }
-            else if (hunterInGame.position.y < huntedItem.get().position.y) {
+            else if (hunterInGame.position.y < huntedItem.get().position.y &&
+                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.down())) {
                 return Move.DOWN;
             }
         }
@@ -139,15 +143,55 @@ public class ExampleBots {
         public Position_ position;
     }
 
+    public static class Wall_ {
+        public Position_ upperLeftCorner;
+        public int width;
+        public int height;
+
+        public boolean containsPosition(Position_ pos) {
+            return upperLeftCorner.x <= pos.x && pos.x < upperLeftCorner.x + width &&
+                    upperLeftCorner.y <= pos.y && pos.y < upperLeftCorner.y + height;
+        }
+    }
+
     public static class Map_ {
         public int width;
         public int height;
-        public String cells;
+        public List<Wall_> walls;
+
+        public boolean isValidPosition(Position_ pos) {
+            return pos.x >= 0 && pos.x <= width &&
+                    pos.y >= 0 && pos.y <= height &&
+                    !walls.stream().anyMatch(w -> w.containsPosition(pos));
+        }
     }
 
+    public static final int step = 10;
+
     public static class Position_ {
+
         public int x;
         public int y;
+
+        public static Position_ of(int x, int y) {
+            Position_ pos = new Position_();
+            pos.x = x;
+            pos.y = y;
+            return pos;
+        }
+
+        public Position_ left() {
+            return Position_.of(x - step, y);
+        }
+        public Position_ right() {
+            return Position_.of(x + step, y);
+        }
+        public Position_ up() {
+            return Position_.of(x, y - step);
+        }
+        public Position_ down() {
+            return Position_.of(x, y + step);
+        }
 
         public int distance(Position_ other) {
             return Math.abs(x - other.x) + Math.abs(y - other.y);

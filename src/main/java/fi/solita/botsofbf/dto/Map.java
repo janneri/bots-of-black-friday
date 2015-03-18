@@ -24,7 +24,23 @@ public class Map {
     }
 
     public static Map siwa() {
-        return new Map(300, 300, Arrays.asList(new Wall(Position.of(50, 0), Position.of(60,50))));
+        return new Map(300, 300, Arrays.asList(
+                new Wall(Position.of(50, 100), 50, 10),
+                new Wall(Position.of(50, 190), 50, 10),
+                new Wall(Position.of(100, 50), 150, 10),
+                new Wall(Position.of(100, 240), 150, 10),
+                new Wall(Position.of(100, 60), 10, 50),
+                new Wall(Position.of(100, 190), 10, 50)));
+    }
+
+    public Position randomValidPosition() {
+        for (int i = 0; i < 100; i++) {
+            Position pos = randomPosition();
+            if ( isValidPosition(pos) ) {
+                return pos;
+            }
+        }
+        throw new IllegalStateException("Cannot find a valid random position.");
     }
 
     public Position randomPosition() {

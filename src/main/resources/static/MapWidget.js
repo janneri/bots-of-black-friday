@@ -50,7 +50,7 @@ var Circle = React.createClass({
 var MapWidget = React.createClass({
 
   getInitialState: function() {
-    return {players: [], items: [], map: {width: 0, height: 0}};
+    return {players: [], items: [], map: {width: 0, height: 0, walls: []}};
   },
 
   /**
@@ -92,6 +92,19 @@ var MapWidget = React.createClass({
         </Text>
       </G>
       );
+    };
+
+    var drawWall = function(wall) {
+          return (
+          <G>
+            <Rectangle
+              x={wall.upperLeftCorner.x}
+              y={wall.upperLeftCorner.y}
+              width={wall.width}
+              height={wall.height}
+              fill="#8C8C8C"/>
+          </G>
+          );
     };
 
     var drawItem = function(item) {
@@ -136,6 +149,7 @@ var MapWidget = React.createClass({
           </Rectangle>
 
           <G>
+          {this.state.map.walls.map(drawWall)}
           {this.state.items.map(drawItem)}
           {this.state.players.map(drawPlayer)}
           </G>

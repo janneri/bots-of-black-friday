@@ -2,19 +2,19 @@ package fi.solita.botsofbf.dto;
 
 public class Wall {
 
-    public final Position upperleftCorner;
-    public final Position lowerRightCorner;
+    public final Position upperLeftCorner;
+    public final int width;
+    public final int height;
 
-    public Wall(Position upperleftCorner, Position lowerRightCorner) {
-        this.upperleftCorner = upperleftCorner;
-        this.lowerRightCorner = lowerRightCorner;
+    public Wall(Position upperLeftCorner, int width, int height) {
+        this.upperLeftCorner = upperLeftCorner;
+        this.width = width;
+        this.height = height;
     }
 
     public boolean containsPosition(Position pos) {
-        return upperleftCorner.x <= pos.x &&
-                upperleftCorner.y <= pos.y &&
-                lowerRightCorner.x >= pos.x &&
-                lowerRightCorner.y >= pos.y;
+        return upperLeftCorner.x <= pos.x && pos.x < upperLeftCorner.x + width &&
+                upperLeftCorner.y <= pos.y && pos.y < upperLeftCorner.y + height;
     }
 
 }
