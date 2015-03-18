@@ -1,12 +1,8 @@
 package fi.solita.botsofbf.dto;
 
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Map {
 
@@ -15,35 +11,30 @@ public class Map {
 
     public final int width;
     public final int height;
-    public final String cells;
+    public final List<Wall> walls;
 
-    //public static final Map SMALL = new Map("small_map.txt");
-
-    public Map(int width, int height, String cells) {
+    public Map(int width, int height, List<Wall> walls) {
         this.width = width;
         this.height = height;
-        this.cells = cells;
+        this.walls = walls;
     }
 
     public static Map createDefault() {
-        return new Map(DEFAULT_WIDTH, DEFAULT_HEIGHT, "");
+        return new Map(DEFAULT_WIDTH, DEFAULT_HEIGHT, Arrays.asList());
     }
 
-    public static Map fromFile(String mapFilePath) throws IOException {
-
-        Stream<String> lines = Files.lines(Paths.get(URI.create(mapFilePath)));
-        int width = lines.findFirst().get().length();
-        int height = (int) lines.count();
-
-        String cells = lines
-                //.map(i -> i.toString())
-                .collect(Collectors.joining());
-
-        return new Map(width, height, cells);
+    public static Map siwa() {
+        return new Map(300, 300, Arrays.asList(new Wall(Position.of(50, 0), Position.of(60,50))));
     }
 
     public Position randomPosition() {
         return new Position(randInt(0, width), randInt(0, height));
+    }
+
+    public boolean isValidPosition(Position pos) {
+        return pos.x >= 0 && pos.x <= width &&
+               pos.y >= 0 && pos.y <= height &&
+               !walls.stream().anyMatch(w -> w.containsPosition(pos));
     }
 
     private static int randInt(int min, int max) {

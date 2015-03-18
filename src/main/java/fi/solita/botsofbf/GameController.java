@@ -19,10 +19,13 @@ public class GameController {
         return gameEngine.registerPlayer(registration.playerName, registration.url);
     }
 
+    @RequestMapping("/foo")
+    public @ResponseBody String foo() throws IOException {
+        return "bar";
+    }
     @RequestMapping("/map")
     public @ResponseBody Map getMap() throws IOException {
-       return Map.fromFile("classpath://small_map.txt");
-        // classpath?
+        return Map.siwa();
     }
 
     @RequestMapping(value = "/{playerId}/say", method = RequestMethod.POST)

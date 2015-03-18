@@ -7,9 +7,6 @@
 var React = require('react');
 var _ = require('lodash');
 
-var MAP_WIDTH = 800;
-var MAP_HEIGHT = 600;
-
 var SVGComponent = React.createClass({
   render: function() {
     return this.transferPropsTo(
@@ -53,7 +50,7 @@ var Circle = React.createClass({
 var MapWidget = React.createClass({
 
   getInitialState: function() {
-    return {players: [], items: []};
+    return {players: [], items: [], map: {width: 0, height: 0}};
   },
 
   /**
@@ -127,13 +124,13 @@ var MapWidget = React.createClass({
 
     return (
       <div>
-        <SVGComponent height={MAP_HEIGHT} width={MAP_WIDTH}>
+        <SVGComponent height={this.state.map.height} width={this.state.map.width}>
           <Rectangle
             key="store"
             x="0"
             y="0"
-            width={MAP_WIDTH}
-            height={MAP_HEIGHT}
+            width={this.state.map.width}
+            height={this.state.map.height}
             fill="none"
             stroke="crimson">
           </Rectangle>

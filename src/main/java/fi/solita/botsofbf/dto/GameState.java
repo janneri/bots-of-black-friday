@@ -19,7 +19,7 @@ public class GameState {
     }
 
     public GameState() {
-        this.map = Map.createDefault();
+        this.map = Map.siwa();
         this.round = 1;
         this.players = new HashSet<>();
         this.items = new HashSet<>();
@@ -67,7 +67,7 @@ public class GameState {
 
     public GameState movePlayer(UUID playerId, Move move) {
         final Player player = getPlayer(playerId);
-        final Player newPlayer = move == Move.PICK ? pickItem(player) : player.move(player.position.move(move, map));
+        final Player newPlayer = move == Move.PICK ? pickItem(player) : movePlayer(player, move);
         final Set<Player> newPlayers = replacePlayer(players, newPlayer);
         final Set<Item> newItems = move == Move.PICK ? removeItem(player.position) : items;
 
@@ -78,7 +78,18 @@ public class GameState {
         return items.stream().filter(i -> !i.position.equals(position)).collect(Collectors.toSet());
     }
 
-    public Player pickItem(Player player) {
+    private Player movePlayer(Player player, Move move) {
+        if ( map.isValidPosition(player.position.move(move, map.width, map.height)) ) {
+            return player.move(player.position.move(move, map.width, map.height));
+        }
+        else {
+            // rangaistus?
+            System.out.println("Invalid move from " + player.name);
+            return player;
+        }
+    }
+
+    private Player pickItem(Player player) {
         final Optional<Item> item = items.stream().filter(i -> i.position.equals(player.position)).findFirst();
 
         if ( !item.isPresent() ) {
