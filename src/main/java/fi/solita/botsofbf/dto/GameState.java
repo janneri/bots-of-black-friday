@@ -107,7 +107,7 @@ public class GameState {
     }
 
     public GameState spawnItems() {
-        if (Math.random() > 0.9) {
+        if (items.size() < map.maxItemCount && Math.random() > 0.9) {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
             Position pos = map.randomValidPosition(items.stream().map(i -> i.position));

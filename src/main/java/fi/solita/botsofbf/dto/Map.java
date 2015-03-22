@@ -12,20 +12,22 @@ public class Map {
 
     public final int width;
     public final int height;
+    public final int maxItemCount;
     public final List<Wall> walls;
 
-    public Map(int width, int height, List<Wall> walls) {
+    public Map(int width, int height, int maxItemCount, List<Wall> walls) {
         this.width = width;
         this.height = height;
+        this.maxItemCount = maxItemCount;
         this.walls = walls;
     }
 
     public static Map createDefault() {
-        return new Map(DEFAULT_WIDTH, DEFAULT_HEIGHT, Arrays.asList());
+        return new Map(DEFAULT_WIDTH, DEFAULT_HEIGHT, 10, Arrays.asList());
     }
 
     public static Map siwa() {
-        return new Map(30, 30, Arrays.asList(
+        return new Map(30, 30, 5, Arrays.asList(
                 new Wall(Position.of(5, 10), 5, 1),
                 new Wall(Position.of(5, 19), 5, 1),
                 new Wall(Position.of(10, 5), 15, 1),
