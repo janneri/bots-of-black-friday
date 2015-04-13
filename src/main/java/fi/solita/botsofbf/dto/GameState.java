@@ -19,7 +19,7 @@ public class GameState {
     }
 
     public GameState() {
-        this.map = Map.siwa();
+        this.map = Map.createDefault();//siwa();
         this.round = 1;
         this.players = new HashSet<>();
         this.items = new HashSet<>();
@@ -64,12 +64,15 @@ public class GameState {
         return players.stream().filter(p -> !p.id.equals(removedPlayer.id)).collect(Collectors.toSet());
     }
 
+    private boolean playerGotItem(Move move, Player player) {
+        return move == Move.PICK && player.lastItem.isPresent() && player.timeInState >= player.lastItem.get().getPickTime();
+    }
 
     public GameState movePlayer(UUID playerId, Move move) {
         final Player player = getPlayer(playerId);
         final Player newPlayer = move == Move.PICK ? pickItem(player) : movePlayer(player, move);
         final Set<Player> newPlayers = replacePlayer(players, newPlayer);
-        final Set<Item> newItems = move == Move.PICK ? removeItem(player.position) : items;
+        final Set<Item> newItems = playerGotItem(move, player) ? removeItem(player.position) : items;
 
         return new GameState(map, round, newPlayers, newItems);
     }

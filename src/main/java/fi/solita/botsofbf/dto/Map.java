@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 
 public class Map {
 
-    public static final int DEFAULT_HEIGHT = 600;
-    public static final int DEFAULT_WIDTH = 800;
+    public static final int DEFAULT_HEIGHT = 50;
+    public static final int DEFAULT_WIDTH = 50;
 
     public final int width;
     public final int height;

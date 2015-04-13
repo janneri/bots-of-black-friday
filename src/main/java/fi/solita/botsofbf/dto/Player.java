@@ -13,6 +13,8 @@ public class Player {
     public final Position position;
     public final int score;
     public final int money;
+    public final PlayerState state;
+    public final int timeInState;
     public static final int INITIAL_MONEY_LEFT = 5000;
 
     @JsonIgnore
@@ -26,7 +28,7 @@ public class Player {
     public final int invalidActionCount;
 
     private Player(UUID uuid, String name, String url, Position position, int actionCount,
-                   int score, int money, Optional<Item> lastItem, int invalidActionCount) {
+                   int score, int money, PlayerState state, int timeInState, Optional<Item> lastItem, int invalidActionCount) {
         this.id = uuid;
         this.name = name;
         this.url = url;
@@ -34,6 +36,8 @@ public class Player {
         this.actionCount = actionCount;
         this.score = score;
         this.money = money;
+        this.state = state;
+        this.timeInState = timeInState;
         this.lastItem = lastItem;
         this.invalidActionCount = invalidActionCount;
     }
@@ -43,17 +47,17 @@ public class Player {
         int score = 0;
 
         return new Player(UUID.randomUUID(), name, url, position, 0, score,
-                INITIAL_MONEY_LEFT, Optional.<Item>empty(), invalidActionCount);
+                INITIAL_MONEY_LEFT, PlayerState.MOVE, 0, Optional.<Item>empty(), invalidActionCount);
     }
 
     public Player move(Position position) {
         return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
-                this.score, this.money, Optional.<Item>empty(), this.invalidActionCount);
+                this.score, this.money, PlayerState.MOVE, 0, Optional.<Item>empty(), this.invalidActionCount);
     }
 
     public Player incInvalidActions() {
         return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
-                this.score, this.money, Optional.<Item>empty(), this.invalidActionCount + 1);
+                this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(), this.invalidActionCount + 1);
     }
 
     public Player pickItem(Item item) {
@@ -61,9 +65,15 @@ public class Player {
             throw new IllegalStateException("No money left");
         }
 
-        return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
-                this.score + item.price, this.money - item.discountedPrice, Optional.of(item),
-                this.invalidActionCount);
+        if (timeInState < item.getPickTime()) {
+            return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
+                    this.score, this.money, PlayerState.PICK, this.timeInState + 1, Optional.of(item),
+                    this.invalidActionCount);
+        } else {
+            return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
+                    this.score + item.price, this.money - item.discountedPrice, PlayerState.MOVE, 0, Optional.of(item),
+                    this.invalidActionCount);
+        }
     }
 
     @Override

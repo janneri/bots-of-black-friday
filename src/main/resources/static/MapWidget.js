@@ -80,6 +80,7 @@ var MapWidget = React.createClass({
   render: function() {
 
     var drawPlayer = function(player) {
+      var color = player.state === "MOVE" ? "#ff0000" : "#0000ff";
       return (
       <G key={player.id}>
         <Rectangle
@@ -87,12 +88,12 @@ var MapWidget = React.createClass({
           y={player.position.y << TILE_WIDTH_SHIFT_AMOUNT}
           width={TILE_WIDTH_IN_PIXELS}
           height={TILE_WIDTH_IN_PIXELS}
-          fill="#ff0000"/>
+          fill={color}/>
         <Text
           x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
           y={(player.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
           fill="#000000">
-          {player.name}
+          {player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "")}
         </Text>
       </G>
       );
@@ -132,7 +133,7 @@ var MapWidget = React.createClass({
     var printPlayer = function(player) {
       return (
         <tr>
-          <td>{player.name}</td>
+          <td>{player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "")}</td>
           <td>{player.money}&euro;</td>
           <td>{player.score}&euro;</td>
         </tr>

@@ -25,7 +25,7 @@ public class GameController {
     }
     @RequestMapping("/map")
     public @ResponseBody Map getMap() throws IOException {
-        return Map.siwa();
+        return Map.createDefault();//siwa();
     }
 
     @RequestMapping(value = "/{playerId}/say", method = RequestMethod.POST)
