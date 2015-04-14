@@ -23,10 +23,6 @@ public class GameController {
     public @ResponseBody String foo() throws IOException {
         return "bar";
     }
-    @RequestMapping("/map")
-    public @ResponseBody Map getMap() throws IOException {
-        return Map.createDefault();//siwa();
-    }
 
     @RequestMapping(value = "/{playerId}/say", method = RequestMethod.POST)
     public void say(@PathVariable String playerId, @RequestBody String message) {
@@ -36,6 +32,11 @@ public class GameController {
     @RequestMapping(value = "/restart", method = RequestMethod.POST)
     public void restart() {
         gameEngine.restart();
+    }
+
+    @RequestMapping(value = "/changemap", method = RequestMethod.POST)
+    public void changeMap(@RequestBody String map) throws IOException {
+        gameEngine.changeMap(map);
     }
 
     /*

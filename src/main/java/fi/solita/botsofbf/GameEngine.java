@@ -17,9 +17,11 @@ public final class GameEngine {
     @Autowired
     private UiClient uiClient;
 
-    private GameState currentState = new GameState();
+    private GameState currentState;
 
-    private GameEngine() {}
+    public GameEngine() {
+        currentState = new GameState(Map.createDefault());
+    }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
         Position randomValidPosition = currentState.map.randomPosition();
@@ -73,7 +75,10 @@ public final class GameEngine {
     }
 
     public void restart() {
-        currentState = new GameState();
+        currentState = new GameState(currentState.map);
     }
 
+    public void changeMap(String map) {
+        currentState = new GameState(Map.readMapFromFile(map));
+    }
 }

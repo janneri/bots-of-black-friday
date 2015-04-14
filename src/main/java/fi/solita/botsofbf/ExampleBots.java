@@ -143,30 +143,23 @@ public class ExampleBots {
         public Position_ position;
     }
 
-    public static class Wall_ {
-        public Position_ upperLeftCorner;
-        public int width;
-        public int height;
-
-        public boolean containsPosition(Position_ pos) {
-            return upperLeftCorner.x <= pos.x && pos.x < upperLeftCorner.x + width &&
-                    upperLeftCorner.y <= pos.y && pos.y < upperLeftCorner.y + height;
-        }
-    }
 
     public static class Map_ {
         public int width;
         public int height;
-        public List<Wall_> walls;
+        public List<String> tiles;
 
         public boolean isValidPosition(Position_ pos) {
-            return pos.x >= 0 && pos.x <= width &&
-                    pos.y >= 0 && pos.y <= height &&
-                    !walls.stream().anyMatch(w -> w.containsPosition(pos));
+            return pos.x >= 0 && pos.x <= width && pos.y >= 0 && pos.y <= height && !isWall(pos);
+        }
+
+        public boolean isWall(Position_ pos) {
+            char tile = tiles.get(pos.y).charAt(pos.x);
+            return tile == 'x';
         }
     }
 
-    public static final int step = 10;
+    public static final int step = 1;
 
     public static class Position_ {
 

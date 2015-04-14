@@ -1,8 +1,13 @@
 package fi.solita.botsofbf.dto;
 
-import java.util.Arrays;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Map {
@@ -13,27 +18,19 @@ public class Map {
     public final int width;
     public final int height;
     public final int maxItemCount;
-    public final List<Wall> walls;
+    public final List<String> tiles;
+    public final String name;
 
-    public Map(int width, int height, int maxItemCount, List<Wall> walls) {
+    private Map(String name, int width, int height, int maxItemCount, List<String> tiles) {
         this.width = width;
         this.height = height;
         this.maxItemCount = maxItemCount;
-        this.walls = walls;
+        this.tiles = tiles;
+        this.name = name;
     }
 
     public static Map createDefault() {
-        return new Map(DEFAULT_WIDTH, DEFAULT_HEIGHT, 10, Arrays.asList());
-    }
-
-    public static Map siwa() {
-        return new Map(30, 30, 5, Arrays.asList(
-                new Wall(Position.of(5, 10), 5, 1),
-                new Wall(Position.of(5, 19), 5, 1),
-                new Wall(Position.of(10, 5), 15, 1),
-                new Wall(Position.of(10, 24), 15, 1),
-                new Wall(Position.of(10, 6), 1, 5),
-                new Wall(Position.of(10, 19), 1, 5)));
+        return readMapFromFile("default.map");
     }
 
     public Position randomValidPosition(Stream<Position> excludedPositions) {
@@ -54,7 +51,36 @@ public class Map {
     public boolean isValidPosition(Position pos) {
         return pos.x >= 0 && pos.x <= width &&
                pos.y >= 0 && pos.y <= height &&
-               !walls.stream().anyMatch(w -> w.containsPosition(pos));
+               !isWall(pos);
+    }
+
+    public boolean isWall(Position pos) {
+        char tile = tiles.get(pos.y).charAt(pos.x);
+        return tile == 'x';
+    }
+
+    public static Map readMapFromFile(String mapFileName) {
+        try {
+            Path path = Paths.get("/bobf-maps", mapFileName);
+            if ( path.toFile().exists() ) {
+                return readMapFromPath(path);
+            } else {
+                return readMapFromPath(Paths.get(ClassLoader.getSystemResource("maps/" + mapFileName).toURI()));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Reading map file " + mapFileName + " failed.");
+        }
+    }
+
+    private static Map readMapFromPath(Path path) throws IOException {
+        List<String> lines = Files.lines(path, Charset.forName("UTF-8")).collect(Collectors.toList());
+        String mapName = lines.remove(0);
+        int maxItemCount = Integer.parseInt(lines.remove(0));
+        int width = lines.get(0).length();
+        int height = lines.size();
+        System.out.println("w " + width + ", h " + height + ", name " + mapName + " items " + maxItemCount);
+
+        return new Map(mapName, width, height, maxItemCount, lines);
     }
 
 }

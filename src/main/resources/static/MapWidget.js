@@ -99,7 +99,7 @@ var MapWidget = React.createClass({
       );
     };
 
-    var drawWall = function(wall) {
+    var drawWalls = function(row) {
           return (
           <G key={wall.upperLeftCorner.x + "." + wall.upperLeftCorner.y + "." + wall.width + "." + wall.height}>
             <Rectangle
@@ -112,6 +112,44 @@ var MapWidget = React.createClass({
           );
     };
 
+    var drawTiles = function(tiles) {
+        if (!tiles) {
+            return [];
+        }
+        var svgTiles = [];
+        for (var y = 0; y < tiles.length; y++) {
+            for (var x = 0; x < tiles[y].length; x++) {
+                if ( tiles[y][x] === 'x' ) {
+                    svgTiles.push(drawWallTile(x, y));
+                }
+            }
+        }
+        return svgTiles;
+    };
+
+    var drawWallTile = function(x, y) {
+        var color = "#494949";
+        return (
+            <G key={"tile_" + x + "." + y}>
+                <Rectangle
+                    x={x << TILE_WIDTH_SHIFT_AMOUNT}
+                    y={y << TILE_WIDTH_SHIFT_AMOUNT}
+                    width={TILE_WIDTH_IN_PIXELS}
+                    height={TILE_WIDTH_IN_PIXELS}
+                    fill={color} />
+            </G>
+        );
+    };
+
+    var drawMapName = function(name) {
+        return (
+            <G key="map_name">
+                <Text x={TILE_WIDTH_IN_PIXELS} y={TILE_WIDTH_IN_PIXELS} fill="#FFFFFF" fontSize="10px">
+                {name}
+                </Text>
+            </G>
+        );
+    };
     var drawItem = function(item) {
       return (
         <G key={item.position.x + "." + item.position.y}>
@@ -154,7 +192,8 @@ var MapWidget = React.createClass({
           </Rectangle>
 
           <G>
-          {this.state.map.walls.map(drawWall)}
+          {drawTiles(this.state.map.tiles)}
+          {drawMapName(this.state.map.name)}
           {this.state.items.map(drawItem)}
           {this.state.players.map(drawPlayer)}
           </G>

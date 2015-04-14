@@ -18,8 +18,8 @@ public class GameState {
         this.items = items;
     }
 
-    public GameState() {
-        this.map = Map.createDefault();//siwa();
+    public GameState(final Map map) {
+        this.map = map;
         this.round = 1;
         this.players = new HashSet<>();
         this.items = new HashSet<>();
@@ -86,9 +86,7 @@ public class GameState {
             return player.move(player.position.move(move, map.width, map.height));
         }
         else {
-            // rangaistus?
-            System.out.println("Invalid move from " + player.name);
-            return player;
+            throw new IllegalStateException(String.format("Invalid move from", player.name));
         }
     }
 
