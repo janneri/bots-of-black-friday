@@ -68,7 +68,7 @@ public class Map {
                 return readMapFromPath(Paths.get(ClassLoader.getSystemResource("maps/" + mapFileName).toURI()));
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException("Reading map file " + mapFileName + " failed.");
+            throw new IllegalArgumentException("Reading map file " + mapFileName + " failed.", e);
         }
     }
 
