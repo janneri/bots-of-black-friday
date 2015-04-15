@@ -39,6 +39,10 @@ public class Map {
         return readMapFromFile("split.map");
     }
 
+    public static Map createIkea() {
+        return readMapFromFile("ikea.map");
+    }
+
     public Position randomValidPosition(Stream<Position> excludedPositions) {
         for (int i = 0; i < 100; i++) {
             Position pos = randomPosition();

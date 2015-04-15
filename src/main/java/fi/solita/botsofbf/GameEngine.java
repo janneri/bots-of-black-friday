@@ -20,7 +20,7 @@ public final class GameEngine {
     private GameState currentState;
 
     public GameEngine() {
-        currentState = new GameState(Map.createDefault());
+        currentState = new GameState(Map.createIkea());
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
