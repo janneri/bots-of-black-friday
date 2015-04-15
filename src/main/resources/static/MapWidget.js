@@ -99,19 +99,6 @@ var MapWidget = React.createClass({
       );
     };
 
-    var drawWalls = function(row) {
-          return (
-          <G key={wall.upperLeftCorner.x + "." + wall.upperLeftCorner.y + "." + wall.width + "." + wall.height}>
-            <Rectangle
-              x={wall.upperLeftCorner.x << TILE_WIDTH_SHIFT_AMOUNT}
-              y={wall.upperLeftCorner.y << TILE_WIDTH_SHIFT_AMOUNT}
-              width={wall.width << TILE_WIDTH_SHIFT_AMOUNT}
-              height={wall.height << TILE_WIDTH_SHIFT_AMOUNT}
-              fill="#8C8C8C"/>
-          </G>
-          );
-    };
-
     var drawTiles = function(tiles) {
         if (!tiles) {
             return [];

@@ -32,15 +32,6 @@ public final class GameEngine {
         return new RegisterResponse(player, currentState);
     }
 
-    public GameState movePlayer(UUID playerId, Move move) {
-        // todo vuoro kasite: salli vain yksi siirto per vuoro
-        // todo tapa pelaaja, jos se lahettaa liikaa siirtoja per vuoro
-        currentState = currentState.movePlayer(playerId, move);
-
-        uiClient.notifyUi(currentState.getPlayer(playerId).name + " moved", currentState);
-        return currentState;
-    }
-
     public void say(UUID playerId, String message) {
         uiClient.sendChatMessageToUi(currentState.getPlayer(playerId), message);
     }
