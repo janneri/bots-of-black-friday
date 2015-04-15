@@ -20,13 +20,15 @@ public class Map {
     public final int maxItemCount;
     public final List<String> tiles;
     public final String name;
+    public final Position exit;
 
-    private Map(String name, int width, int height, int maxItemCount, List<String> tiles) {
+    private Map(String name, int width, int height, int maxItemCount, List<String> tiles, Position exit) {
         this.width = width;
         this.height = height;
         this.maxItemCount = maxItemCount;
         this.tiles = tiles;
         this.name = name;
+        this.exit = exit;
     }
 
     public static Map createDefault() {
@@ -59,8 +61,7 @@ public class Map {
     }
 
     public boolean isWall(Position pos) {
-        char tile = tiles.get(pos.y).charAt(pos.x);
-        return tile == 'x';
+        return tiles.get(pos.y).charAt(pos.x) == 'x';
     }
 
     public static Map readMapFromFile(String mapFileName) {
@@ -76,6 +77,21 @@ public class Map {
         }
     }
 
+    private static boolean isExit(List<String> tiles, int x, int y) {
+        return tiles.get(y).charAt(x) == 'o';
+    }
+
+    private static Position getExit(List<String> lines) {
+        for (int y = 0; y < lines.size(); y++) {
+            for (int x = 0; x < lines.get(y).length(); x++) {
+                if (isExit(lines, x, y)) {
+                    return Position.of(x, y);
+                }
+            }
+        }
+        throw new IllegalArgumentException("Exit position not found");
+    }
+
     private static Map readMapFromPath(Path path) throws IOException {
         List<String> lines = Files.lines(path, Charset.forName("UTF-8")).collect(Collectors.toList());
         String mapName = lines.remove(0);
@@ -84,7 +100,7 @@ public class Map {
         int height = lines.size();
         System.out.println("w " + width + ", h " + height + ", name " + mapName + " items " + maxItemCount);
 
-        return new Map(mapName, width, height, maxItemCount, lines);
+        return new Map(mapName, width, height, maxItemCount, lines, getExit(lines));
     }
 
 }

@@ -78,27 +78,14 @@ public class ExampleBots {
                 + " and hunting " + (huntedItem.isPresent() ? huntedItem.get().position : null));
 
         if (huntedItem.isPresent()) {
-
-            if ( hunterInGame.position.equals(huntedItem.get().position) ) {
-                System.out.println(String.format("%s picking up", hunterInGame.name));
-                return Move.PICK;
+            Move nextMove = nextMoveToItem(hunterInGame.position, huntedItem.get().position, gameStateChanged.gameState.map);
+            if ( nextMove != null ) {
+                return nextMove;
             }
-            if (hunterInGame.position.x > huntedItem.get().position.x &&
-                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.left())) {
-                return Move.LEFT;
-            }
-            else if (hunterInGame.position.x < huntedItem.get().position.x &&
-                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.right()))  {
-                return Move.RIGHT;
-            }
-            else if (hunterInGame.position.y > huntedItem.get().position.y &&
-                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.up())) {
-                return Move.UP;
-            }
-            else if (hunterInGame.position.y < huntedItem.get().position.y &&
-                    gameStateChanged.gameState.map.isValidPosition(hunterInGame.position.down())) {
-                return Move.DOWN;
-            }
+        }
+        else {
+            System.out.println(hunterInGame.name + " is running to exit.");
+            return nextMoveToItem(hunterInGame.position, gameStateChanged.gameState.map.findExit(), gameStateChanged.gameState.map);
         }
 
         new RestTemplate().postForEntity(
@@ -108,6 +95,29 @@ public class ExampleBots {
         return Move.UP;
     }
 
+    private Move nextMoveToItem(Position_ fromPos, Position_ toPos, Map_ map) {
+        if ( fromPos.equals(toPos) ) {
+            return Move.PICK;
+        }
+        if (fromPos.x > toPos.x &&
+                map.isValidPosition(fromPos.left())) {
+            return Move.LEFT;
+        }
+        else if (fromPos.x < toPos.x &&
+                map.isValidPosition(fromPos.right()))  {
+            return Move.RIGHT;
+        }
+        else if (fromPos.y > toPos.y &&
+                map.isValidPosition(fromPos.up())) {
+            return Move.UP;
+        }
+        else if (fromPos.y < toPos.y &&
+                map.isValidPosition(fromPos.down())) {
+            return Move.DOWN;
+        }
+
+        return null;
+    }
 
     public static class RegisterResponse_ {
         public UUID id;
@@ -156,6 +166,17 @@ public class ExampleBots {
         public boolean isWall(Position_ pos) {
             char tile = tiles.get(pos.y).charAt(pos.x);
             return tile == 'x';
+        }
+
+        public Position_ findExit() {
+            for (int y = 0; y < tiles.size(); y++) {
+                for (int x = 0; x < tiles.get(y).length(); x++) {
+                    if (tiles.get(y).charAt(x) == 'o') {
+                        return Position_.of(x, y);
+                    }
+                }
+            }
+            return null;
         }
     }
 

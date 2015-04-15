@@ -7,22 +7,25 @@ public class GameState {
 
     public final Map map;
     public final Set<Player> players;
+    public final Set<Player> finishedPlayers;
     public final Set<Item> items;
     public final int round;
     public static final int MAX_INVALID_ACTIONS = 5;
 
-    public GameState(final Map map, final int round, final Set<Player> players, final Set<Item> items) {
-        this.map = map;
-        this.round = round;
-        this.players = players;
-        this.items = items;
-    }
-
     public GameState(final Map map) {
         this.map = map;
         this.round = 1;
+        this.finishedPlayers = new HashSet<>();
         this.players = new HashSet<>();
         this.items = new HashSet<>();
+    }
+
+    private GameState(final Map map, final int round, final Set<Player> players, Set<Player> finishedPlayers, final Set<Item> items) {
+        this.map = map;
+        this.round = round;
+        this.players = players;
+        this.finishedPlayers = finishedPlayers;
+        this.items = items;
     }
 
     public GameState addPlayer(final Player player) {
@@ -33,17 +36,17 @@ public class GameState {
 
         Set<Player> newPlayers = new HashSet<>(players);
         newPlayers.add(player);
-        return new GameState(map, round, newPlayers, items);
+        return new GameState(map, round, newPlayers, finishedPlayers, items);
     }
 
     public GameState addItem(final Item item) {
         Set<Item> newItems = new HashSet<>(items);
         newItems.add(item);
-        return new GameState(map, round, players, newItems);
+        return new GameState(map, round, players, finishedPlayers, newItems);
     }
 
     public GameState newRound() {
-        return new GameState(map, round + 1, players, items);
+        return new GameState(map, round + 1, players, finishedPlayers, items);
     }
 
     public Player getPlayer(UUID playerId) {
@@ -53,10 +56,10 @@ public class GameState {
     public GameState addInvalidMove(Player player) {
         Player newPlayer = player.incInvalidActions();
         if ( newPlayer.invalidActionCount > MAX_INVALID_ACTIONS ) {
-            return new GameState(map, round, getOtherPlayers(newPlayer), items);
+            return new GameState(map, round, getOtherPlayers(newPlayer), finishedPlayers, items);
         }
         else {
-            return new GameState(map, round, replacePlayer(players, newPlayer), items);
+            return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items);
         }
     }
 
@@ -74,7 +77,13 @@ public class GameState {
         final Set<Player> newPlayers = replacePlayer(players, newPlayer);
         final Set<Item> newItems = playerGotItem(move, player) ? removeItem(player.position) : items;
 
-        return new GameState(map, round, newPlayers, newItems);
+        if ( map.exit.equals(newPlayer.position) ) {
+            finishedPlayers.add(newPlayer);
+            return new GameState(map, round, getOtherPlayers(newPlayer), finishedPlayers, newItems);
+        }
+        else {
+            return new GameState(map, round, newPlayers, finishedPlayers, newItems);
+        }
     }
 
     public Set<Item> removeItem(Position position) {

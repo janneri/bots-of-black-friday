@@ -107,15 +107,17 @@ var MapWidget = React.createClass({
         for (var y = 0; y < tiles.length; y++) {
             for (var x = 0; x < tiles[y].length; x++) {
                 if ( tiles[y][x] === 'x' ) {
-                    svgTiles.push(drawWallTile(x, y));
+                    svgTiles.push(drawTile(x, y, "#494949"));
+                }
+                else if ( tiles[y][x] === 'o' ) {
+                    svgTiles.push(drawTile(x, y, "#CC00FF"));
                 }
             }
         }
         return svgTiles;
     };
 
-    var drawWallTile = function(x, y) {
-        var color = "#494949";
+    var drawTile = function(x, y, color) {
         return (
             <G key={"tile_" + x + "." + y}>
                 <Rectangle
@@ -187,19 +189,41 @@ var MapWidget = React.createClass({
           </G>
         </SVGComponent>
 
-        <table className="active-player-list">
-          <thead>
-            <tr className="player">
-              <th className="name">Name</th>
-              <th className="moves">Moves</th>
-              <th className="money">Money left</th>
-              <th className="possession">Possession</th>
-            </tr>
-          </thead>
-          <tbody>
-          {_.sortBy(this.state.players, 'score').reverse().map(printPlayer)}
-          </tbody>
-        </table>
+        <div className="score-board">
+            <div className="finished-player-section">
+                <h3 className="title">Scoreboard</h3>
+                <table className="player-list">
+                    <thead>
+                        <tr className="player">
+                            <th className="name">Name</th>
+                            <th className="moves">Moves</th>
+                            <th className="money">Money left</th>
+                            <th className="possession">Possession</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {_.sortBy(this.state.finishedPlayers, 'score').reverse().map(printPlayer)}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="active-player-section">
+                <h3 className="title">Active players</h3>
+                <table className="player-list">
+                  <thead>
+                    <tr className="player">
+                      <th className="name">Name</th>
+                      <th className="moves">Moves</th>
+                      <th className="money">Money left</th>
+                      <th className="possession">Possession</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {_.sortBy(this.state.players, 'score').reverse().map(printPlayer)}
+                  </tbody>
+                </table>
+            </div>
+        </div>
       </div>
 
     );

@@ -1,9 +1,19 @@
-table {
-  float: left;
+.score-board {
+    float: left;
+    padding: 0;
+}
+
+.score-board .title {
+    padding: 0;
+    margin: 0;
+}
+
+.active-player-section {
+    margin-top: 12px;
 }
 
 svg {
-  float: left;
+    float: left;
 }
 
 table th {
