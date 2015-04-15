@@ -33,6 +33,10 @@ public class Map {
         return readMapFromFile("default.map");
     }
 
+    public static Map createSplit() {
+        return readMapFromFile("split.map");
+    }
+
     public Position randomValidPosition(Stream<Position> excludedPositions) {
         for (int i = 0; i < 100; i++) {
             Position pos = randomPosition();
