@@ -24,7 +24,6 @@ public class Player {
     // Pelaajan tilaksi retired, jos/kun tulee mitta täyteen?
     public final int actionCount;
 
-    @JsonIgnore
     public final int invalidActionCount;
 
     private Player(UUID uuid, String name, String url, Position position, int actionCount,

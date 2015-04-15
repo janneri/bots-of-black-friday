@@ -158,7 +158,8 @@ var MapWidget = React.createClass({
     var printPlayer = function(player) {
       return (
         <tr>
-          <td>{player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "")}</td>
+          <td>{player.name}</td>
+          <td>{player.actionCount + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "") + (player.invalidActionCount > 0 ? " (" + player.invalidActionCount + ")" : "")}</td>
           <td>{player.money}&euro;</td>
           <td>{player.score}&euro;</td>
         </tr>
@@ -186,12 +187,13 @@ var MapWidget = React.createClass({
           </G>
         </SVGComponent>
 
-        <table>
+        <table className="active-player-list">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Money left</th>
-              <th>Possession</th>
+            <tr className="player">
+              <th className="name">Name</th>
+              <th className="moves">Moves</th>
+              <th className="money">Money left</th>
+              <th className="possession">Possession</th>
             </tr>
           </thead>
           <tbody>
