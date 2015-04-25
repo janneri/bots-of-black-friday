@@ -6,6 +6,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class Player {
+
+    public static final int INITIAL_MONEY_LEFT = 5000;
+    public static final int INITIAL_HEALTH_LEFT = 100;
+
     @JsonIgnore
     public final UUID id;
     public final String name;
@@ -15,19 +19,15 @@ public class Player {
     public final int money;
     public final PlayerState state;
     public final int timeInState;
-    public static final int INITIAL_MONEY_LEFT = 5000;
-
     @JsonIgnore
     public final Optional<Item> lastItem;
-
-    // TODO rajoita DOSSAUSTA siten, että pelaaja voi tehdä vain rajallisen määrän liikkeitä?
-    // Pelaajan tilaksi retired, jos/kun tulee mitta täyteen?
     public final int actionCount;
+    public final int health; // 0-100%
 
-    public final int invalidActionCount;
 
     private Player(UUID uuid, String name, String url, Position position, int actionCount,
-                   int score, int money, PlayerState state, int timeInState, Optional<Item> lastItem, int invalidActionCount) {
+                   int score, int money, PlayerState state, int timeInState, Optional<Item> lastItem,
+                   int health) {
         this.id = uuid;
         this.name = name;
         this.url = url;
@@ -38,7 +38,7 @@ public class Player {
         this.state = state;
         this.timeInState = timeInState;
         this.lastItem = lastItem;
-        this.invalidActionCount = invalidActionCount;
+        this.health = health;
     }
 
     public static Player create(String name, String url, Position position) {
@@ -46,17 +46,20 @@ public class Player {
         int score = 0;
 
         return new Player(UUID.randomUUID(), name, url, position, 0, score,
-                INITIAL_MONEY_LEFT, PlayerState.MOVE, 0, Optional.<Item>empty(), invalidActionCount);
+                INITIAL_MONEY_LEFT, PlayerState.MOVE, 0, Optional.<Item>empty(),
+                INITIAL_HEALTH_LEFT);
     }
 
     public Player move(Position position) {
         return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
-                this.score, this.money, PlayerState.MOVE, 0, Optional.<Item>empty(), this.invalidActionCount);
+                this.score, this.money, PlayerState.MOVE, 0, Optional.<Item>empty(),
+                this.health);
     }
 
     public Player incInvalidActions() {
         return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
-                this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(), this.invalidActionCount + 1);
+                this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(),
+                this.health - 20);
     }
 
     public Player pickItem(Item item) {
@@ -67,11 +70,11 @@ public class Player {
         if (timeInState < item.getPickTime()) {
             return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
                     this.score, this.money, PlayerState.PICK, this.timeInState + 1, Optional.of(item),
-                    this.invalidActionCount);
+                    this.health);
         } else {
             return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
                     this.score + item.price, this.money - item.discountedPrice, PlayerState.MOVE, 0, Optional.of(item),
-                    this.invalidActionCount);
+                    this.health);
         }
     }
 

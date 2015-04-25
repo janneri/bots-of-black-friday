@@ -10,7 +10,6 @@ public class GameState {
     public final Set<Player> finishedPlayers;
     public final Set<Item> items;
     public final int round;
-    public static final int MAX_INVALID_ACTIONS = 5;
 
     public GameState(final Map map) {
         this.map = map;
@@ -55,13 +54,17 @@ public class GameState {
 
     public GameState addInvalidMove(Player player) {
         Player newPlayer = player.incInvalidActions();
-        if ( newPlayer.invalidActionCount > MAX_INVALID_ACTIONS ) {
-            return new GameState(map, round, getOtherPlayers(newPlayer), finishedPlayers, items);
-        }
-        else {
-            return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items);
-        }
+        return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items);
     }
+
+    public GameState removeDeadPlayers() {
+        Set<Player> alivePlayers = players.stream()
+                .filter(p -> p.health > 0)
+                .collect(Collectors.toSet());
+
+        return new GameState(map, round, alivePlayers, finishedPlayers, items);
+    }
+
 
     private Set<Player> getOtherPlayers(Player removedPlayer) {
         return players.stream().filter(p -> !p.id.equals(removedPlayer.id)).collect(Collectors.toSet());

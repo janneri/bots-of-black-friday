@@ -56,6 +56,8 @@ public final class GameEngine {
                 currentState = currentState.addInvalidMove(player);
                 uiClient.notifyUi(player.name + " is fucking up: " + e.getMessage(), currentState);
             }
+
+            currentState = currentState.removeDeadPlayers();
         }
     }
 

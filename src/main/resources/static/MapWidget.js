@@ -161,7 +161,8 @@ var MapWidget = React.createClass({
       return (
         <tr>
           <td>{player.name}</td>
-          <td>{player.actionCount + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "") + (player.invalidActionCount > 0 ? " (" + player.invalidActionCount + ")" : "")}</td>
+          <td>{player.actionCount + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "") }</td>
+          <td>{player.health}</td>
           <td>{player.money}&euro;</td>
           <td>{player.score}&euro;</td>
         </tr>
@@ -197,6 +198,7 @@ var MapWidget = React.createClass({
                         <tr className="player">
                             <th className="name">Name</th>
                             <th className="moves">Moves</th>
+                            <th className="health">Health %</th>
                             <th className="money">Money left</th>
                             <th className="possession">Possession</th>
                         </tr>
@@ -214,6 +216,7 @@ var MapWidget = React.createClass({
                     <tr className="player">
                       <th className="name">Name</th>
                       <th className="moves">Moves</th>
+                      <th className="health">Health %</th>
                       <th className="money">Money left</th>
                       <th className="possession">Possession</th>
                     </tr>
