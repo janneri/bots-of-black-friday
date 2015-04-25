@@ -11,17 +11,32 @@ public class Item {
     public final int discount;
     @JsonIgnore
     public final int discountedPrice;
+    public final Type type;
+    public final boolean isUsable;
 
-    private Item(int price, int discountPercent, Position position) {
+    public enum Type {
+        JUST_SOME_JUNK,
+        WEAPON
+    }
+
+    private Item(int price, int discountPercent, Position position, Type type, boolean isUsable) {
         this.price = price;
         this.discountPercent = discountPercent;
         this.discount = (int)(price * ((double)discountPercent/100));
         this.discountedPrice = this.price - this.discount;
         this.position = position;
+        this.type = type;
+        this.isUsable = isUsable;
     }
 
     public static Item create(int price, int discountPercent, Position position) {
-        return new Item(price, discountPercent, position);
+        final boolean isUsable = false;
+        return new Item(price, discountPercent, position, Type.JUST_SOME_JUNK, isUsable);
+    }
+
+    public static Item createWeapon(int price, int discountPercent, Position position) {
+        final boolean isUsable = true;
+        return new Item(price, discountPercent, position, Type.WEAPON, isUsable);
     }
 
     @Override
