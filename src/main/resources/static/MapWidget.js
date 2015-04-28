@@ -27,6 +27,14 @@ var Rectangle = React.createClass({
   }
 });
 
+var Line = React.createClass({
+  render: function() {
+    return this.transferPropsTo(
+      <line>{this.props.children}</line>
+    );
+  }
+});
+
 var G = React.createClass({
   render: function() {
     return this.transferPropsTo(
@@ -54,7 +62,7 @@ var Circle = React.createClass({
 var MapWidget = React.createClass({
 
   getInitialState: function() {
-    return {players: [], items: [], map: {width: 0, height: 0, walls: []}};
+    return {players: [], items: [], shootingLines: [{fromPosition: {x: 1, y: 1}, toPosition: {x: 50, y: 1}}], map: {width: 0, height: 0, walls: []}};
   },
 
   /**
@@ -139,6 +147,19 @@ var MapWidget = React.createClass({
             </G>
         );
     };
+
+    var drawShootingLine = function(line) {
+        return (
+            <G key={"line." + line.fromPosition.x  + "." + line.toPosition.x + line.fromPosition.y  + "." + line.toPosition.y}>
+                <Line x1={line.fromPosition.x << TILE_WIDTH_SHIFT_AMOUNT}
+                      y1={line.fromPosition.y << TILE_WIDTH_SHIFT_AMOUNT}
+                      x2={line.toPosition.x << TILE_WIDTH_SHIFT_AMOUNT}
+                      y2={line.toPosition.y << TILE_WIDTH_SHIFT_AMOUNT}
+                      stroke="crimson" strokeWidth={2} />
+            </G>
+        );
+    };
+
     var drawItem = function(item) {
       return (
         <G key={item.position.x + "." + item.position.y}>
@@ -151,7 +172,7 @@ var MapWidget = React.createClass({
             x={item.position.x << TILE_WIDTH_SHIFT_AMOUNT}
             y={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
             fill="#000000">
-          {item.price + '€ - ' + item.discountPercent + '%'}
+          {item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'}
           </Text>
         </G>
       );
@@ -187,6 +208,7 @@ var MapWidget = React.createClass({
           {drawMapName(this.state.map.name)}
           {this.state.items.map(drawItem)}
           {this.state.players.map(drawPlayer)}
+          {this.state.shootingLines.map(drawShootingLine)}
           </G>
         </SVGComponent>
 

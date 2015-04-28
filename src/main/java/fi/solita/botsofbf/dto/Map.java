@@ -53,7 +53,7 @@ public class Map {
         throw new IllegalStateException("Cannot find a valid random position.");
     }
 
-    public Position randomPosition() {
+    private Position randomPosition() {
         Random rand = new Random();
         return new Position(rand.nextInt(width), rand.nextInt(height));
     }

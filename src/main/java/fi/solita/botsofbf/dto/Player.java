@@ -2,8 +2,8 @@ package fi.solita.botsofbf.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -21,13 +21,14 @@ public class Player {
     public final int timeInState;
     @JsonIgnore
     public final Optional<Item> lastItem;
+    public final List<Item> usableItems;
     public final int actionCount;
     public final int health; // 0-100%
 
 
     private Player(UUID uuid, String name, String url, Position position, int actionCount,
                    int score, int money, PlayerState state, int timeInState, Optional<Item> lastItem,
-                   int health) {
+                   int health, List<Item> usableItems) {
         this.id = uuid;
         this.name = name;
         this.url = url;
@@ -39,27 +40,42 @@ public class Player {
         this.timeInState = timeInState;
         this.lastItem = lastItem;
         this.health = health;
+        this.usableItems = usableItems;
     }
 
     public static Player create(String name, String url, Position position) {
-        int invalidActionCount = 0;
-        int score = 0;
-
-        return new Player(UUID.randomUUID(), name, url, position, 0, score,
-                INITIAL_MONEY_LEFT, PlayerState.MOVE, 0, Optional.<Item>empty(),
-                INITIAL_HEALTH_LEFT);
+        final int score = 0;
+        final int actionCount = 0;
+        final int timeInState = 0;
+        return new Player(UUID.randomUUID(), name, url, position, actionCount, score,
+                INITIAL_MONEY_LEFT, PlayerState.MOVE, timeInState, Optional.<Item>empty(),
+                INITIAL_HEALTH_LEFT, Collections.<Item>emptyList());
     }
 
     public Player move(Position position) {
+        final int timeInState = 0;
         return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
-                this.score, this.money, PlayerState.MOVE, 0, Optional.<Item>empty(),
-                this.health);
+                this.score, this.money, PlayerState.MOVE, timeInState, Optional.<Item>empty(),
+                this.health, this.usableItems);
     }
 
-    public Player incInvalidActions() {
+    public Player decreaseHealth(int amount) {
         return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
                 this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(),
-                this.health - 20);
+                this.health - amount, this.usableItems);
+    }
+
+    public boolean hasUnusedWeapon() {
+        return usableItems.stream()
+                .anyMatch(item -> item.isUsable && item.type == Item.Type.WEAPON);
+    }
+
+    public Player useFirstUsableItem() {
+        List<Item> newItems = this.usableItems.stream().skip(1).collect(Collectors.toList());
+
+        return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
+                this.score, this.money, PlayerState.MOVE, this.timeInState, this.lastItem,
+                this.health, newItems);
     }
 
     public Player pickItem(Item item) {
@@ -70,11 +86,16 @@ public class Player {
         if (timeInState < item.getPickTime()) {
             return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
                     this.score, this.money, PlayerState.PICK, this.timeInState + 1, Optional.of(item),
-                    this.health);
+                    this.health, this.usableItems);
         } else {
+            ArrayList<Item> newItems = new ArrayList<>(this.usableItems);
+            if ( item.isUsable && item.type == Item.Type.WEAPON ) {
+                newItems.add(item);
+            }
+
             return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
                     this.score + item.price, this.money - item.discountedPrice, PlayerState.MOVE, 0, Optional.of(item),
-                    this.health);
+                    this.health, newItems);
         }
     }
 

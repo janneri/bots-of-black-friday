@@ -10,6 +10,7 @@ public class GameState {
     public final Set<Player> finishedPlayers;
     public final Set<Item> items;
     public final int round;
+    public final List<ShootingLine> shootingLines;
 
     public GameState(final Map map) {
         this.map = map;
@@ -17,14 +18,17 @@ public class GameState {
         this.finishedPlayers = new HashSet<>();
         this.players = new HashSet<>();
         this.items = new HashSet<>();
+        this.shootingLines = new ArrayList<>();
     }
 
-    private GameState(final Map map, final int round, final Set<Player> players, Set<Player> finishedPlayers, final Set<Item> items) {
+    private GameState(final Map map, final int round, final Set<Player> players,
+                      Set<Player> finishedPlayers, final Set<Item> items, final List<ShootingLine> shootingLines) {
         this.map = map;
         this.round = round;
         this.players = players;
         this.finishedPlayers = finishedPlayers;
         this.items = items;
+        this.shootingLines = shootingLines;
     }
 
     public GameState addPlayer(final Player player) {
@@ -35,17 +39,21 @@ public class GameState {
 
         Set<Player> newPlayers = new HashSet<>(players);
         newPlayers.add(player);
-        return new GameState(map, round, newPlayers, finishedPlayers, items);
+        return new GameState(map, round, newPlayers, finishedPlayers, items, shootingLines);
     }
 
     public GameState addItem(final Item item) {
         Set<Item> newItems = new HashSet<>(items);
         newItems.add(item);
-        return new GameState(map, round, players, finishedPlayers, newItems);
+        return new GameState(map, round, players, finishedPlayers, newItems, shootingLines);
     }
 
     public GameState newRound() {
-        return new GameState(map, round + 1, players, finishedPlayers, items);
+        List<ShootingLine> newShootingLines = shootingLines.stream()
+                .map(line -> line.incAge())
+                .filter(line -> line.age < 3)
+                .collect(Collectors.toList());
+        return new GameState(map, round + 1, players, finishedPlayers, items, newShootingLines);
     }
 
     public Player getPlayer(UUID playerId) {
@@ -53,8 +61,8 @@ public class GameState {
     }
 
     public GameState addInvalidMove(Player player) {
-        Player newPlayer = player.incInvalidActions();
-        return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items);
+        Player newPlayer = player.decreaseHealth(20);
+        return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items, shootingLines);
     }
 
     public GameState removeDeadPlayers() {
@@ -62,7 +70,7 @@ public class GameState {
                 .filter(p -> p.health > 0)
                 .collect(Collectors.toSet());
 
-        return new GameState(map, round, alivePlayers, finishedPlayers, items);
+        return new GameState(map, round, alivePlayers, finishedPlayers, items, shootingLines);
     }
 
 
@@ -74,18 +82,54 @@ public class GameState {
         return move == Move.PICK && player.lastItem.isPresent() && player.timeInState >= player.lastItem.get().getPickTime();
     }
 
+    private static int manhattanDistance(Player p1, Player p2) {
+        return Math.abs(p1.position.x - p2.position.x) + Math.abs(p1.position.y - p2.position.y);
+    }
+
+    private static Optional<Player> findClosestPlayer(Player fromPlayer, Set<Player> players) {
+        return players.stream()
+                .filter(p -> !p.id.equals(fromPlayer.id))
+                .sorted((p1, p2) -> manhattanDistance(fromPlayer, p2) - manhattanDistance(fromPlayer, p1))
+                .findFirst();
+    }
+
     public GameState movePlayer(UUID playerId, Move move) {
         final Player player = getPlayer(playerId);
-        final Player newPlayer = move == Move.PICK ? pickItem(player) : movePlayer(player, move);
-        final Set<Player> newPlayers = replacePlayer(players, newPlayer);
+        Player newPlayer = null;
+        Optional<Player> affectedPlayer = Optional.empty();
+        final List<ShootingLine> newShootingLines = new ArrayList(shootingLines);
+
+        if ( move == Move.PICK ) {
+            newPlayer = pickItem(player);
+        }
+        else if ( move == Move.USE ) {
+            if ( !player.hasUnusedWeapon() ) {
+                throw new IllegalStateException(String.format("%s is trying to use an already used item", player.name));
+            }
+            Optional<Player> closestPlayer = findClosestPlayer(player, players);
+            if ( closestPlayer.isPresent() ) {
+                affectedPlayer = Optional.of(closestPlayer.get().decreaseHealth(50));
+                newPlayer = player.useFirstUsableItem();
+                newShootingLines.add(ShootingLine.of(player.position, closestPlayer.get().position));
+            }
+        }
+        else {
+            newPlayer = movePlayer(player, move);
+        }
+
+
+        final Set<Player> newPlayers = affectedPlayer.isPresent() ?
+                replacePlayer(replacePlayer(players, newPlayer), affectedPlayer.get()) :
+                replacePlayer(players, newPlayer);
+
         final Set<Item> newItems = playerGotItem(move, player) ? removeItem(player.position) : items;
 
         if ( map.exit.equals(newPlayer.position) ) {
             finishedPlayers.add(newPlayer);
-            return new GameState(map, round, getOtherPlayers(newPlayer), finishedPlayers, newItems);
+            return new GameState(map, round, getOtherPlayers(newPlayer), finishedPlayers, newItems, newShootingLines);
         }
         else {
-            return new GameState(map, round, newPlayers, finishedPlayers, newItems);
+            return new GameState(map, round, newPlayers, finishedPlayers, newItems, newShootingLines);
         }
     }
 
@@ -105,11 +149,8 @@ public class GameState {
     private Player pickItem(Player player) {
         final Optional<Item> item = items.stream().filter(i -> i.position.equals(player.position)).findFirst();
 
-        if ( !item.isPresent() ) {
-            throw new IllegalStateException(String.format("%s is trying to pick from invalid location", player.name));
-        }
-
-        return player.pickItem(item.get());
+        return player.pickItem(item.orElseThrow(() -> new IllegalStateException(
+                String.format("%s is trying to pick from invalid location", player.name))));
     }
 
     private Set<Player> replacePlayer(Set<Player> players, Player newPlayer) {
@@ -124,7 +165,10 @@ public class GameState {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
             Position pos = map.randomValidPosition(items.stream().map(i -> i.position));
-            return addItem(Item.create(price, discountPercent, pos));
+            Item newItem = discountPercent > 70 ?
+                    Item.createWeapon(price, discountPercent, pos) :
+                    Item.create(price, discountPercent, pos);
+            return addItem(newItem);
         } else {
             return this;
         }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Component
 public final class GameEngine {
@@ -24,7 +25,7 @@ public final class GameEngine {
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
-        Position randomValidPosition = currentState.map.randomPosition();
+        Position randomValidPosition = currentState.map.randomValidPosition(Stream.<Position>empty());
         Player player = Player.create(playerName, url, randomValidPosition);
         currentState = currentState.addPlayer(player);
         System.out.println("Registered " + playerName + " " + url);

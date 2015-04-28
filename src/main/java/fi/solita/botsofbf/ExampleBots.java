@@ -68,6 +68,11 @@ public class ExampleBots {
     public @ResponseBody Move moveHunter(@RequestBody GameStateChanged_ gameStateChanged) throws InterruptedException {
         Player_ hunterInGame = gameStateChanged.playerState;
 
+        if ( hunterInGame.hasUnusedWeapon() ) {
+            System.out.println("Using a weapon");
+            return Move.USE;
+        }
+
         Optional<Item_> huntedItem = gameStateChanged.gameState.items.stream()
                 .filter(i -> hunterInGame.money > i.price)
                 .sorted(Comparator.comparing((Item_ item) -> item.position.distance(hunterInGame.position))
@@ -132,6 +137,13 @@ public class ExampleBots {
         public int movedOnRound;
         public int score;
         public int money;
+        public List<Item_> usableItems;
+
+        public boolean hasUnusedWeapon() {
+            return usableItems.stream()
+                    .anyMatch(item -> item.isUsable && item.type == Item_.Type.WEAPON);
+        }
+
     }
 
     public static class GameState_ {
@@ -151,6 +163,13 @@ public class ExampleBots {
     public static class Item_ {
         public int price;
         public Position_ position;
+        public Type type;
+        public boolean isUsable;
+
+        public enum Type {
+            JUST_SOME_JUNK,
+            WEAPON
+        }
     }
 
 
