@@ -149,13 +149,13 @@ var MapWidget = React.createClass({
     };
 
     var drawShootingLine = function(line) {
-        return (
+      return (
             <G key={"line." + line.fromPosition.x  + "." + line.toPosition.x + line.fromPosition.y  + "." + line.toPosition.y}>
                 <Line x1={line.fromPosition.x << TILE_WIDTH_SHIFT_AMOUNT}
                       y1={line.fromPosition.y << TILE_WIDTH_SHIFT_AMOUNT}
                       x2={line.toPosition.x << TILE_WIDTH_SHIFT_AMOUNT}
                       y2={line.toPosition.y << TILE_WIDTH_SHIFT_AMOUNT}
-                      stroke="crimson" strokeWidth={2} />
+                      stroke="orange" strokeWidth="2" />
             </G>
         );
     };
@@ -204,11 +204,11 @@ var MapWidget = React.createClass({
           </Rectangle>
 
           <G>
-          {drawTiles(this.state.map.tiles)}
-          {drawMapName(this.state.map.name)}
-          {this.state.items.map(drawItem)}
-          {this.state.players.map(drawPlayer)}
-          {this.state.shootingLines.map(drawShootingLine)}
+            {drawTiles(this.state.map.tiles)}
+            {drawMapName(this.state.map.name)}
+            {this.state.items.map(drawItem)}
+            {this.state.players.map(drawPlayer)}
+            {this.state.shootingLines.map(drawShootingLine)}
           </G>
         </SVGComponent>
 
