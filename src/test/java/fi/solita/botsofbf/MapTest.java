@@ -21,7 +21,7 @@ public class MapTest {
             "halpahalli",
             "5",
             "xxxxxxx",
-            "x  o  x ",
+            "x__o__x ",
             "xxxxxxx");
 
     @Test

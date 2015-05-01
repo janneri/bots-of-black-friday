@@ -78,24 +78,28 @@ public class Player {
                 this.health, newItems);
     }
 
-    public Player pickItem(Item item) {
+    public PickResult pickItem(Item item) {
         if (this.money < item.discountedPrice) {
             throw new IllegalStateException("No money left");
         }
 
-        if (timeInState < item.getPickTime()) {
-            return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
-                    this.score, this.money, PlayerState.PICK, this.timeInState + 1, Optional.of(item),
-                    this.health, this.usableItems);
-        } else {
+        if (timeInState + 1 >= item.getPickTime()) {
             ArrayList<Item> newItems = new ArrayList<>(this.usableItems);
             if ( item.isUsable && item.type == Item.Type.WEAPON ) {
                 newItems.add(item);
             }
 
-            return new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
+            Player player = new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
                     this.score + item.price, this.money - item.discountedPrice, PlayerState.MOVE, 0, Optional.of(item),
                     this.health, newItems);
+
+            return new PickResult(true, player);
+        } else {
+            Player player = new Player(this.id, this.name, this.url, this.position, this.actionCount + 1,
+                    this.score, this.money, PlayerState.PICK, this.timeInState + 1, Optional.of(item),
+                    this.health, this.usableItems);
+
+            return new PickResult(false, player);
         }
     }
 

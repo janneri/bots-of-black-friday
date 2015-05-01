@@ -79,10 +79,6 @@ public class GameState {
         return players.stream().filter(p -> !p.id.equals(removedPlayer.id)).collect(Collectors.toSet());
     }
 
-    private boolean playerGotItem(Move move, Player player) {
-        return move == Move.PICK && player.lastItem.isPresent() && player.timeInState >= player.lastItem.get().getPickTime();
-    }
-
     private static int manhattanDistance(Player p1, Player p2) {
         return Math.abs(p1.position.x - p2.position.x) + Math.abs(p1.position.y - p2.position.y);
     }
@@ -99,9 +95,15 @@ public class GameState {
         Player newPlayer = null;
         Optional<Player> affectedPlayer = Optional.empty();
         final List<ShootingLine> newShootingLines = new ArrayList(shootingLines);
+        boolean itemWasPicked = false;
 
         if ( move == Move.PICK ) {
-            newPlayer = pickItem(player);
+            final Optional<Item> item = items.stream().filter(i -> i.position.equals(player.position)).findFirst();
+            PickResult pickResult = player.pickItem(item.orElseThrow(() -> new IllegalStateException(
+                    String.format("%s is trying to pick from invalid location", player.name))));
+
+            newPlayer = pickResult.newPlayer;
+            itemWasPicked = pickResult.itemWasPicked;
         }
         else if ( move == Move.USE ) {
             if ( !player.hasUnusedWeapon() ) {
@@ -123,7 +125,7 @@ public class GameState {
                 replacePlayer(replacePlayer(players, newPlayer), affectedPlayer.get()) :
                 replacePlayer(players, newPlayer);
 
-        final Set<Item> newItems = playerGotItem(move, newPlayer) ? removeItem(newPlayer.position) : items;
+        final Set<Item> newItems = itemWasPicked ? removeItem(newPlayer.position) : items;
 
         if ( map.exit.equals(newPlayer.position) ) {
             finishedPlayers.add(newPlayer);
@@ -145,13 +147,6 @@ public class GameState {
         else {
             throw new IllegalStateException(String.format("Invalid move from", player.name));
         }
-    }
-
-    private Player pickItem(Player player) {
-        final Optional<Item> item = items.stream().filter(i -> i.position.equals(player.position)).findFirst();
-
-        return player.pickItem(item.orElseThrow(() -> new IllegalStateException(
-                String.format("%s is trying to pick from invalid location", player.name))));
     }
 
     private Set<Player> replacePlayer(Set<Player> players, Player newPlayer) {

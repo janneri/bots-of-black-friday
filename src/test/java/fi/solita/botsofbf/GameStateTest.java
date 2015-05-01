@@ -16,7 +16,7 @@ public class GameStateTest {
             "halpahalli",
             "5",
             "xxxxxxx",
-            "x  o  x ",
+            "x__o__x ",
             "xxxxxxx");
 
 
@@ -71,7 +71,7 @@ public class GameStateTest {
     }
 
     @Test
-    public void pickItemIncreasesPlayerScore() {
+    public void pickItemIncreasesPlayerScoreAndDecreasesMoneyLeft() {
         Map map = Map.createMapFromLines(mapLines);
         Player player = createPlayerToMap(map);
         Item item = Item.create(100, 1, player.position);

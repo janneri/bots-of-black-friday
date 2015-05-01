@@ -22,7 +22,7 @@ public class Map {
     // todo create Tile type
     public static final char WALL = 'x';
     public static final char EXIT = 'o';
-    public static final char FLOOR = ' ';
+    public static final char FLOOR = '_';
 
     private final List<Position> movablePositions;
 
