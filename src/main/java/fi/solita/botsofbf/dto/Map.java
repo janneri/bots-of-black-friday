@@ -5,15 +5,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Map {
-
-    public static final int DEFAULT_HEIGHT = 50;
-    public static final int DEFAULT_WIDTH = 50;
 
     public final int width;
     public final int height;
@@ -22,50 +19,37 @@ public class Map {
     public final String name;
     public final Position exit;
 
-    private Map(String name, int width, int height, int maxItemCount, List<String> tiles, Position exit) {
+    // todo create Tile type
+    public static final char WALL = 'x';
+    public static final char EXIT = 'o';
+    public static final char FLOOR = ' ';
+
+    private final List<Position> movablePositions;
+
+    private Map(String name, int width, int height, int maxItemCount, List<String> tiles,
+                Position exit, List<Position> movablePositions) {
         this.width = width;
         this.height = height;
         this.maxItemCount = maxItemCount;
         this.tiles = tiles;
         this.name = name;
         this.exit = exit;
+        this.movablePositions = movablePositions;
     }
 
-    public static Map createDefault() {
-        return readMapFromFile("default.map");
-    }
-
-    public static Map createSplit() {
-        return readMapFromFile("split.map");
-    }
-
-    public static Map createIkea() {
-        return readMapFromFile("ikea.map");
-    }
-
-    public Position randomValidPosition(Stream<Position> excludedPositions) {
-        for (int i = 0; i < 100; i++) {
-            Position pos = randomPosition();
-            if ( isValidPosition(pos) && excludedPositions.noneMatch(p -> p.equals(pos))) {
-                return pos;
-            }
-        }
-        throw new IllegalStateException("Cannot find a valid random position.");
-    }
-
-    private Position randomPosition() {
+    public Position randomFloorPosition() {
         Random rand = new Random();
-        return new Position(rand.nextInt(width), rand.nextInt(height));
+        return movablePositions.get(rand.nextInt(movablePositions.size()));
     }
 
-    public boolean isValidPosition(Position pos) {
+    public boolean isMovablePosition(Position pos) {
         return pos.x >= 0 && pos.x <= width &&
                pos.y >= 0 && pos.y <= height &&
                !isWall(pos);
     }
 
-    public boolean isWall(Position pos) {
-        return tiles.get(pos.y).charAt(pos.x) == 'x';
+    private boolean isWall(Position pos) {
+        return tiles.get(pos.y).charAt(pos.x) == WALL;
     }
 
     public static Map readMapFromFile(String mapFileName) {
@@ -81,30 +65,52 @@ public class Map {
         }
     }
 
-    private static boolean isExit(List<String> tiles, int x, int y) {
-        return tiles.get(y).charAt(x) == 'o';
-    }
-
-    private static Position getExit(List<String> lines) {
+    // todo map to Tile and use Stream::findFirst
+    private static Position getPositionOf(List<String> lines, char tile) {
         for (int y = 0; y < lines.size(); y++) {
             for (int x = 0; x < lines.get(y).length(); x++) {
-                if (isExit(lines, x, y)) {
+                if (lines.get(y).charAt(x) == tile) {
                     return Position.of(x, y);
                 }
             }
         }
-        throw new IllegalArgumentException("Exit position not found");
+        throw new IllegalArgumentException("Position of " + tile + " not found");
+    }
+
+    // todo map to Tile and use Stream::filter
+    private static List<Position> filterPositionsOfType(List<String> lines, char tile) {
+        List<Position> positions = new ArrayList();
+        for (int y = 0; y < lines.size(); y++) {
+            for (int x = 0; x < lines.get(y).length(); x++) {
+                if (lines.get(y).charAt(x) == tile) {
+                    positions.add(Position.of(x, y));
+                }
+            }
+        }
+        return positions;
     }
 
     private static Map readMapFromPath(Path path) throws IOException {
-        List<String> lines = Files.lines(path, Charset.forName("UTF-8")).collect(Collectors.toList());
-        String mapName = lines.remove(0);
-        int maxItemCount = Integer.parseInt(lines.remove(0));
-        int width = lines.get(0).length();
-        int height = lines.size();
+        return createMapFromLines(Files.lines(path, Charset.forName("UTF-8")).collect(Collectors.toList()));
+    }
+
+    public static Map createMapFromLines(List<String> lines) {
+        // header
+        String mapName = lines.get(0);
+        int maxItemCount = Integer.parseInt(lines.get(1));
+        // tile rows
+        List<String> tiles = lines.stream().skip(2).collect(Collectors.toList());
+        int width = tiles.get(0).length();
+        int height = tiles.size();
         System.out.println("w " + width + ", h " + height + ", name " + mapName + " items " + maxItemCount);
 
-        return new Map(mapName, width, height, maxItemCount, lines, getExit(lines));
+        final List<Position> floorTiles = filterPositionsOfType(tiles, FLOOR);
+        if ( floorTiles.size() == 0) {
+            throw new IllegalStateException("The map must contain movable tiles.");
+        }
+
+        return new Map(mapName, width, height, maxItemCount, tiles, getPositionOf(tiles, EXIT), floorTiles);
     }
+
 
 }

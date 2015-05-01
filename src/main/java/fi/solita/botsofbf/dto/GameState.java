@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class GameState {
 
+    public static final int HEALTH_LOST_WHEN_ATTACKED = 50;
     public final Map map;
     public final Set<Player> players;
     public final Set<Player> finishedPlayers;
@@ -86,7 +87,7 @@ public class GameState {
         return Math.abs(p1.position.x - p2.position.x) + Math.abs(p1.position.y - p2.position.y);
     }
 
-    private static Optional<Player> findClosestPlayer(Player fromPlayer, Set<Player> players) {
+    private static Optional<Player> findFurthestPlayer(Player fromPlayer, Set<Player> players) {
         return players.stream()
                 .filter(p -> !p.id.equals(fromPlayer.id))
                 .sorted((p1, p2) -> manhattanDistance(fromPlayer, p2) - manhattanDistance(fromPlayer, p1))
@@ -104,11 +105,11 @@ public class GameState {
         }
         else if ( move == Move.USE ) {
             if ( !player.hasUnusedWeapon() ) {
-                throw new IllegalStateException(String.format("%s is trying to use an already used item", player.name));
+                throw new IllegalStateException(String.format("%s does not have a usable item", player.name));
             }
-            Optional<Player> closestPlayer = findClosestPlayer(player, players);
+            Optional<Player> closestPlayer = findFurthestPlayer(player, players);
             if ( closestPlayer.isPresent() ) {
-                affectedPlayer = Optional.of(closestPlayer.get().decreaseHealth(50));
+                affectedPlayer = Optional.of(closestPlayer.get().decreaseHealth(HEALTH_LOST_WHEN_ATTACKED));
                 newPlayer = player.useFirstUsableItem();
                 newShootingLines.add(ShootingLine.of(player.position, closestPlayer.get().position));
             }
@@ -122,7 +123,7 @@ public class GameState {
                 replacePlayer(replacePlayer(players, newPlayer), affectedPlayer.get()) :
                 replacePlayer(players, newPlayer);
 
-        final Set<Item> newItems = playerGotItem(move, player) ? removeItem(player.position) : items;
+        final Set<Item> newItems = playerGotItem(move, newPlayer) ? removeItem(newPlayer.position) : items;
 
         if ( map.exit.equals(newPlayer.position) ) {
             finishedPlayers.add(newPlayer);
@@ -138,7 +139,7 @@ public class GameState {
     }
 
     private Player movePlayer(Player player, Move move) {
-        if ( map.isValidPosition(player.position.move(move, map.width, map.height)) ) {
+        if ( map.isMovablePosition(player.position.move(move, map.width, map.height)) ) {
             return player.move(player.position.move(move, map.width, map.height));
         }
         else {
@@ -164,7 +165,7 @@ public class GameState {
         if (items.size() < map.maxItemCount && Math.random() > 0.9) {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
-            Position pos = map.randomValidPosition(items.stream().map(i -> i.position));
+            Position pos = map.randomFloorPosition();
             Item newItem = discountPercent > 70 ?
                     Item.createWeapon(price, discountPercent, pos) :
                     Item.create(price, discountPercent, pos);

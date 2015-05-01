@@ -39,6 +39,11 @@ public class Item {
         return new Item(price, discountPercent, position, Type.WEAPON, isUsable);
     }
 
+    @JsonIgnore
+    public int getPickTime() {
+        return Math.round(discountPercent / 10);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,8 +51,11 @@ public class Item {
 
         Item item = (Item) o;
 
+        if (discountPercent != item.discountPercent) return false;
+        if (isUsable != item.isUsable) return false;
         if (price != item.price) return false;
         if (position != null ? !position.equals(item.position) : item.position != null) return false;
+        if (type != item.type) return false;
 
         return true;
     }
@@ -55,12 +63,11 @@ public class Item {
     @Override
     public int hashCode() {
         int result = price;
+        result = 31 * result + discountPercent;
         result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (isUsable ? 1 : 0);
         return result;
     }
 
-    @JsonIgnore
-    public int getPickTime() {
-        return Math.round(discountPercent / 10);
-    }
 }

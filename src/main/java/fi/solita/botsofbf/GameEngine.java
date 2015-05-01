@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Component
 public final class GameEngine {
@@ -21,11 +20,11 @@ public final class GameEngine {
     private GameState currentState;
 
     public GameEngine() {
-        currentState = new GameState(Map.createIkea());
+        currentState = new GameState(Map.readMapFromFile("ikea.map"));
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
-        Position randomValidPosition = currentState.map.randomValidPosition(Stream.<Position>empty());
+        Position randomValidPosition = currentState.map.randomFloorPosition();
         Player player = Player.create(playerName, url, randomValidPosition);
         currentState = currentState.addPlayer(player);
         System.out.println("Registered " + playerName + " " + url);
