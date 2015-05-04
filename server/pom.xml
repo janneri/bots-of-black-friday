@@ -41,6 +41,15 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <!--resources>
+            <resource>
+                <directory>resources</directory>
+                <includes>
+                    <include>maps/*.map</include>
+                    <include>static</include>
+                </includes>
+            </resource>
+        </resources-->
     </build>
 
     <repositories>

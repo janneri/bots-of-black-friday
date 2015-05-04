@@ -1,6 +1,7 @@
 package fi.solita.botsofbf.dto;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,7 +59,11 @@ public class Map {
             if ( path.toFile().exists() ) {
                 return readMapFromPath(path);
             } else {
-                return readMapFromPath(Paths.get(ClassLoader.getSystemResource("maps/" + mapFileName).toURI()));
+                URL resourceUrl = ClassLoader.getSystemResource("maps/" + mapFileName);
+                if ( resourceUrl == null ) {
+                    throw new IllegalArgumentException("Map " + mapFileName + " was not found.");
+                }
+                return readMapFromPath(Paths.get(resourceUrl.toURI()));
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Reading map file " + mapFileName + " failed.", e);
