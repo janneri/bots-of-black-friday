@@ -1,7 +1,9 @@
 package fi.solita.botsofbf.dto;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,17 +59,26 @@ public class Map {
         try {
             Path path = Paths.get("/bobf-maps", mapFileName);
             if ( path.toFile().exists() ) {
-                return readMapFromPath(path);
+                return createMapFromLines(Files.lines(path, Charset.forName("UTF-8")).collect(Collectors.toList()));
             } else {
-                URL resourceUrl = ClassLoader.getSystemResource("maps/" + mapFileName);
-                if ( resourceUrl == null ) {
-                    throw new IllegalArgumentException("Map " + mapFileName + " was not found.");
-                }
-                return readMapFromPath(Paths.get(resourceUrl.toURI()));
+                return createMapFromLines(readClasspathResourceAsLines(mapFileName));
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Reading map file " + mapFileName + " failed.", e);
         }
+    }
+
+    private static List<String> readClasspathResourceAsLines(String mapFileName) throws IOException {
+        final InputStream inputStream = ClassLoader.getSystemResourceAsStream("maps/" + mapFileName);
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+        List<String> lines = new ArrayList();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            lines.add(line);
+        }
+
+        return lines;
     }
 
     // todo map to Tile and use Stream::findFirst
@@ -93,10 +104,6 @@ public class Map {
             }
         }
         return positions;
-    }
-
-    private static Map readMapFromPath(Path path) throws IOException {
-        return createMapFromLines(Files.lines(path, Charset.forName("UTF-8")).collect(Collectors.toList()));
     }
 
     public static Map createMapFromLines(List<String> lines) {
