@@ -141,8 +141,13 @@ public class GameState {
     }
 
     private Player movePlayer(Player player, Move move) {
-        if ( map.isMovablePosition(player.position.move(move, map.width, map.height)) ) {
-            return player.move(player.position.move(move, map.width, map.height));
+        final Position newPos = player.position.move(move, map.width, map.height);
+        if (map.isMovablePosition(newPos) ) {
+            final Player newPlayer = player.move(newPos);
+            if (map.isTrap(newPos)) {
+                return newPlayer.decreaseHealth(10);
+            }
+            return newPlayer;
         }
         else {
             throw new IllegalStateException(String.format("Invalid move from", player.name));

@@ -120,6 +120,9 @@ var MapWidget = React.createClass({
                 else if ( tiles[y][x] === 'o' ) {
                     svgTiles.push(drawTile(x, y, "#CC00FF"));
                 }
+                else if ( tiles[y][x] === '#' ) {
+                  svgTiles.push(drawTrap(x, y));
+                }
             }
         }
         return svgTiles;
@@ -136,6 +139,19 @@ var MapWidget = React.createClass({
                     fill={color} />
             </G>
         );
+    };
+
+    var drawTrap = function(x, y) {
+      return (
+        <G key={"trap_" + x + "." + y}>
+          <Circle
+            cx={(x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
+            cy={(y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
+            r={TILE_WIDTH_IN_PIXELS >> 1}
+            fill="white"
+            stroke="red"/>
+        </G>
+      );
     };
 
     var drawMapName = function(name) {

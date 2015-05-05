@@ -191,6 +191,9 @@
 	                else if ( tiles[y][x] === 'o' ) {
 	                    svgTiles.push(drawTile(x, y, "#CC00FF"));
 	                }
+	                else if ( tiles[y][x] === '#' ) {
+	                  svgTiles.push(drawTrap(x, y));
+	                }
 	            }
 	        }
 	        return svgTiles;
@@ -207,6 +210,19 @@
 	                    fill: color})
 	            )
 	        );
+	    };
+
+	    var drawTrap = function(x, y) {
+	      return (
+	        React.createElement(G, {key: "trap_" + x + "." + y}, 
+	          React.createElement(Circle, {
+	            cx: (x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1), 
+	            cy: (y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1), 
+	            r: TILE_WIDTH_IN_PIXELS >> 1, 
+	            fill: "white", 
+	            stroke: "red"})
+	        )
+	      );
 	    };
 
 	    var drawMapName = function(name) {
@@ -15889,9 +15905,9 @@
 
 	"use strict";
 
-	var PooledClass = require(42);
+	var PooledClass = require(45);
 
-	var traverseAllChildren = require(43);
+	var traverseAllChildren = require(46);
 	var warning = require(39);
 
 	var twoArgumentPooler = PooledClass.twoArgumentPooler;
@@ -16042,12 +16058,12 @@
 	"use strict";
 
 	var ReactElement = require(18);
-	var ReactOwner = require(44);
-	var ReactUpdates = require(45);
+	var ReactOwner = require(42);
+	var ReactUpdates = require(43);
 
 	var assign = require(31);
 	var invariant = require(41);
-	var keyMirror = require(46);
+	var keyMirror = require(44);
 
 	/**
 	 * Every React component is in one of these life cycles.
@@ -16494,17 +16510,17 @@
 	var ReactEmptyComponent = require(47);
 	var ReactErrorUtils = require(48);
 	var ReactLegacyElement = require(24);
-	var ReactOwner = require(44);
+	var ReactOwner = require(42);
 	var ReactPerf = require(27);
 	var ReactPropTransferer = require(49);
 	var ReactPropTypeLocations = require(50);
 	var ReactPropTypeLocationNames = require(51);
-	var ReactUpdates = require(45);
+	var ReactUpdates = require(43);
 
 	var assign = require(31);
 	var instantiateReactComponent = require(52);
 	var invariant = require(41);
-	var keyMirror = require(46);
+	var keyMirror = require(44);
 	var keyOf = require(53);
 	var monitorCodeUse = require(54);
 	var mapObject = require(55);
@@ -18750,12 +18766,12 @@
 
 	"use strict";
 
-	var CSSPropertyOperations = require(57);
+	var CSSPropertyOperations = require(58);
 	var DOMProperty = require(36);
 	var DOMPropertyOperations = require(11);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactComponent = require(14);
-	var ReactBrowserEventEmitter = require(59);
+	var ReactBrowserEventEmitter = require(60);
 	var ReactMount = require(25);
 	var ReactMultiChild = require(26);
 	var ReactPerf = require(27);
@@ -18763,7 +18779,7 @@
 	var assign = require(31);
 	var escapeTextForBrowser = require(37);
 	var invariant = require(41);
-	var isEventSupported = require(60);
+	var isEventSupported = require(61);
 	var keyOf = require(53);
 	var monitorCodeUse = require(54);
 
@@ -19238,37 +19254,37 @@
 
 	"use strict";
 
-	var BeforeInputEventPlugin = require(61);
-	var ChangeEventPlugin = require(62);
-	var ClientReactRootIndex = require(63);
-	var CompositionEventPlugin = require(64);
-	var DefaultEventPluginOrder = require(65);
-	var EnterLeaveEventPlugin = require(66);
+	var BeforeInputEventPlugin = require(62);
+	var ChangeEventPlugin = require(63);
+	var ClientReactRootIndex = require(64);
+	var CompositionEventPlugin = require(65);
+	var DefaultEventPluginOrder = require(66);
+	var EnterLeaveEventPlugin = require(67);
 	var ExecutionEnvironment = require(34);
-	var HTMLDOMPropertyConfig = require(67);
-	var MobileSafariClickEventPlugin = require(68);
-	var ReactBrowserComponentMixin = require(58);
+	var HTMLDOMPropertyConfig = require(68);
+	var MobileSafariClickEventPlugin = require(69);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactComponentBrowserEnvironment =
-	  require(69);
-	var ReactDefaultBatchingStrategy = require(70);
+	  require(70);
+	var ReactDefaultBatchingStrategy = require(71);
 	var ReactDOMComponent = require(21);
-	var ReactDOMButton = require(71);
-	var ReactDOMForm = require(72);
-	var ReactDOMImg = require(73);
-	var ReactDOMInput = require(74);
-	var ReactDOMOption = require(75);
-	var ReactDOMSelect = require(76);
-	var ReactDOMTextarea = require(77);
-	var ReactEventListener = require(78);
-	var ReactInjection = require(79);
+	var ReactDOMButton = require(72);
+	var ReactDOMForm = require(73);
+	var ReactDOMImg = require(74);
+	var ReactDOMInput = require(75);
+	var ReactDOMOption = require(76);
+	var ReactDOMSelect = require(77);
+	var ReactDOMTextarea = require(78);
+	var ReactEventListener = require(79);
+	var ReactInjection = require(80);
 	var ReactInstanceHandles = require(23);
 	var ReactMount = require(25);
-	var SelectEventPlugin = require(80);
-	var ServerReactRootIndex = require(81);
-	var SimpleEventPlugin = require(82);
-	var SVGDOMPropertyConfig = require(83);
+	var SelectEventPlugin = require(81);
+	var ServerReactRootIndex = require(82);
+	var SimpleEventPlugin = require(83);
+	var SVGDOMPropertyConfig = require(84);
 
-	var createFullPageComponent = require(84);
+	var createFullPageComponent = require(85);
 
 	function inject() {
 	  ReactInjection.EventEmitter.injectReactEventListener(
@@ -19341,7 +19357,7 @@
 	  if (true) {
 	    var url = (ExecutionEnvironment.canUseDOM && window.location.href) || '';
 	    if ((/[?&]react_perf\b/).test(url)) {
-	      var ReactDefaultPerf = require(85);
+	      var ReactDefaultPerf = require(86);
 	      ReactDefaultPerf.start();
 	    }
 	  }
@@ -19370,7 +19386,7 @@
 
 	"use strict";
 
-	var ReactRootIndex = require(86);
+	var ReactRootIndex = require(57);
 
 	var invariant = require(41);
 
@@ -19956,16 +19972,16 @@
 	"use strict";
 
 	var DOMProperty = require(36);
-	var ReactBrowserEventEmitter = require(59);
+	var ReactBrowserEventEmitter = require(60);
 	var ReactCurrentOwner = require(17);
 	var ReactElement = require(18);
 	var ReactLegacyElement = require(24);
 	var ReactInstanceHandles = require(23);
 	var ReactPerf = require(27);
 
-	var containsNode = require(87);
+	var containsNode = require(89);
 	var deprecated = require(32);
-	var getReactRootElementInContainer = require(88);
+	var getReactRootElementInContainer = require(90);
 	var instantiateReactComponent = require(52);
 	var invariant = require(41);
 	var shouldUpdateReactComponent = require(56);
@@ -20657,9 +20673,9 @@
 	"use strict";
 
 	var ReactComponent = require(14);
-	var ReactMultiChildUpdateTypes = require(89);
+	var ReactMultiChildUpdateTypes = require(87);
 
-	var flattenChildren = require(90);
+	var flattenChildren = require(88);
 	var instantiateReactComponent = require(52);
 	var shouldUpdateReactComponent = require(56);
 
@@ -21177,7 +21193,7 @@
 	var ReactPropTypeLocationNames = require(51);
 
 	var deprecated = require(32);
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 
 	/**
 	 * Collection of methods that allow declaration and validation of props that are
@@ -21533,9 +21549,9 @@
 
 	var ReactElement = require(18);
 	var ReactInstanceHandles = require(23);
-	var ReactMarkupChecksum = require(91);
+	var ReactMarkupChecksum = require(92);
 	var ReactServerRenderingTransaction =
-	  require(92);
+	  require(93);
 
 	var instantiateReactComponent = require(52);
 	var invariant = require(41);
@@ -22318,7 +22334,7 @@
 
 	"use strict";
 
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 
 	/**
 	 * Similar to invariant but only logs a warning if the condition is not met.
@@ -22365,7 +22381,7 @@
 
 	"use strict";
 
-	var keyMirror = require(46);
+	var keyMirror = require(44);
 
 	var PropagationPhases = keyMirror({bubbled: null, captured: null});
 
@@ -22495,315 +22511,12 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule PooledClass
-	 */
-
-	"use strict";
-
-	var invariant = require(41);
-
-	/**
-	 * Static poolers. Several custom versions for each potential number of
-	 * arguments. A completely generic pooler is easy to implement, but would
-	 * require accessing the `arguments` object. In each of these, `this` refers to
-	 * the Class itself, not an instance. If any others are needed, simply add them
-	 * here, or in their own files.
-	 */
-	var oneArgumentPooler = function(copyFieldsFrom) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, copyFieldsFrom);
-	    return instance;
-	  } else {
-	    return new Klass(copyFieldsFrom);
-	  }
-	};
-
-	var twoArgumentPooler = function(a1, a2) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2);
-	  }
-	};
-
-	var threeArgumentPooler = function(a1, a2, a3) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3);
-	  }
-	};
-
-	var fiveArgumentPooler = function(a1, a2, a3, a4, a5) {
-	  var Klass = this;
-	  if (Klass.instancePool.length) {
-	    var instance = Klass.instancePool.pop();
-	    Klass.call(instance, a1, a2, a3, a4, a5);
-	    return instance;
-	  } else {
-	    return new Klass(a1, a2, a3, a4, a5);
-	  }
-	};
-
-	var standardReleaser = function(instance) {
-	  var Klass = this;
-	  (true ? invariant(
-	    instance instanceof Klass,
-	    'Trying to release an instance into a pool of a different type.'
-	  ) : invariant(instance instanceof Klass));
-	  if (instance.destructor) {
-	    instance.destructor();
-	  }
-	  if (Klass.instancePool.length < Klass.poolSize) {
-	    Klass.instancePool.push(instance);
-	  }
-	};
-
-	var DEFAULT_POOL_SIZE = 10;
-	var DEFAULT_POOLER = oneArgumentPooler;
-
-	/**
-	 * Augments `CopyConstructor` to be a poolable class, augmenting only the class
-	 * itself (statically) not adding any prototypical fields. Any CopyConstructor
-	 * you give this may have a `poolSize` property, and will look for a
-	 * prototypical `destructor` on instances (optional).
-	 *
-	 * @param {Function} CopyConstructor Constructor that can be used to reset.
-	 * @param {Function} pooler Customizable pooler.
-	 */
-	var addPoolingTo = function(CopyConstructor, pooler) {
-	  var NewKlass = CopyConstructor;
-	  NewKlass.instancePool = [];
-	  NewKlass.getPooled = pooler || DEFAULT_POOLER;
-	  if (!NewKlass.poolSize) {
-	    NewKlass.poolSize = DEFAULT_POOL_SIZE;
-	  }
-	  NewKlass.release = standardReleaser;
-	  return NewKlass;
-	};
-
-	var PooledClass = {
-	  addPoolingTo: addPoolingTo,
-	  oneArgumentPooler: oneArgumentPooler,
-	  twoArgumentPooler: twoArgumentPooler,
-	  threeArgumentPooler: threeArgumentPooler,
-	  fiveArgumentPooler: fiveArgumentPooler
-	};
-
-	module.exports = PooledClass;
-
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule traverseAllChildren
-	 */
-
-	"use strict";
-
-	var ReactElement = require(18);
-	var ReactInstanceHandles = require(23);
-
-	var invariant = require(41);
-
-	var SEPARATOR = ReactInstanceHandles.SEPARATOR;
-	var SUBSEPARATOR = ':';
-
-	/**
-	 * TODO: Test that:
-	 * 1. `mapChildren` transforms strings and numbers into `ReactTextComponent`.
-	 * 2. it('should fail when supplied duplicate key', function() {
-	 * 3. That a single child and an array with one item have the same key pattern.
-	 * });
-	 */
-
-	var userProvidedKeyEscaperLookup = {
-	  '=': '=0',
-	  '.': '=1',
-	  ':': '=2'
-	};
-
-	var userProvidedKeyEscapeRegex = /[=.:]/g;
-
-	function userProvidedKeyEscaper(match) {
-	  return userProvidedKeyEscaperLookup[match];
-	}
-
-	/**
-	 * Generate a key string that identifies a component within a set.
-	 *
-	 * @param {*} component A component that could contain a manual key.
-	 * @param {number} index Index that is used if a manual key is not provided.
-	 * @return {string}
-	 */
-	function getComponentKey(component, index) {
-	  if (component && component.key != null) {
-	    // Explicit key
-	    return wrapUserProvidedKey(component.key);
-	  }
-	  // Implicit key determined by the index in the set
-	  return index.toString(36);
-	}
-
-	/**
-	 * Escape a component key so that it is safe to use in a reactid.
-	 *
-	 * @param {*} key Component key to be escaped.
-	 * @return {string} An escaped string.
-	 */
-	function escapeUserProvidedKey(text) {
-	  return ('' + text).replace(
-	    userProvidedKeyEscapeRegex,
-	    userProvidedKeyEscaper
-	  );
-	}
-
-	/**
-	 * Wrap a `key` value explicitly provided by the user to distinguish it from
-	 * implicitly-generated keys generated by a component's index in its parent.
-	 *
-	 * @param {string} key Value of a user-provided `key` attribute
-	 * @return {string}
-	 */
-	function wrapUserProvidedKey(key) {
-	  return '$' + escapeUserProvidedKey(key);
-	}
-
-	/**
-	 * @param {?*} children Children tree container.
-	 * @param {!string} nameSoFar Name of the key path so far.
-	 * @param {!number} indexSoFar Number of children encountered until this point.
-	 * @param {!function} callback Callback to invoke with each child found.
-	 * @param {?*} traverseContext Used to pass information throughout the traversal
-	 * process.
-	 * @return {!number} The number of children in this subtree.
-	 */
-	var traverseAllChildrenImpl =
-	  function(children, nameSoFar, indexSoFar, callback, traverseContext) {
-	    var nextName, nextIndex;
-	    var subtreeCount = 0;  // Count of children found in the current subtree.
-	    if (Array.isArray(children)) {
-	      for (var i = 0; i < children.length; i++) {
-	        var child = children[i];
-	        nextName = (
-	          nameSoFar +
-	          (nameSoFar ? SUBSEPARATOR : SEPARATOR) +
-	          getComponentKey(child, i)
-	        );
-	        nextIndex = indexSoFar + subtreeCount;
-	        subtreeCount += traverseAllChildrenImpl(
-	          child,
-	          nextName,
-	          nextIndex,
-	          callback,
-	          traverseContext
-	        );
-	      }
-	    } else {
-	      var type = typeof children;
-	      var isOnlyChild = nameSoFar === '';
-	      // If it's the only child, treat the name as if it was wrapped in an array
-	      // so that it's consistent if the number of children grows
-	      var storageName =
-	        isOnlyChild ? SEPARATOR + getComponentKey(children, 0) : nameSoFar;
-	      if (children == null || type === 'boolean') {
-	        // All of the above are perceived as null.
-	        callback(traverseContext, null, storageName, indexSoFar);
-	        subtreeCount = 1;
-	      } else if (type === 'string' || type === 'number' ||
-	                 ReactElement.isValidElement(children)) {
-	        callback(traverseContext, children, storageName, indexSoFar);
-	        subtreeCount = 1;
-	      } else if (type === 'object') {
-	        (true ? invariant(
-	          !children || children.nodeType !== 1,
-	          'traverseAllChildren(...): Encountered an invalid child; DOM ' +
-	          'elements are not valid children of React components.'
-	        ) : invariant(!children || children.nodeType !== 1));
-	        for (var key in children) {
-	          if (children.hasOwnProperty(key)) {
-	            nextName = (
-	              nameSoFar + (nameSoFar ? SUBSEPARATOR : SEPARATOR) +
-	              wrapUserProvidedKey(key) + SUBSEPARATOR +
-	              getComponentKey(children[key], 0)
-	            );
-	            nextIndex = indexSoFar + subtreeCount;
-	            subtreeCount += traverseAllChildrenImpl(
-	              children[key],
-	              nextName,
-	              nextIndex,
-	              callback,
-	              traverseContext
-	            );
-	          }
-	        }
-	      }
-	    }
-	    return subtreeCount;
-	  };
-
-	/**
-	 * Traverses children that are typically specified as `props.children`, but
-	 * might also be specified through attributes:
-	 *
-	 * - `traverseAllChildren(this.props.children, ...)`
-	 * - `traverseAllChildren(this.props.leftPanelChildren, ...)`
-	 *
-	 * The `traverseContext` is an optional argument that is passed through the
-	 * entire traversal. It can be used to store accumulations or anything else that
-	 * the callback might find relevant.
-	 *
-	 * @param {?*} children Children tree object.
-	 * @param {!function} callback To invoke upon traversing each child.
-	 * @param {?*} traverseContext Context for traversal.
-	 * @return {!number} The number of children in this subtree.
-	 */
-	function traverseAllChildren(children, callback, traverseContext) {
-	  if (children == null) {
-	    return 0;
-	  }
-
-	  return traverseAllChildrenImpl(children, '', 0, callback, traverseContext);
-	}
-
-	module.exports = traverseAllChildren;
-
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
 	 * @providesModule ReactOwner
 	 */
 
 	"use strict";
 
-	var emptyObject = require(96);
+	var emptyObject = require(98);
 	var invariant = require(41);
 
 	/**
@@ -22945,7 +22658,7 @@
 
 
 /***/ },
-/* 45 */
+/* 43 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -22961,11 +22674,11 @@
 
 	"use strict";
 
-	var CallbackQueue = require(97);
-	var PooledClass = require(42);
+	var CallbackQueue = require(96);
+	var PooledClass = require(45);
 	var ReactCurrentOwner = require(17);
 	var ReactPerf = require(27);
-	var Transaction = require(98);
+	var Transaction = require(97);
 
 	var assign = require(31);
 	var invariant = require(41);
@@ -23237,7 +22950,7 @@
 
 
 /***/ },
-/* 46 */
+/* 44 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -23291,6 +23004,309 @@
 	};
 
 	module.exports = keyMirror;
+
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule PooledClass
+	 */
+
+	"use strict";
+
+	var invariant = require(41);
+
+	/**
+	 * Static poolers. Several custom versions for each potential number of
+	 * arguments. A completely generic pooler is easy to implement, but would
+	 * require accessing the `arguments` object. In each of these, `this` refers to
+	 * the Class itself, not an instance. If any others are needed, simply add them
+	 * here, or in their own files.
+	 */
+	var oneArgumentPooler = function(copyFieldsFrom) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, copyFieldsFrom);
+	    return instance;
+	  } else {
+	    return new Klass(copyFieldsFrom);
+	  }
+	};
+
+	var twoArgumentPooler = function(a1, a2) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2);
+	  }
+	};
+
+	var threeArgumentPooler = function(a1, a2, a3) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2, a3);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2, a3);
+	  }
+	};
+
+	var fiveArgumentPooler = function(a1, a2, a3, a4, a5) {
+	  var Klass = this;
+	  if (Klass.instancePool.length) {
+	    var instance = Klass.instancePool.pop();
+	    Klass.call(instance, a1, a2, a3, a4, a5);
+	    return instance;
+	  } else {
+	    return new Klass(a1, a2, a3, a4, a5);
+	  }
+	};
+
+	var standardReleaser = function(instance) {
+	  var Klass = this;
+	  (true ? invariant(
+	    instance instanceof Klass,
+	    'Trying to release an instance into a pool of a different type.'
+	  ) : invariant(instance instanceof Klass));
+	  if (instance.destructor) {
+	    instance.destructor();
+	  }
+	  if (Klass.instancePool.length < Klass.poolSize) {
+	    Klass.instancePool.push(instance);
+	  }
+	};
+
+	var DEFAULT_POOL_SIZE = 10;
+	var DEFAULT_POOLER = oneArgumentPooler;
+
+	/**
+	 * Augments `CopyConstructor` to be a poolable class, augmenting only the class
+	 * itself (statically) not adding any prototypical fields. Any CopyConstructor
+	 * you give this may have a `poolSize` property, and will look for a
+	 * prototypical `destructor` on instances (optional).
+	 *
+	 * @param {Function} CopyConstructor Constructor that can be used to reset.
+	 * @param {Function} pooler Customizable pooler.
+	 */
+	var addPoolingTo = function(CopyConstructor, pooler) {
+	  var NewKlass = CopyConstructor;
+	  NewKlass.instancePool = [];
+	  NewKlass.getPooled = pooler || DEFAULT_POOLER;
+	  if (!NewKlass.poolSize) {
+	    NewKlass.poolSize = DEFAULT_POOL_SIZE;
+	  }
+	  NewKlass.release = standardReleaser;
+	  return NewKlass;
+	};
+
+	var PooledClass = {
+	  addPoolingTo: addPoolingTo,
+	  oneArgumentPooler: oneArgumentPooler,
+	  twoArgumentPooler: twoArgumentPooler,
+	  threeArgumentPooler: threeArgumentPooler,
+	  fiveArgumentPooler: fiveArgumentPooler
+	};
+
+	module.exports = PooledClass;
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule traverseAllChildren
+	 */
+
+	"use strict";
+
+	var ReactElement = require(18);
+	var ReactInstanceHandles = require(23);
+
+	var invariant = require(41);
+
+	var SEPARATOR = ReactInstanceHandles.SEPARATOR;
+	var SUBSEPARATOR = ':';
+
+	/**
+	 * TODO: Test that:
+	 * 1. `mapChildren` transforms strings and numbers into `ReactTextComponent`.
+	 * 2. it('should fail when supplied duplicate key', function() {
+	 * 3. That a single child and an array with one item have the same key pattern.
+	 * });
+	 */
+
+	var userProvidedKeyEscaperLookup = {
+	  '=': '=0',
+	  '.': '=1',
+	  ':': '=2'
+	};
+
+	var userProvidedKeyEscapeRegex = /[=.:]/g;
+
+	function userProvidedKeyEscaper(match) {
+	  return userProvidedKeyEscaperLookup[match];
+	}
+
+	/**
+	 * Generate a key string that identifies a component within a set.
+	 *
+	 * @param {*} component A component that could contain a manual key.
+	 * @param {number} index Index that is used if a manual key is not provided.
+	 * @return {string}
+	 */
+	function getComponentKey(component, index) {
+	  if (component && component.key != null) {
+	    // Explicit key
+	    return wrapUserProvidedKey(component.key);
+	  }
+	  // Implicit key determined by the index in the set
+	  return index.toString(36);
+	}
+
+	/**
+	 * Escape a component key so that it is safe to use in a reactid.
+	 *
+	 * @param {*} key Component key to be escaped.
+	 * @return {string} An escaped string.
+	 */
+	function escapeUserProvidedKey(text) {
+	  return ('' + text).replace(
+	    userProvidedKeyEscapeRegex,
+	    userProvidedKeyEscaper
+	  );
+	}
+
+	/**
+	 * Wrap a `key` value explicitly provided by the user to distinguish it from
+	 * implicitly-generated keys generated by a component's index in its parent.
+	 *
+	 * @param {string} key Value of a user-provided `key` attribute
+	 * @return {string}
+	 */
+	function wrapUserProvidedKey(key) {
+	  return '$' + escapeUserProvidedKey(key);
+	}
+
+	/**
+	 * @param {?*} children Children tree container.
+	 * @param {!string} nameSoFar Name of the key path so far.
+	 * @param {!number} indexSoFar Number of children encountered until this point.
+	 * @param {!function} callback Callback to invoke with each child found.
+	 * @param {?*} traverseContext Used to pass information throughout the traversal
+	 * process.
+	 * @return {!number} The number of children in this subtree.
+	 */
+	var traverseAllChildrenImpl =
+	  function(children, nameSoFar, indexSoFar, callback, traverseContext) {
+	    var nextName, nextIndex;
+	    var subtreeCount = 0;  // Count of children found in the current subtree.
+	    if (Array.isArray(children)) {
+	      for (var i = 0; i < children.length; i++) {
+	        var child = children[i];
+	        nextName = (
+	          nameSoFar +
+	          (nameSoFar ? SUBSEPARATOR : SEPARATOR) +
+	          getComponentKey(child, i)
+	        );
+	        nextIndex = indexSoFar + subtreeCount;
+	        subtreeCount += traverseAllChildrenImpl(
+	          child,
+	          nextName,
+	          nextIndex,
+	          callback,
+	          traverseContext
+	        );
+	      }
+	    } else {
+	      var type = typeof children;
+	      var isOnlyChild = nameSoFar === '';
+	      // If it's the only child, treat the name as if it was wrapped in an array
+	      // so that it's consistent if the number of children grows
+	      var storageName =
+	        isOnlyChild ? SEPARATOR + getComponentKey(children, 0) : nameSoFar;
+	      if (children == null || type === 'boolean') {
+	        // All of the above are perceived as null.
+	        callback(traverseContext, null, storageName, indexSoFar);
+	        subtreeCount = 1;
+	      } else if (type === 'string' || type === 'number' ||
+	                 ReactElement.isValidElement(children)) {
+	        callback(traverseContext, children, storageName, indexSoFar);
+	        subtreeCount = 1;
+	      } else if (type === 'object') {
+	        (true ? invariant(
+	          !children || children.nodeType !== 1,
+	          'traverseAllChildren(...): Encountered an invalid child; DOM ' +
+	          'elements are not valid children of React components.'
+	        ) : invariant(!children || children.nodeType !== 1));
+	        for (var key in children) {
+	          if (children.hasOwnProperty(key)) {
+	            nextName = (
+	              nameSoFar + (nameSoFar ? SUBSEPARATOR : SEPARATOR) +
+	              wrapUserProvidedKey(key) + SUBSEPARATOR +
+	              getComponentKey(children[key], 0)
+	            );
+	            nextIndex = indexSoFar + subtreeCount;
+	            subtreeCount += traverseAllChildrenImpl(
+	              children[key],
+	              nextName,
+	              nextIndex,
+	              callback,
+	              traverseContext
+	            );
+	          }
+	        }
+	      }
+	    }
+	    return subtreeCount;
+	  };
+
+	/**
+	 * Traverses children that are typically specified as `props.children`, but
+	 * might also be specified through attributes:
+	 *
+	 * - `traverseAllChildren(this.props.children, ...)`
+	 * - `traverseAllChildren(this.props.leftPanelChildren, ...)`
+	 *
+	 * The `traverseContext` is an optional argument that is passed through the
+	 * entire traversal. It can be used to store accumulations or anything else that
+	 * the callback might find relevant.
+	 *
+	 * @param {?*} children Children tree object.
+	 * @param {!function} callback To invoke upon traversing each child.
+	 * @param {?*} traverseContext Context for traversal.
+	 * @return {!number} The number of children in this subtree.
+	 */
+	function traverseAllChildren(children, callback, traverseContext) {
+	  if (children == null) {
+	    return 0;
+	  }
+
+	  return traverseAllChildrenImpl(children, '', 0, callback, traverseContext);
+	}
+
+	module.exports = traverseAllChildren;
 
 
 /***/ },
@@ -23426,7 +23442,7 @@
 	"use strict";
 
 	var assign = require(31);
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 	var invariant = require(41);
 	var joinClasses = require(99);
 	var warning = require(39);
@@ -23594,7 +23610,7 @@
 
 	"use strict";
 
-	var keyMirror = require(46);
+	var keyMirror = require(44);
 
 	var ReactPropTypeLocations = keyMirror({
 	  prop: null,
@@ -23938,6 +23954,41 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
+	 * @providesModule ReactRootIndex
+	 * @typechecks
+	 */
+
+	"use strict";
+
+	var ReactRootIndexInjection = {
+	  /**
+	   * @param {function} _createReactRootIndex
+	   */
+	  injectCreateReactRootIndex: function(_createReactRootIndex) {
+	    ReactRootIndex.createReactRootIndex = _createReactRootIndex;
+	  }
+	};
+
+	var ReactRootIndex = {
+	  createReactRootIndex: null,
+	  injection: ReactRootIndexInjection
+	};
+
+	module.exports = ReactRootIndex;
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
 	 * @providesModule CSSPropertyOperations
 	 * @typechecks static-only
 	 */
@@ -24064,7 +24115,7 @@
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -24109,7 +24160,7 @@
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -24127,13 +24178,13 @@
 	"use strict";
 
 	var EventConstants = require(40);
-	var EventPluginHub = require(105);
-	var EventPluginRegistry = require(106);
-	var ReactEventEmitterMixin = require(107);
-	var ViewportMetrics = require(108);
+	var EventPluginHub = require(107);
+	var EventPluginRegistry = require(110);
+	var ReactEventEmitterMixin = require(111);
+	var ViewportMetrics = require(112);
 
 	var assign = require(31);
-	var isEventSupported = require(60);
+	var isEventSupported = require(61);
 
 	/**
 	 * Summary of `ReactBrowserEventEmitter` event handling:
@@ -24468,7 +24519,7 @@
 
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -24537,7 +24588,7 @@
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -24555,9 +24606,9 @@
 	"use strict";
 
 	var EventConstants = require(40);
-	var EventPropagators = require(109);
+	var EventPropagators = require(105);
 	var ExecutionEnvironment = require(34);
-	var SyntheticInputEvent = require(110);
+	var SyntheticInputEvent = require(106);
 
 	var keyOf = require(53);
 
@@ -24763,7 +24814,7 @@
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -24780,14 +24831,14 @@
 	"use strict";
 
 	var EventConstants = require(40);
-	var EventPluginHub = require(105);
-	var EventPropagators = require(109);
+	var EventPluginHub = require(107);
+	var EventPropagators = require(105);
 	var ExecutionEnvironment = require(34);
-	var ReactUpdates = require(45);
-	var SyntheticEvent = require(111);
+	var ReactUpdates = require(43);
+	var SyntheticEvent = require(108);
 
-	var isEventSupported = require(60);
-	var isTextInputElement = require(112);
+	var isEventSupported = require(61);
+	var isTextInputElement = require(109);
 	var keyOf = require(53);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
@@ -25149,7 +25200,7 @@
 
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25178,7 +25229,7 @@
 
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25196,7 +25247,7 @@
 	"use strict";
 
 	var EventConstants = require(40);
-	var EventPropagators = require(109);
+	var EventPropagators = require(105);
 	var ExecutionEnvironment = require(34);
 	var ReactInputSelection = require(113);
 	var SyntheticCompositionEvent = require(114);
@@ -25441,7 +25492,7 @@
 
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25485,7 +25536,7 @@
 
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25503,7 +25554,7 @@
 	"use strict";
 
 	var EventConstants = require(40);
-	var EventPropagators = require(109);
+	var EventPropagators = require(105);
 	var SyntheticMouseEvent = require(116);
 
 	var ReactMount = require(25);
@@ -25629,7 +25680,7 @@
 
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25825,7 +25876,7 @@
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25844,7 +25895,7 @@
 
 	var EventConstants = require(40);
 
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -25887,7 +25938,7 @@
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -25906,12 +25957,12 @@
 	"use strict";
 
 	var ReactDOMIDOperations = require(117);
-	var ReactMarkupChecksum = require(91);
+	var ReactMarkupChecksum = require(92);
 	var ReactMount = require(25);
 	var ReactPerf = require(27);
 	var ReactReconcileTransaction = require(118);
 
-	var getReactRootElementInContainer = require(88);
+	var getReactRootElementInContainer = require(90);
 	var invariant = require(41);
 	var setInnerHTML = require(119);
 
@@ -26011,7 +26062,7 @@
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26027,11 +26078,11 @@
 
 	"use strict";
 
-	var ReactUpdates = require(45);
-	var Transaction = require(98);
+	var ReactUpdates = require(43);
+	var Transaction = require(97);
 
 	var assign = require(31);
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 
 	var RESET_BATCHED_UPDATES = {
 	  initialize: emptyFunction,
@@ -26088,7 +26139,7 @@
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26105,12 +26156,12 @@
 	"use strict";
 
 	var AutoFocusMixin = require(120);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
 
-	var keyMirror = require(46);
+	var keyMirror = require(44);
 
 	// Store a reference to the <button> `ReactDOMComponent`. TODO: use string
 	var button = ReactElement.createFactory(ReactDOM.button.type);
@@ -26157,7 +26208,7 @@
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26175,7 +26226,7 @@
 
 	var EventConstants = require(40);
 	var LocalEventTrapMixin = require(121);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
@@ -26211,7 +26262,7 @@
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26229,7 +26280,7 @@
 
 	var EventConstants = require(40);
 	var LocalEventTrapMixin = require(121);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
@@ -26263,7 +26314,7 @@
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26282,12 +26333,12 @@
 	var AutoFocusMixin = require(120);
 	var DOMPropertyOperations = require(11);
 	var LinkedValueUtils = require(122);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
 	var ReactMount = require(25);
-	var ReactUpdates = require(45);
+	var ReactUpdates = require(43);
 
 	var assign = require(31);
 	var invariant = require(41);
@@ -26443,7 +26494,7 @@
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26459,7 +26510,7 @@
 
 	"use strict";
 
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
@@ -26498,7 +26549,7 @@
 
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26516,11 +26567,11 @@
 
 	var AutoFocusMixin = require(120);
 	var LinkedValueUtils = require(122);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
-	var ReactUpdates = require(45);
+	var ReactUpdates = require(43);
 
 	var assign = require(31);
 
@@ -26686,7 +26737,7 @@
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26705,11 +26756,11 @@
 	var AutoFocusMixin = require(120);
 	var DOMPropertyOperations = require(11);
 	var LinkedValueUtils = require(122);
-	var ReactBrowserComponentMixin = require(58);
+	var ReactBrowserComponentMixin = require(59);
 	var ReactCompositeComponent = require(15);
 	var ReactElement = require(18);
 	var ReactDOM = require(20);
-	var ReactUpdates = require(45);
+	var ReactUpdates = require(43);
 
 	var assign = require(31);
 	var invariant = require(41);
@@ -26829,7 +26880,7 @@
 
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26848,10 +26899,10 @@
 
 	var EventListener = require(123);
 	var ExecutionEnvironment = require(34);
-	var PooledClass = require(42);
+	var PooledClass = require(45);
 	var ReactInstanceHandles = require(23);
 	var ReactMount = require(25);
-	var ReactUpdates = require(45);
+	var ReactUpdates = require(43);
 
 	var assign = require(31);
 	var getEventTarget = require(124);
@@ -27017,7 +27068,7 @@
 
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27034,15 +27085,15 @@
 	"use strict";
 
 	var DOMProperty = require(36);
-	var EventPluginHub = require(105);
+	var EventPluginHub = require(107);
 	var ReactComponent = require(14);
 	var ReactCompositeComponent = require(15);
 	var ReactEmptyComponent = require(47);
-	var ReactBrowserEventEmitter = require(59);
+	var ReactBrowserEventEmitter = require(60);
 	var ReactNativeComponent = require(100);
 	var ReactPerf = require(27);
-	var ReactRootIndex = require(86);
-	var ReactUpdates = require(45);
+	var ReactRootIndex = require(57);
+	var ReactUpdates = require(43);
 
 	var ReactInjection = {
 	  Component: ReactComponent.injection,
@@ -27061,7 +27112,7 @@
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27078,12 +27129,12 @@
 	"use strict";
 
 	var EventConstants = require(40);
-	var EventPropagators = require(109);
+	var EventPropagators = require(105);
 	var ReactInputSelection = require(113);
-	var SyntheticEvent = require(111);
+	var SyntheticEvent = require(108);
 
 	var getActiveElement = require(126);
-	var isTextInputElement = require(112);
+	var isTextInputElement = require(109);
 	var keyOf = require(53);
 	var shallowEqual = require(127);
 
@@ -27260,7 +27311,7 @@
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27295,7 +27346,7 @@
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27313,9 +27364,9 @@
 
 	var EventConstants = require(40);
 	var EventPluginUtils = require(12);
-	var EventPropagators = require(109);
+	var EventPropagators = require(105);
 	var SyntheticClipboardEvent = require(128);
-	var SyntheticEvent = require(111);
+	var SyntheticEvent = require(108);
 	var SyntheticFocusEvent = require(129);
 	var SyntheticKeyboardEvent = require(130);
 	var SyntheticMouseEvent = require(116);
@@ -27725,7 +27776,7 @@
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27821,7 +27872,7 @@
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27884,7 +27935,7 @@
 
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28148,129 +28199,7 @@
 
 
 /***/ },
-/* 86 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactRootIndex
-	 * @typechecks
-	 */
-
-	"use strict";
-
-	var ReactRootIndexInjection = {
-	  /**
-	   * @param {function} _createReactRootIndex
-	   */
-	  injectCreateReactRootIndex: function(_createReactRootIndex) {
-	    ReactRootIndex.createReactRootIndex = _createReactRootIndex;
-	  }
-	};
-
-	var ReactRootIndex = {
-	  createReactRootIndex: null,
-	  injection: ReactRootIndexInjection
-	};
-
-	module.exports = ReactRootIndex;
-
-
-/***/ },
 /* 87 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule containsNode
-	 * @typechecks
-	 */
-
-	var isTextNode = require(138);
-
-	/*jslint bitwise:true */
-
-	/**
-	 * Checks if a given DOM node contains or is another DOM node.
-	 *
-	 * @param {?DOMNode} outerNode Outer DOM node.
-	 * @param {?DOMNode} innerNode Inner DOM node.
-	 * @return {boolean} True if `outerNode` contains or is `innerNode`.
-	 */
-	function containsNode(outerNode, innerNode) {
-	  if (!outerNode || !innerNode) {
-	    return false;
-	  } else if (outerNode === innerNode) {
-	    return true;
-	  } else if (isTextNode(outerNode)) {
-	    return false;
-	  } else if (isTextNode(innerNode)) {
-	    return containsNode(outerNode, innerNode.parentNode);
-	  } else if (outerNode.contains) {
-	    return outerNode.contains(innerNode);
-	  } else if (outerNode.compareDocumentPosition) {
-	    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
-	  } else {
-	    return false;
-	  }
-	}
-
-	module.exports = containsNode;
-
-
-/***/ },
-/* 88 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule getReactRootElementInContainer
-	 */
-
-	"use strict";
-
-	var DOC_NODE_TYPE = 9;
-
-	/**
-	 * @param {DOMElement|DOMDocument} container DOM element that may contain
-	 *                                           a React component
-	 * @return {?*} DOM element that may have the reactRoot ID, or null.
-	 */
-	function getReactRootElementInContainer(container) {
-	  if (!container) {
-	    return null;
-	  }
-
-	  if (container.nodeType === DOC_NODE_TYPE) {
-	    return container.documentElement;
-	  } else {
-	    return container.firstChild;
-	  }
-	}
-
-	module.exports = getReactRootElementInContainer;
-
-
-/***/ },
-/* 89 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28286,7 +28215,7 @@
 
 	"use strict";
 
-	var keyMirror = require(46);
+	var keyMirror = require(44);
 
 	/**
 	 * When a component's children are updated, a series of update configuration
@@ -28307,7 +28236,7 @@
 
 
 /***/ },
-/* 90 */
+/* 88 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28325,7 +28254,7 @@
 
 	var ReactTextComponent = require(30);
 
-	var traverseAllChildren = require(43);
+	var traverseAllChildren = require(46);
 	var warning = require(39);
 
 	/**
@@ -28378,7 +28307,132 @@
 
 
 /***/ },
+/* 89 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule containsNode
+	 * @typechecks
+	 */
+
+	var isTextNode = require(138);
+
+	/*jslint bitwise:true */
+
+	/**
+	 * Checks if a given DOM node contains or is another DOM node.
+	 *
+	 * @param {?DOMNode} outerNode Outer DOM node.
+	 * @param {?DOMNode} innerNode Inner DOM node.
+	 * @return {boolean} True if `outerNode` contains or is `innerNode`.
+	 */
+	function containsNode(outerNode, innerNode) {
+	  if (!outerNode || !innerNode) {
+	    return false;
+	  } else if (outerNode === innerNode) {
+	    return true;
+	  } else if (isTextNode(outerNode)) {
+	    return false;
+	  } else if (isTextNode(innerNode)) {
+	    return containsNode(outerNode, innerNode.parentNode);
+	  } else if (outerNode.contains) {
+	    return outerNode.contains(innerNode);
+	  } else if (outerNode.compareDocumentPosition) {
+	    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
+	  } else {
+	    return false;
+	  }
+	}
+
+	module.exports = containsNode;
+
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule getReactRootElementInContainer
+	 */
+
+	"use strict";
+
+	var DOC_NODE_TYPE = 9;
+
+	/**
+	 * @param {DOMElement|DOMDocument} container DOM element that may contain
+	 *                                           a React component
+	 * @return {?*} DOM element that may have the reactRoot ID, or null.
+	 */
+	function getReactRootElementInContainer(container) {
+	  if (!container) {
+	    return null;
+	  }
+
+	  if (container.nodeType === DOC_NODE_TYPE) {
+	    return container.documentElement;
+	  } else {
+	    return container.firstChild;
+	  }
+	}
+
+	module.exports = getReactRootElementInContainer;
+
+
+/***/ },
 /* 91 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule emptyFunction
+	 */
+
+	function makeEmptyFunction(arg) {
+	  return function() {
+	    return arg;
+	  };
+	}
+
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	function emptyFunction() {}
+
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function() { return this; };
+	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
+
+	module.exports = emptyFunction;
+
+
+/***/ },
+/* 92 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28394,7 +28448,7 @@
 
 	"use strict";
 
-	var adler32 = require(139);
+	var adler32 = require(140);
 
 	var ReactMarkupChecksum = {
 	  CHECKSUM_ATTR_NAME: 'data-react-checksum',
@@ -28430,7 +28484,7 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28447,13 +28501,13 @@
 
 	"use strict";
 
-	var PooledClass = require(42);
-	var CallbackQueue = require(97);
-	var ReactPutListenerQueue = require(140);
-	var Transaction = require(98);
+	var PooledClass = require(45);
+	var CallbackQueue = require(96);
+	var ReactPutListenerQueue = require(139);
+	var Transaction = require(97);
 
 	var assign = require(31);
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 
 	/**
 	 * Provides a `CallbackQueue` queue for collecting `onDOMReady` callbacks
@@ -28547,44 +28601,6 @@
 
 
 /***/ },
-/* 93 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule emptyFunction
-	 */
-
-	function makeEmptyFunction(arg) {
-	  return function() {
-	    return arg;
-	  };
-	}
-
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	function emptyFunction() {}
-
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function() { return this; };
-	emptyFunction.thatReturnsArgument = function(arg) { return arg; };
-
-	module.exports = emptyFunction;
-
-
-/***/ },
 /* 94 */
 /***/ function(module, exports, require) {
 
@@ -28650,38 +28666,12 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule emptyObject
-	 */
-
-	"use strict";
-
-	var emptyObject = {};
-
-	if (true) {
-	  Object.freeze(emptyObject);
-	}
-
-	module.exports = emptyObject;
-
-
-/***/ },
-/* 97 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
 	 * @providesModule CallbackQueue
 	 */
 
 	"use strict";
 
-	var PooledClass = require(42);
+	var PooledClass = require(45);
 
 	var assign = require(31);
 	var invariant = require(41);
@@ -28767,7 +28757,7 @@
 
 
 /***/ },
-/* 98 */
+/* 97 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29007,6 +28997,32 @@
 	};
 
 	module.exports = Transaction;
+
+
+/***/ },
+/* 98 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule emptyObject
+	 */
+
+	"use strict";
+
+	var emptyObject = {};
+
+	if (true) {
+	  Object.freeze(emptyObject);
+	}
+
+	module.exports = emptyObject;
 
 
 /***/ },
@@ -29417,12 +29433,207 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
+	 * @providesModule EventPropagators
+	 */
+
+	"use strict";
+
+	var EventConstants = require(40);
+	var EventPluginHub = require(107);
+
+	var accumulateInto = require(143);
+	var forEachAccumulated = require(144);
+
+	var PropagationPhases = EventConstants.PropagationPhases;
+	var getListener = EventPluginHub.getListener;
+
+	/**
+	 * Some event types have a notion of different registration names for different
+	 * "phases" of propagation. This finds listeners by a given phase.
+	 */
+	function listenerAtPhase(id, event, propagationPhase) {
+	  var registrationName =
+	    event.dispatchConfig.phasedRegistrationNames[propagationPhase];
+	  return getListener(id, registrationName);
+	}
+
+	/**
+	 * Tags a `SyntheticEvent` with dispatched listeners. Creating this function
+	 * here, allows us to not have to bind or create functions for each event.
+	 * Mutating the event's members allows us to not have to create a wrapping
+	 * "dispatch" object that pairs the event with the listener.
+	 */
+	function accumulateDirectionalDispatches(domID, upwards, event) {
+	  if (true) {
+	    if (!domID) {
+	      throw new Error('Dispatching id must not be null');
+	    }
+	  }
+	  var phase = upwards ? PropagationPhases.bubbled : PropagationPhases.captured;
+	  var listener = listenerAtPhase(domID, event, phase);
+	  if (listener) {
+	    event._dispatchListeners =
+	      accumulateInto(event._dispatchListeners, listener);
+	    event._dispatchIDs = accumulateInto(event._dispatchIDs, domID);
+	  }
+	}
+
+	/**
+	 * Collect dispatches (must be entirely collected before dispatching - see unit
+	 * tests). Lazily allocate the array to conserve memory.  We must loop through
+	 * each event and perform the traversal for each one. We can not perform a
+	 * single traversal for the entire collection of events because each event may
+	 * have a different target.
+	 */
+	function accumulateTwoPhaseDispatchesSingle(event) {
+	  if (event && event.dispatchConfig.phasedRegistrationNames) {
+	    EventPluginHub.injection.getInstanceHandle().traverseTwoPhase(
+	      event.dispatchMarker,
+	      accumulateDirectionalDispatches,
+	      event
+	    );
+	  }
+	}
+
+
+	/**
+	 * Accumulates without regard to direction, does not look for phased
+	 * registration names. Same as `accumulateDirectDispatchesSingle` but without
+	 * requiring that the `dispatchMarker` be the same as the dispatched ID.
+	 */
+	function accumulateDispatches(id, ignoredDirection, event) {
+	  if (event && event.dispatchConfig.registrationName) {
+	    var registrationName = event.dispatchConfig.registrationName;
+	    var listener = getListener(id, registrationName);
+	    if (listener) {
+	      event._dispatchListeners =
+	        accumulateInto(event._dispatchListeners, listener);
+	      event._dispatchIDs = accumulateInto(event._dispatchIDs, id);
+	    }
+	  }
+	}
+
+	/**
+	 * Accumulates dispatches on an `SyntheticEvent`, but only for the
+	 * `dispatchMarker`.
+	 * @param {SyntheticEvent} event
+	 */
+	function accumulateDirectDispatchesSingle(event) {
+	  if (event && event.dispatchConfig.registrationName) {
+	    accumulateDispatches(event.dispatchMarker, null, event);
+	  }
+	}
+
+	function accumulateTwoPhaseDispatches(events) {
+	  forEachAccumulated(events, accumulateTwoPhaseDispatchesSingle);
+	}
+
+	function accumulateEnterLeaveDispatches(leave, enter, fromID, toID) {
+	  EventPluginHub.injection.getInstanceHandle().traverseEnterLeave(
+	    fromID,
+	    toID,
+	    accumulateDispatches,
+	    leave,
+	    enter
+	  );
+	}
+
+
+	function accumulateDirectDispatches(events) {
+	  forEachAccumulated(events, accumulateDirectDispatchesSingle);
+	}
+
+
+
+	/**
+	 * A small set of propagation patterns, each of which will accept a small amount
+	 * of information, and generate a set of "dispatch ready event objects" - which
+	 * are sets of events that have already been annotated with a set of dispatched
+	 * listener functions/ids. The API is designed this way to discourage these
+	 * propagation strategies from actually executing the dispatches, since we
+	 * always want to collect the entire set of dispatches before executing event a
+	 * single one.
+	 *
+	 * @constructor EventPropagators
+	 */
+	var EventPropagators = {
+	  accumulateTwoPhaseDispatches: accumulateTwoPhaseDispatches,
+	  accumulateDirectDispatches: accumulateDirectDispatches,
+	  accumulateEnterLeaveDispatches: accumulateEnterLeaveDispatches
+	};
+
+	module.exports = EventPropagators;
+
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013 Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule SyntheticInputEvent
+	 * @typechecks static-only
+	 */
+
+	"use strict";
+
+	var SyntheticEvent = require(108);
+
+	/**
+	 * @interface Event
+	 * @see http://www.w3.org/TR/2013/WD-DOM-Level-3-Events-20131105
+	 *      /#events-inputevents
+	 */
+	var InputEventInterface = {
+	  data: null
+	};
+
+	/**
+	 * @param {object} dispatchConfig Configuration used to dispatch this event.
+	 * @param {string} dispatchMarker Marker identifying the event target.
+	 * @param {object} nativeEvent Native browser event.
+	 * @extends {SyntheticUIEvent}
+	 */
+	function SyntheticInputEvent(
+	  dispatchConfig,
+	  dispatchMarker,
+	  nativeEvent) {
+	  SyntheticEvent.call(this, dispatchConfig, dispatchMarker, nativeEvent);
+	}
+
+	SyntheticEvent.augmentClass(
+	  SyntheticInputEvent,
+	  InputEventInterface
+	);
+
+	module.exports = SyntheticInputEvent;
+
+
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
 	 * @providesModule EventPluginHub
 	 */
 
 	"use strict";
 
-	var EventPluginRegistry = require(106);
+	var EventPluginRegistry = require(110);
 	var EventPluginUtils = require(12);
 
 	var accumulateInto = require(143);
@@ -29684,7 +29895,217 @@
 
 
 /***/ },
-/* 106 */
+/* 108 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule SyntheticEvent
+	 * @typechecks static-only
+	 */
+
+	"use strict";
+
+	var PooledClass = require(45);
+
+	var assign = require(31);
+	var emptyFunction = require(91);
+	var getEventTarget = require(124);
+
+	/**
+	 * @interface Event
+	 * @see http://www.w3.org/TR/DOM-Level-3-Events/
+	 */
+	var EventInterface = {
+	  type: null,
+	  target: getEventTarget,
+	  // currentTarget is set when dispatching; no use in copying it here
+	  currentTarget: emptyFunction.thatReturnsNull,
+	  eventPhase: null,
+	  bubbles: null,
+	  cancelable: null,
+	  timeStamp: function(event) {
+	    return event.timeStamp || Date.now();
+	  },
+	  defaultPrevented: null,
+	  isTrusted: null
+	};
+
+	/**
+	 * Synthetic events are dispatched by event plugins, typically in response to a
+	 * top-level event delegation handler.
+	 *
+	 * These systems should generally use pooling to reduce the frequency of garbage
+	 * collection. The system should check `isPersistent` to determine whether the
+	 * event should be released into the pool after being dispatched. Users that
+	 * need a persisted event should invoke `persist`.
+	 *
+	 * Synthetic events (and subclasses) implement the DOM Level 3 Events API by
+	 * normalizing browser quirks. Subclasses do not necessarily have to implement a
+	 * DOM interface; custom application-specific events can also subclass this.
+	 *
+	 * @param {object} dispatchConfig Configuration used to dispatch this event.
+	 * @param {string} dispatchMarker Marker identifying the event target.
+	 * @param {object} nativeEvent Native browser event.
+	 */
+	function SyntheticEvent(dispatchConfig, dispatchMarker, nativeEvent) {
+	  this.dispatchConfig = dispatchConfig;
+	  this.dispatchMarker = dispatchMarker;
+	  this.nativeEvent = nativeEvent;
+
+	  var Interface = this.constructor.Interface;
+	  for (var propName in Interface) {
+	    if (!Interface.hasOwnProperty(propName)) {
+	      continue;
+	    }
+	    var normalize = Interface[propName];
+	    if (normalize) {
+	      this[propName] = normalize(nativeEvent);
+	    } else {
+	      this[propName] = nativeEvent[propName];
+	    }
+	  }
+
+	  var defaultPrevented = nativeEvent.defaultPrevented != null ?
+	    nativeEvent.defaultPrevented :
+	    nativeEvent.returnValue === false;
+	  if (defaultPrevented) {
+	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
+	  } else {
+	    this.isDefaultPrevented = emptyFunction.thatReturnsFalse;
+	  }
+	  this.isPropagationStopped = emptyFunction.thatReturnsFalse;
+	}
+
+	assign(SyntheticEvent.prototype, {
+
+	  preventDefault: function() {
+	    this.defaultPrevented = true;
+	    var event = this.nativeEvent;
+	    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
+	  },
+
+	  stopPropagation: function() {
+	    var event = this.nativeEvent;
+	    event.stopPropagation ? event.stopPropagation() : event.cancelBubble = true;
+	    this.isPropagationStopped = emptyFunction.thatReturnsTrue;
+	  },
+
+	  /**
+	   * We release all dispatched `SyntheticEvent`s after each event loop, adding
+	   * them back into the pool. This allows a way to hold onto a reference that
+	   * won't be added back into the pool.
+	   */
+	  persist: function() {
+	    this.isPersistent = emptyFunction.thatReturnsTrue;
+	  },
+
+	  /**
+	   * Checks if this event should be released back into the pool.
+	   *
+	   * @return {boolean} True if this should not be released, false otherwise.
+	   */
+	  isPersistent: emptyFunction.thatReturnsFalse,
+
+	  /**
+	   * `PooledClass` looks for `destructor` on each instance it releases.
+	   */
+	  destructor: function() {
+	    var Interface = this.constructor.Interface;
+	    for (var propName in Interface) {
+	      this[propName] = null;
+	    }
+	    this.dispatchConfig = null;
+	    this.dispatchMarker = null;
+	    this.nativeEvent = null;
+	  }
+
+	});
+
+	SyntheticEvent.Interface = EventInterface;
+
+	/**
+	 * Helper to reduce boilerplate when creating subclasses.
+	 *
+	 * @param {function} Class
+	 * @param {?object} Interface
+	 */
+	SyntheticEvent.augmentClass = function(Class, Interface) {
+	  var Super = this;
+
+	  var prototype = Object.create(Super.prototype);
+	  assign(prototype, Class.prototype);
+	  Class.prototype = prototype;
+	  Class.prototype.constructor = Class;
+
+	  Class.Interface = assign({}, Super.Interface, Interface);
+	  Class.augmentClass = Super.augmentClass;
+
+	  PooledClass.addPoolingTo(Class, PooledClass.threeArgumentPooler);
+	};
+
+	PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
+
+	module.exports = SyntheticEvent;
+
+
+/***/ },
+/* 109 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule isTextInputElement
+	 */
+
+	"use strict";
+
+	/**
+	 * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
+	 */
+	var supportedInputTypes = {
+	  'color': true,
+	  'date': true,
+	  'datetime': true,
+	  'datetime-local': true,
+	  'email': true,
+	  'month': true,
+	  'number': true,
+	  'password': true,
+	  'range': true,
+	  'search': true,
+	  'tel': true,
+	  'text': true,
+	  'time': true,
+	  'url': true,
+	  'week': true
+	};
+
+	function isTextInputElement(elem) {
+	  return elem && (
+	    (elem.nodeName === 'INPUT' && supportedInputTypes[elem.type]) ||
+	    elem.nodeName === 'TEXTAREA'
+	  );
+	}
+
+	module.exports = isTextInputElement;
+
+
+/***/ },
+/* 110 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29966,7 +30387,7 @@
 
 
 /***/ },
-/* 107 */
+/* 111 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29982,7 +30403,7 @@
 
 	"use strict";
 
-	var EventPluginHub = require(105);
+	var EventPluginHub = require(107);
 
 	function runEventQueueInBatch(events) {
 	  EventPluginHub.enqueueEvents(events);
@@ -30020,7 +30441,7 @@
 
 
 /***/ },
-/* 108 */
+/* 112 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -30056,411 +30477,6 @@
 
 
 /***/ },
-/* 109 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule EventPropagators
-	 */
-
-	"use strict";
-
-	var EventConstants = require(40);
-	var EventPluginHub = require(105);
-
-	var accumulateInto = require(143);
-	var forEachAccumulated = require(144);
-
-	var PropagationPhases = EventConstants.PropagationPhases;
-	var getListener = EventPluginHub.getListener;
-
-	/**
-	 * Some event types have a notion of different registration names for different
-	 * "phases" of propagation. This finds listeners by a given phase.
-	 */
-	function listenerAtPhase(id, event, propagationPhase) {
-	  var registrationName =
-	    event.dispatchConfig.phasedRegistrationNames[propagationPhase];
-	  return getListener(id, registrationName);
-	}
-
-	/**
-	 * Tags a `SyntheticEvent` with dispatched listeners. Creating this function
-	 * here, allows us to not have to bind or create functions for each event.
-	 * Mutating the event's members allows us to not have to create a wrapping
-	 * "dispatch" object that pairs the event with the listener.
-	 */
-	function accumulateDirectionalDispatches(domID, upwards, event) {
-	  if (true) {
-	    if (!domID) {
-	      throw new Error('Dispatching id must not be null');
-	    }
-	  }
-	  var phase = upwards ? PropagationPhases.bubbled : PropagationPhases.captured;
-	  var listener = listenerAtPhase(domID, event, phase);
-	  if (listener) {
-	    event._dispatchListeners =
-	      accumulateInto(event._dispatchListeners, listener);
-	    event._dispatchIDs = accumulateInto(event._dispatchIDs, domID);
-	  }
-	}
-
-	/**
-	 * Collect dispatches (must be entirely collected before dispatching - see unit
-	 * tests). Lazily allocate the array to conserve memory.  We must loop through
-	 * each event and perform the traversal for each one. We can not perform a
-	 * single traversal for the entire collection of events because each event may
-	 * have a different target.
-	 */
-	function accumulateTwoPhaseDispatchesSingle(event) {
-	  if (event && event.dispatchConfig.phasedRegistrationNames) {
-	    EventPluginHub.injection.getInstanceHandle().traverseTwoPhase(
-	      event.dispatchMarker,
-	      accumulateDirectionalDispatches,
-	      event
-	    );
-	  }
-	}
-
-
-	/**
-	 * Accumulates without regard to direction, does not look for phased
-	 * registration names. Same as `accumulateDirectDispatchesSingle` but without
-	 * requiring that the `dispatchMarker` be the same as the dispatched ID.
-	 */
-	function accumulateDispatches(id, ignoredDirection, event) {
-	  if (event && event.dispatchConfig.registrationName) {
-	    var registrationName = event.dispatchConfig.registrationName;
-	    var listener = getListener(id, registrationName);
-	    if (listener) {
-	      event._dispatchListeners =
-	        accumulateInto(event._dispatchListeners, listener);
-	      event._dispatchIDs = accumulateInto(event._dispatchIDs, id);
-	    }
-	  }
-	}
-
-	/**
-	 * Accumulates dispatches on an `SyntheticEvent`, but only for the
-	 * `dispatchMarker`.
-	 * @param {SyntheticEvent} event
-	 */
-	function accumulateDirectDispatchesSingle(event) {
-	  if (event && event.dispatchConfig.registrationName) {
-	    accumulateDispatches(event.dispatchMarker, null, event);
-	  }
-	}
-
-	function accumulateTwoPhaseDispatches(events) {
-	  forEachAccumulated(events, accumulateTwoPhaseDispatchesSingle);
-	}
-
-	function accumulateEnterLeaveDispatches(leave, enter, fromID, toID) {
-	  EventPluginHub.injection.getInstanceHandle().traverseEnterLeave(
-	    fromID,
-	    toID,
-	    accumulateDispatches,
-	    leave,
-	    enter
-	  );
-	}
-
-
-	function accumulateDirectDispatches(events) {
-	  forEachAccumulated(events, accumulateDirectDispatchesSingle);
-	}
-
-
-
-	/**
-	 * A small set of propagation patterns, each of which will accept a small amount
-	 * of information, and generate a set of "dispatch ready event objects" - which
-	 * are sets of events that have already been annotated with a set of dispatched
-	 * listener functions/ids. The API is designed this way to discourage these
-	 * propagation strategies from actually executing the dispatches, since we
-	 * always want to collect the entire set of dispatches before executing event a
-	 * single one.
-	 *
-	 * @constructor EventPropagators
-	 */
-	var EventPropagators = {
-	  accumulateTwoPhaseDispatches: accumulateTwoPhaseDispatches,
-	  accumulateDirectDispatches: accumulateDirectDispatches,
-	  accumulateEnterLeaveDispatches: accumulateEnterLeaveDispatches
-	};
-
-	module.exports = EventPropagators;
-
-
-/***/ },
-/* 110 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013 Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule SyntheticInputEvent
-	 * @typechecks static-only
-	 */
-
-	"use strict";
-
-	var SyntheticEvent = require(111);
-
-	/**
-	 * @interface Event
-	 * @see http://www.w3.org/TR/2013/WD-DOM-Level-3-Events-20131105
-	 *      /#events-inputevents
-	 */
-	var InputEventInterface = {
-	  data: null
-	};
-
-	/**
-	 * @param {object} dispatchConfig Configuration used to dispatch this event.
-	 * @param {string} dispatchMarker Marker identifying the event target.
-	 * @param {object} nativeEvent Native browser event.
-	 * @extends {SyntheticUIEvent}
-	 */
-	function SyntheticInputEvent(
-	  dispatchConfig,
-	  dispatchMarker,
-	  nativeEvent) {
-	  SyntheticEvent.call(this, dispatchConfig, dispatchMarker, nativeEvent);
-	}
-
-	SyntheticEvent.augmentClass(
-	  SyntheticInputEvent,
-	  InputEventInterface
-	);
-
-	module.exports = SyntheticInputEvent;
-
-
-
-/***/ },
-/* 111 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule SyntheticEvent
-	 * @typechecks static-only
-	 */
-
-	"use strict";
-
-	var PooledClass = require(42);
-
-	var assign = require(31);
-	var emptyFunction = require(93);
-	var getEventTarget = require(124);
-
-	/**
-	 * @interface Event
-	 * @see http://www.w3.org/TR/DOM-Level-3-Events/
-	 */
-	var EventInterface = {
-	  type: null,
-	  target: getEventTarget,
-	  // currentTarget is set when dispatching; no use in copying it here
-	  currentTarget: emptyFunction.thatReturnsNull,
-	  eventPhase: null,
-	  bubbles: null,
-	  cancelable: null,
-	  timeStamp: function(event) {
-	    return event.timeStamp || Date.now();
-	  },
-	  defaultPrevented: null,
-	  isTrusted: null
-	};
-
-	/**
-	 * Synthetic events are dispatched by event plugins, typically in response to a
-	 * top-level event delegation handler.
-	 *
-	 * These systems should generally use pooling to reduce the frequency of garbage
-	 * collection. The system should check `isPersistent` to determine whether the
-	 * event should be released into the pool after being dispatched. Users that
-	 * need a persisted event should invoke `persist`.
-	 *
-	 * Synthetic events (and subclasses) implement the DOM Level 3 Events API by
-	 * normalizing browser quirks. Subclasses do not necessarily have to implement a
-	 * DOM interface; custom application-specific events can also subclass this.
-	 *
-	 * @param {object} dispatchConfig Configuration used to dispatch this event.
-	 * @param {string} dispatchMarker Marker identifying the event target.
-	 * @param {object} nativeEvent Native browser event.
-	 */
-	function SyntheticEvent(dispatchConfig, dispatchMarker, nativeEvent) {
-	  this.dispatchConfig = dispatchConfig;
-	  this.dispatchMarker = dispatchMarker;
-	  this.nativeEvent = nativeEvent;
-
-	  var Interface = this.constructor.Interface;
-	  for (var propName in Interface) {
-	    if (!Interface.hasOwnProperty(propName)) {
-	      continue;
-	    }
-	    var normalize = Interface[propName];
-	    if (normalize) {
-	      this[propName] = normalize(nativeEvent);
-	    } else {
-	      this[propName] = nativeEvent[propName];
-	    }
-	  }
-
-	  var defaultPrevented = nativeEvent.defaultPrevented != null ?
-	    nativeEvent.defaultPrevented :
-	    nativeEvent.returnValue === false;
-	  if (defaultPrevented) {
-	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
-	  } else {
-	    this.isDefaultPrevented = emptyFunction.thatReturnsFalse;
-	  }
-	  this.isPropagationStopped = emptyFunction.thatReturnsFalse;
-	}
-
-	assign(SyntheticEvent.prototype, {
-
-	  preventDefault: function() {
-	    this.defaultPrevented = true;
-	    var event = this.nativeEvent;
-	    event.preventDefault ? event.preventDefault() : event.returnValue = false;
-	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
-	  },
-
-	  stopPropagation: function() {
-	    var event = this.nativeEvent;
-	    event.stopPropagation ? event.stopPropagation() : event.cancelBubble = true;
-	    this.isPropagationStopped = emptyFunction.thatReturnsTrue;
-	  },
-
-	  /**
-	   * We release all dispatched `SyntheticEvent`s after each event loop, adding
-	   * them back into the pool. This allows a way to hold onto a reference that
-	   * won't be added back into the pool.
-	   */
-	  persist: function() {
-	    this.isPersistent = emptyFunction.thatReturnsTrue;
-	  },
-
-	  /**
-	   * Checks if this event should be released back into the pool.
-	   *
-	   * @return {boolean} True if this should not be released, false otherwise.
-	   */
-	  isPersistent: emptyFunction.thatReturnsFalse,
-
-	  /**
-	   * `PooledClass` looks for `destructor` on each instance it releases.
-	   */
-	  destructor: function() {
-	    var Interface = this.constructor.Interface;
-	    for (var propName in Interface) {
-	      this[propName] = null;
-	    }
-	    this.dispatchConfig = null;
-	    this.dispatchMarker = null;
-	    this.nativeEvent = null;
-	  }
-
-	});
-
-	SyntheticEvent.Interface = EventInterface;
-
-	/**
-	 * Helper to reduce boilerplate when creating subclasses.
-	 *
-	 * @param {function} Class
-	 * @param {?object} Interface
-	 */
-	SyntheticEvent.augmentClass = function(Class, Interface) {
-	  var Super = this;
-
-	  var prototype = Object.create(Super.prototype);
-	  assign(prototype, Class.prototype);
-	  Class.prototype = prototype;
-	  Class.prototype.constructor = Class;
-
-	  Class.Interface = assign({}, Super.Interface, Interface);
-	  Class.augmentClass = Super.augmentClass;
-
-	  PooledClass.addPoolingTo(Class, PooledClass.threeArgumentPooler);
-	};
-
-	PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
-
-	module.exports = SyntheticEvent;
-
-
-/***/ },
-/* 112 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule isTextInputElement
-	 */
-
-	"use strict";
-
-	/**
-	 * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
-	 */
-	var supportedInputTypes = {
-	  'color': true,
-	  'date': true,
-	  'datetime': true,
-	  'datetime-local': true,
-	  'email': true,
-	  'month': true,
-	  'number': true,
-	  'password': true,
-	  'range': true,
-	  'search': true,
-	  'tel': true,
-	  'text': true,
-	  'time': true,
-	  'url': true,
-	  'week': true
-	};
-
-	function isTextInputElement(elem) {
-	  return elem && (
-	    (elem.nodeName === 'INPUT' && supportedInputTypes[elem.type]) ||
-	    elem.nodeName === 'TEXTAREA'
-	  );
-	}
-
-	module.exports = isTextInputElement;
-
-
-/***/ },
 /* 113 */
 /***/ function(module, exports, require) {
 
@@ -30479,7 +30495,7 @@
 
 	var ReactDOMSelection = require(145);
 
-	var containsNode = require(87);
+	var containsNode = require(89);
 	var focusNode = require(146);
 	var getActiveElement = require(126);
 
@@ -30618,7 +30634,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = require(111);
+	var SyntheticEvent = require(108);
 
 	/**
 	 * @interface Event
@@ -30710,7 +30726,7 @@
 	"use strict";
 
 	var SyntheticUIEvent = require(133);
-	var ViewportMetrics = require(108);
+	var ViewportMetrics = require(112);
 
 	var getEventModifierState = require(147);
 
@@ -30798,7 +30814,7 @@
 
 	"use strict";
 
-	var CSSPropertyOperations = require(57);
+	var CSSPropertyOperations = require(58);
 	var DOMChildrenOperations = require(148);
 	var DOMPropertyOperations = require(11);
 	var ReactMount = require(25);
@@ -30984,12 +31000,12 @@
 
 	"use strict";
 
-	var CallbackQueue = require(97);
-	var PooledClass = require(42);
-	var ReactBrowserEventEmitter = require(59);
+	var CallbackQueue = require(96);
+	var PooledClass = require(45);
+	var ReactBrowserEventEmitter = require(60);
 	var ReactInputSelection = require(113);
-	var ReactPutListenerQueue = require(140);
-	var Transaction = require(98);
+	var ReactPutListenerQueue = require(139);
+	var Transaction = require(97);
 
 	var assign = require(31);
 
@@ -31276,7 +31292,7 @@
 
 	"use strict";
 
-	var ReactBrowserEventEmitter = require(59);
+	var ReactBrowserEventEmitter = require(60);
 
 	var accumulateInto = require(143);
 	var forEachAccumulated = require(144);
@@ -31492,7 +31508,7 @@
 	 * @typechecks
 	 */
 
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 
 	/**
 	 * Upstream version of event listener. Does not take into account specific
@@ -31739,7 +31755,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = require(111);
+	var SyntheticEvent = require(108);
 
 	/**
 	 * @interface Event
@@ -32018,7 +32034,7 @@
 
 	"use strict";
 
-	var SyntheticEvent = require(111);
+	var SyntheticEvent = require(108);
 
 	var getEventTarget = require(124);
 
@@ -32470,51 +32486,13 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule adler32
-	 */
-
-	/* jslint bitwise:true */
-
-	"use strict";
-
-	var MOD = 65521;
-
-	// This is a clean-room implementation of adler32 designed for detecting
-	// if markup is not what we expect it to be. It does not need to be
-	// cryptographically strong, only reasonably good at detecting if markup
-	// generated on the server is different than that on the client.
-	function adler32(data) {
-	  var a = 1;
-	  var b = 0;
-	  for (var i = 0; i < data.length; i++) {
-	    a = (a + data.charCodeAt(i)) % MOD;
-	    b = (b + a) % MOD;
-	  }
-	  return a | (b << 16);
-	}
-
-	module.exports = adler32;
-
-
-/***/ },
-/* 140 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-2014, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
 	 * @providesModule ReactPutListenerQueue
 	 */
 
 	"use strict";
 
-	var PooledClass = require(42);
-	var ReactBrowserEventEmitter = require(59);
+	var PooledClass = require(45);
+	var ReactBrowserEventEmitter = require(60);
 
 	var assign = require(31);
 
@@ -32554,6 +32532,44 @@
 	PooledClass.addPoolingTo(ReactPutListenerQueue);
 
 	module.exports = ReactPutListenerQueue;
+
+
+/***/ },
+/* 140 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule adler32
+	 */
+
+	/* jslint bitwise:true */
+
+	"use strict";
+
+	var MOD = 65521;
+
+	// This is a clean-room implementation of adler32 designed for detecting
+	// if markup is not what we expect it to be. It does not need to be
+	// cryptographically strong, only reasonably good at detecting if markup
+	// generated on the server is different than that on the client.
+	function adler32(data) {
+	  var a = 1;
+	  var b = 0;
+	  for (var i = 0; i < data.length; i++) {
+	    a = (a + data.charCodeAt(i)) % MOD;
+	    b = (b + a) % MOD;
+	  }
+	  return a | (b << 16);
+	}
+
+	module.exports = adler32;
 
 
 /***/ },
@@ -33048,7 +33064,7 @@
 	"use strict";
 
 	var Danger = require(154);
-	var ReactMultiChildUpdateTypes = require(89);
+	var ReactMultiChildUpdateTypes = require(87);
 
 	var getTextContentAccessor = require(115);
 	var invariant = require(41);
@@ -33488,7 +33504,7 @@
 	var ExecutionEnvironment = require(34);
 
 	var createNodesFromMarkup = require(155);
-	var emptyFunction = require(93);
+	var emptyFunction = require(91);
 	var getMarkupWrap = require(156);
 	var invariant = require(41);
 
@@ -33923,17 +33939,31 @@
 			"lib": "./lib"
 		},
 		"browser": "lib/browser.js",
-		"readme": "WebSocket Client & Server Implementation for Node\n=================================================\n\n[![Join the chat at https://gitter.im/theturtle32/WebSocket-Node](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/theturtle32/WebSocket-Node?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n\n[![npm version](https://badge.fury.io/js/websocket.svg)](http://badge.fury.io/js/websocket)\n\n[![NPM](https://nodei.co/npm/websocket.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/websocket/)\n\n[![NPM](https://nodei.co/npm-dl/websocket.png?height=3)](https://nodei.co/npm/websocket/)\n\n[ ![Codeship Status for theturtle32/WebSocket-Node](https://codeship.com/projects/70458270-8ee7-0132-7756-0a0cf4fe8e66/status?branch=master)](https://codeship.com/projects/61106)\n\nOverview\n--------\nThis is a (mostly) pure JavaScript implementation of the WebSocket protocol versions 8 and 13 for Node.  There are some example client and server applications that implement various interoperability testing protocols in the \"test/scripts\" folder.\n\nFor a WebSocket client written in ActionScript 3, see my [AS3WebScocket](https://github.com/theturtle32/AS3WebSocket) project.\n\n\nDocumentation\n=============\n\n[You can read the full API documentation in the docs folder.](docs/index.md)\n\n\nChangelog\n---------\n\n***Current Version: 1.0.18*** — Released 2015-03-19\n\n***Version 1.0.18***\n\n* Resolves [issue #195](https://github.com/theturtle32/WebSocket-Node/pull/179) - passing number to connection.send() causes crash\n* [Added close code/reason arguments to W3CWebSocket#close()](https://github.com/theturtle32/WebSocket-Node/issues/184)\n\n***Version 1.0.17***\n\n* Resolves [issue #179](https://github.com/theturtle32/WebSocket-Node/pull/179) - Allow toBuffer to work with empty data\n\n***Version 1.0.16***\n\n* Resolves [issue #178](https://github.com/theturtle32/WebSocket-Node/issues/178) - Ping Frames with no data\n\n***Version 1.0.15***\n\n* Resolves [issue #177](https://github.com/theturtle32/WebSocket-Node/issues/177) - WebSocketClient ignores options unless it has a tlsOptions property\n\n***Version 1.0.14***\n\n* Resolves [issue #173](https://github.com/theturtle32/WebSocket-Node/issues/173) - To allow the W3CWebSocket interface to accept an optional non-standard configuration object as its third parameter, which will be ignored when running in a browser context.\n\n\n[View the full changelog](CHANGELOG.md)\n\nBrowser Support\n---------------\n\nAll current browsers are fully supported.\n\n* Firefox 7-9 (Old) (Protocol Version 8)\n* Firefox 10+ (Protocol Version 13)\n* Chrome 14,15 (Old) (Protocol Version 8)\n* Chrome 16+ (Protocol Version 13)\n* Internet Explorer 10+ (Protocol Version 13)\n* Safari 6+ (Protocol Version 13)\n\n***Safari older than 6.0 is not supported since it uses a very old draft of WebSockets***\n\n***If you need to simultaneously support legacy browser versions that had implemented draft-75/draft-76/draft-00, take a look here: https://gist.github.com/1428579***\n\nBenchmarks\n----------\nThere are some basic benchmarking sections in the Autobahn test suite.  I've put up a [benchmark page](http://theturtle32.github.com/WebSocket-Node/benchmarks/) that shows the results from the Autobahn tests run against AutobahnServer 0.4.10, WebSocket-Node 1.0.2, WebSocket-Node 1.0.4, and ws 0.3.4.\n\nAutobahn Tests\n--------------\nThe very complete [Autobahn Test Suite](http://autobahn.ws/testsuite/) is used by most WebSocket implementations to test spec compliance and interoperability.\n\n- [View Server Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/servers/)\n- [View Client Test Results](http://theturtle32.github.com/WebSocket-Node/test-report/clients/)\n\nNotes\n-----\nThis library has been used in production on [worlize.com](https://www.worlize.com) since April 2011 and seems to be stable.  Your mileage may vary.\n\n**Tested with the following node versions:**\n\n- 0.8.28\n- 0.10.33\n\nIt may work in earlier or later versions but I'm not actively testing it outside of the listed versions.  YMMV.\n\nInstallation\n------------\n\nA few users have reported difficulties building the native extensions without first manually installing node-gyp.  If you have trouble building the native extensions, make sure you've got a C++ compiler, and have done `npm install -g node-gyp` first. \n\nNative extensions are optional, however, and WebSocket-Node will work even if the extensions cannot be compiled.\n\nIn your project root:\n\n    $ npm install websocket\n  \nThen in your code:\n\n```javascript\nvar WebSocketServer = require('websocket').server;\nvar WebSocketClient = require('websocket').client;\nvar WebSocketFrame  = require('websocket').frame;\nvar WebSocketRouter = require('websocket').router;\nvar W3CWebSocket = require('websocket').w3cwebsocket;\n```\n\nNote for Windows Users\n----------------------\nBecause there is a small C++ component used for validating UTF-8 data, you will need to install a few other software packages in addition to Node to be able to build this module:\n\n- [Microsoft Visual C++](http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express)\n- [Python 2.7](http://www.python.org/download/) (NOT Python 3.x)\n\n\nCurrent Features:\n-----------------\n- Licensed under the Apache License, Version 2.0\n- Protocol version \"8\" and \"13\" (Draft-08 through the final RFC) framing and handshake\n- Can handle/aggregate received fragmented messages\n- Can fragment outgoing messages\n- Router to mount multiple applications to various path and protocol combinations\n- TLS supported for outbound connections via WebSocketClient\n- TLS supported for server connections (use https.createServer instead of http.createServer)\n  - Thanks to [pors](https://github.com/pors) for confirming this!\n- Cookie setting and parsing\n- Tunable settings\n  - Max Receivable Frame Size\n  - Max Aggregate ReceivedMessage Size\n  - Whether to fragment outgoing messages\n  - Fragmentation chunk size for outgoing messages\n  - Whether to automatically send ping frames for the purposes of keepalive\n  - Keep-alive ping interval\n  - Whether or not to automatically assemble received fragments (allows application to handle individual fragments directly)\n  - How long to wait after sending a close frame for acknowledgment before closing the socket.\n- [W3C WebSocket API](http://www.w3.org/TR/websockets/) for applications running on both Node and browsers (via the `W3CWebSocket` class). \n\n\nKnown Issues/Missing Features:\n------------------------------\n- No API for user-provided protocol extensions.\n\n\nUsage Examples\n==============\n\nServer Example\n--------------\n\nHere's a short example showing a server that echos back anything sent to it, whether utf-8 or binary.\n\n```javascript\n#!/usr/bin/env node\nvar WebSocketServer = require('websocket').server;\nvar http = require('http');\n\nvar server = http.createServer(function(request, response) {\n    console.log((new Date()) + ' Received request for ' + request.url);\n    response.writeHead(404);\n    response.end();\n});\nserver.listen(8080, function() {\n    console.log((new Date()) + ' Server is listening on port 8080');\n});\n\nwsServer = new WebSocketServer({\n    httpServer: server,\n    // You should not use autoAcceptConnections for production\n    // applications, as it defeats all standard cross-origin protection\n    // facilities built into the protocol and the browser.  You should\n    // *always* verify the connection's origin and decide whether or not\n    // to accept it.\n    autoAcceptConnections: false\n});\n\nfunction originIsAllowed(origin) {\n  // put logic here to detect whether the specified origin is allowed.\n  return true;\n}\n\nwsServer.on('request', function(request) {\n    if (!originIsAllowed(request.origin)) {\n      // Make sure we only accept requests from an allowed origin\n      request.reject();\n      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');\n      return;\n    }\n    \n    var connection = request.accept('echo-protocol', request.origin);\n    console.log((new Date()) + ' Connection accepted.');\n    connection.on('message', function(message) {\n        if (message.type === 'utf8') {\n            console.log('Received Message: ' + message.utf8Data);\n            connection.sendUTF(message.utf8Data);\n        }\n        else if (message.type === 'binary') {\n            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');\n            connection.sendBytes(message.binaryData);\n        }\n    });\n    connection.on('close', function(reasonCode, description) {\n        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');\n    });\n});\n```\n\nClient Example\n--------------\n\nThis is a simple example client that will print out any utf-8 messages it receives on the console, and periodically sends a random number.\n\n*This code demonstrates a client in Node.js, not in the browser*\n\n```javascript\n#!/usr/bin/env node\nvar WebSocketClient = require('websocket').client;\n\nvar client = new WebSocketClient();\n\nclient.on('connectFailed', function(error) {\n    console.log('Connect Error: ' + error.toString());\n});\n\nclient.on('connect', function(connection) {\n    console.log('WebSocket Client Connected');\n    connection.on('error', function(error) {\n        console.log(\"Connection Error: \" + error.toString());\n    });\n    connection.on('close', function() {\n        console.log('echo-protocol Connection Closed');\n    });\n    connection.on('message', function(message) {\n        if (message.type === 'utf8') {\n            console.log(\"Received: '\" + message.utf8Data + \"'\");\n        }\n    });\n    \n    function sendNumber() {\n        if (connection.connected) {\n            var number = Math.round(Math.random() * 0xFFFFFF);\n            connection.sendUTF(number.toString());\n            setTimeout(sendNumber, 1000);\n        }\n    }\n    sendNumber();\n});\n\nclient.connect('ws://localhost:8080/', 'echo-protocol');\n```\n\nClient Example using the *W3C WebSocket API*\n--------------------------------------------\n\nSame example as above but using the [W3C WebSocket API](http://www.w3.org/TR/websockets/).\n\n```javascript\nvar W3CWebSocket = require('websocket').w3cwebsocket;\n\nvar client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');\n\nclient.onerror = function() {\n    console.log('Connection Error');\n};\n\nclient.onopen = function() {\n    console.log('WebSocket Client Connected');\n\n    function sendNumber() {\n        if (client.readyState === client.OPEN) {\n            var number = Math.round(Math.random() * 0xFFFFFF);\n            client.send(number.toString());\n            setTimeout(sendNumber, 1000);\n        }\n    }\n    sendNumber();\n};\n\nclient.onclose = function() {\n    console.log('echo-protocol Client Closed');\n};\n\nclient.onmessage = function(e) {\n    if (typeof e.data === 'string') {\n        console.log(\"Received: '\" + e.data + \"'\");\n    }\n};\n```\n    \nRequest Router Example\n----------------------\n\nFor an example of using the request router, see `libwebsockets-test-server.js` in the `test` folder.\n\n\nResources\n---------\n\nA presentation on the state of the WebSockets protocol that I gave on July 23, 2011 at the LA Hacker News meetup.  [WebSockets: The Real-Time Web, Delivered](http://www.scribd.com/doc/60898569/WebSockets-The-Real-Time-Web-Delivered)\n",
-		"readmeFilename": "README.md",
+		"gitHead": "2888a6d8c6ea0211b429000d43ed5da76124733f",
 		"bugs": {
 			"url": "https://github.com/theturtle32/WebSocket-Node/issues"
 		},
 		"_id": "websocket@1.0.18",
-		"dist": {
-			"shasum": "598116eb867f43d3a289999ed34efdbc7d31094c"
-		},
+		"_shasum": "140280dcc90ed42caa7a701e182a8c9e2dec75ef",
 		"_from": "websocket@latest",
-		"_resolved": "https://registry.npmjs.org/websocket/-/websocket-1.0.18.tgz"
+		"_npmVersion": "2.6.1",
+		"_nodeVersion": "1.4.3",
+		"_npmUser": {
+			"name": "theturtle32",
+			"email": "brian@worlize.com"
+		},
+		"maintainers": [
+			{
+				"name": "theturtle32",
+				"email": "brian@worlize.com"
+			}
+		],
+		"dist": {
+			"shasum": "140280dcc90ed42caa7a701e182a8c9e2dec75ef",
+			"tarball": "http://registry.npmjs.org/websocket/-/websocket-1.0.18.tgz"
+		},
+		"_resolved": "https://registry.npmjs.org/websocket/-/websocket-1.0.18.tgz",
+		"readme": "ERROR: No README data found!"
 	}
 
 /***/ },

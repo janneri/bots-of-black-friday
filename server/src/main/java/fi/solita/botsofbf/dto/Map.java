@@ -8,9 +8,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Map {
@@ -26,6 +24,7 @@ public class Map {
     public static final char WALL = 'x';
     public static final char EXIT = 'o';
     public static final char FLOOR = '_';
+    public static final char TRAP = '#';
 
     private final List<Position> movablePositions;
 
@@ -54,6 +53,8 @@ public class Map {
     private boolean isWall(Position pos) {
         return tiles.get(pos.y).charAt(pos.x) == WALL;
     }
+
+    public boolean isTrap(Position pos) { return tiles.get(pos.y).charAt(pos.x) == TRAP; }
 
     public static Map readMapFromFile(String mapFileName) {
         try {
@@ -94,11 +95,11 @@ public class Map {
     }
 
     // todo map to Tile and use Stream::filter
-    private static List<Position> filterPositionsOfType(List<String> lines, char tile) {
+    private static List<Position> filterPositionsOfType(List<String> lines, Set<Character> tiles) {
         List<Position> positions = new ArrayList();
         for (int y = 0; y < lines.size(); y++) {
             for (int x = 0; x < lines.get(y).length(); x++) {
-                if (lines.get(y).charAt(x) == tile) {
+                if (tiles.contains(Character.valueOf(lines.get(y).charAt(x)))) {
                     positions.add(Position.of(x, y));
                 }
             }
@@ -116,7 +117,10 @@ public class Map {
         int height = tiles.size();
         System.out.println("w " + width + ", h " + height + ", name " + mapName + " items " + maxItemCount);
 
-        final List<Position> floorTiles = filterPositionsOfType(tiles, FLOOR);
+        final Set<Character> movable = new HashSet<>();
+        movable.add(FLOOR);
+        movable.add(TRAP);
+        final List<Position> floorTiles = filterPositionsOfType(tiles, movable);
         if ( floorTiles.size() == 0) {
             throw new IllegalStateException("The map must contain movable tiles.");
         }
