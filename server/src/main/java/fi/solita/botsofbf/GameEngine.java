@@ -20,7 +20,7 @@ public final class GameEngine {
     private GameState currentState;
 
     public GameEngine() {
-        currentState = new GameState(Map.readMapFromFile("ikea.map"));
+        currentState = new GameState(Map.readMapFromFile("split.map"));
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {

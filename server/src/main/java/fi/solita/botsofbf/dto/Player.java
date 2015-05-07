@@ -65,6 +65,12 @@ public class Player {
                 this.health - amount, this.usableItems);
     }
 
+    public Player cancelState() {
+        return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
+                this.score, this.money, PlayerState.MOVE, 0, Optional.<Item>empty(),
+                this.health, this.usableItems);
+    }
+
     public boolean hasUnusedWeapon() {
         return usableItems.stream()
                 .anyMatch(item -> item.isUsable && item.type == Item.Type.WEAPON);

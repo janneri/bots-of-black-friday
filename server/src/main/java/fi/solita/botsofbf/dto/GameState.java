@@ -62,7 +62,7 @@ public class GameState {
     }
 
     public GameState addInvalidMove(Player player) {
-        Player newPlayer = player.decreaseHealth(20);
+        Player newPlayer = player.decreaseHealth(20).cancelState();
         return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items, shootingLines);
     }
 
