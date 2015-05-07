@@ -60,7 +60,7 @@ public class Player {
     }
 
     public Player decreaseHealth(int amount) {
-        return new Player(this.id, this.name, this.url, position, this.actionCount + 1,
+        return new Player(this.id, this.name, this.url, position, this.actionCount,
                 this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(),
                 this.health - amount, this.usableItems);
     }
