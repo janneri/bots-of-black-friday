@@ -32,6 +32,35 @@ public class GameStateTest {
     }
 
     @Test
+    public void movingAroundDecreasesHealth() {
+        Player player = createPlayerToPos(0, 0);
+        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "5", "__o")))
+                .addPlayer(player);
+
+        final int healthDecreasedWhenAging = 33;
+
+        assertEquals(100, state.getPlayer(player.id).health);
+
+        state = state.movePlayer(player.id, Move.RIGHT);
+        state = state.movePlayer(player.id, Move.LEFT);
+        state = state.movePlayer(player.id, Move.RIGHT);
+
+        assertEquals(100 - healthDecreasedWhenAging, state.getPlayer(player.id).health);
+
+        state = state.movePlayer(player.id, Move.LEFT);
+        state = state.movePlayer(player.id, Move.RIGHT);
+        state = state.movePlayer(player.id, Move.LEFT);
+
+        assertEquals(100 - 2 * healthDecreasedWhenAging, state.getPlayer(player.id).health);
+
+        state = state.movePlayer(player.id, Move.RIGHT);
+        state = state.movePlayer(player.id, Move.LEFT);
+        state = state.movePlayer(player.id, Move.RIGHT);
+
+        assertEquals(100 - 3 * healthDecreasedWhenAging, state.getPlayer(player.id).health);
+    }
+
+    @Test
     public void invalidPickThrows() {
         Map map = Map.createMapFromLines(mapLines);
         Player player = createPlayerToMap(map);

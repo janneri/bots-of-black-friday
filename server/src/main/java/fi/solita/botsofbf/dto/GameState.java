@@ -120,6 +120,10 @@ public class GameState {
             newPlayer = movePlayer(player, move);
         }
 
+        if ( newPlayer.actionCount % (map.height * map.width) == 0 ) {
+            newPlayer = newPlayer.decreaseHealth(33);
+        }
+
 
         final Set<Player> newPlayers = affectedPlayer.isPresent() ?
                 replacePlayer(replacePlayer(players, newPlayer), affectedPlayer.get()) :
