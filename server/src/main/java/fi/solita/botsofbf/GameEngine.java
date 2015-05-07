@@ -11,16 +11,15 @@ public final class GameEngine {
 
     public static final int ROUND_DURATION_MILLIS = 500;
 
-    @Autowired
     private PlayerClient playerClient;
-
-    @Autowired
     private UiClient uiClient;
-
     private GameState currentState;
 
-    public GameEngine() {
-        currentState = new GameState(Map.readMapFromFile("split.map"));
+    @Autowired
+    public GameEngine(GameState initialGameState, UiClient uiClient, PlayerClient playerClient) {
+        this.currentState = initialGameState;
+        this.playerClient = playerClient;
+        this.uiClient = uiClient;
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
@@ -36,29 +35,38 @@ public final class GameEngine {
         uiClient.sendChatMessageToUi(currentState.getPlayer(playerId), message);
     }
 
+    /**
+     * Voipi olla, että tämä kannattaisi kirjoittaa sellaiseksi, että
+     * vuoro kestää vähintään n millisekuntia, mutta voi kestää enemmänkin, jos joku botti on hidas.
+     * Botille pitää kuitenkin joku timeout olla.
+     * Saattaapi tulla ongelmaksi bottien tai verkon hitaus ja socket timeoutit.
+     * todo parempi systeemi
+     */
     public void tick() {
-        playRound();
+        int timeout = ROUND_DURATION_MILLIS / (currentState.players.size() == 0 ? 1 : currentState.players.size());
+        playRound(timeout);
         endRound();
     }
 
-    private void playRound() {
-        int timeout = ROUND_DURATION_MILLIS / (currentState.players.size() == 0 ? 1 : currentState.players.size());
-
+    private void playRound(int timeout) {
         for ( Player player : currentState.players ) {
-            System.out.println("Notify player " + player.name);
-
-            try {
-                Move move = playerClient.askMoveFromPlayer(player, currentState, timeout);
-                currentState = currentState.movePlayer(player.id, move);
-                uiClient.notifyUi(player.name + " moved", currentState);
-            } catch (Exception e) {
-                System.out.println(player.name + " is fucking up: " + e.getMessage());
-                currentState = currentState.addInvalidMove(player);
-                uiClient.notifyUi(player.name + " is fucking up: " + e.getMessage(), currentState);
-            }
-
-            currentState = currentState.removeDeadPlayers();
+            currentState = playTurn(player, currentState, timeout);
         }
+    }
+
+    private GameState playTurn(Player player, GameState fromState, int timeout) {
+        GameState newGameState = null;
+        try {
+            Move move = playerClient.askMoveFromPlayer(player, fromState, timeout);
+            newGameState = fromState.movePlayer(player.id, move);
+            uiClient.notifyUi(player.name + " moved", newGameState);
+        } catch (Exception e) {
+            System.out.println(player.name + " is fucking up: " + e.getMessage());
+            newGameState = fromState.addInvalidMove(player);
+            uiClient.notifyUi(player.name + " is fucking up: " + e.getMessage(), currentState);
+        }
+
+        return newGameState.removeDeadPlayers();
     }
 
     private void endRound() {
@@ -73,5 +81,9 @@ public final class GameEngine {
 
     public void changeMap(String map) {
         currentState = new GameState(Map.readMapFromFile(map));
+    }
+
+    public GameState getCurrentState() {
+        return currentState;
     }
 }

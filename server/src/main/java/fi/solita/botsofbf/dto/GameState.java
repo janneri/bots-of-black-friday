@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class GameState {
 
     public static final int HEALTH_LOST_WHEN_ATTACKED = 50;
+    public static final int HEALTH_LOST_WHEN_INVALID_MOVE = 20;
     public final Map map;
     public final Set<Player> players;
     public final Set<Player> finishedPlayers;
@@ -62,7 +63,7 @@ public class GameState {
     }
 
     public GameState addInvalidMove(Player player) {
-        Player newPlayer = player.decreaseHealth(20).cancelState();
+        Player newPlayer = player.decreaseHealth(HEALTH_LOST_WHEN_INVALID_MOVE).cancelState();
         return new GameState(map, round, replacePlayer(players, newPlayer), finishedPlayers, items, shootingLines);
     }
 
@@ -109,11 +110,11 @@ public class GameState {
             if ( !player.hasUnusedWeapon() ) {
                 throw new IllegalStateException(String.format("%s does not have a usable item", player.name));
             }
-            Optional<Player> closestPlayer = findFurthestPlayer(player, players);
-            if ( closestPlayer.isPresent() ) {
-                affectedPlayer = Optional.of(closestPlayer.get().decreaseHealth(HEALTH_LOST_WHEN_ATTACKED));
+            Optional<Player> furthestPlayer = findFurthestPlayer(player, players);
+            if ( furthestPlayer.isPresent() ) {
+                affectedPlayer = Optional.of(furthestPlayer.get().decreaseHealth(HEALTH_LOST_WHEN_ATTACKED));
                 newPlayer = player.useFirstUsableItem();
-                newShootingLines.add(ShootingLine.of(player.position, closestPlayer.get().position));
+                newShootingLines.add(ShootingLine.of(player.position, furthestPlayer.get().position));
             }
         }
         else {
