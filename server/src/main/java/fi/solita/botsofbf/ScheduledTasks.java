@@ -9,8 +9,8 @@ public class ScheduledTasks {
 
     @Autowired
     private GameEngine gameEngine;
-    
-    @Scheduled(fixedRate = GameEngine.ROUND_DURATION_MILLIS)
+
+    @Scheduled(fixedDelay = GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS)
     public void tick() {
         gameEngine.tick();
     }
