@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @Component
 public final class GameEngine {
 
-    public static final int PAUSE_BETWEEN_ROUNDS_MILLIS = 300;
+    public static final int PAUSE_BETWEEN_ROUNDS_MILLIS = 400;
 
     private PlayerClient playerClient;
     private UiClient uiClient;
@@ -39,7 +39,7 @@ public final class GameEngine {
     }
 
     public void tick() {
-        int botAnswerTimeout = 500;
+        int botAnswerTimeout = 2500;
         for (Player p : registeredPlayers) {
             currentState = currentState.addPlayer(p);
         }
