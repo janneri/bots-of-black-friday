@@ -33,12 +33,15 @@ public class GameState {
         this.shootingLines = shootingLines;
     }
 
-    public GameState addPlayer(final Player player) {
-        boolean nameReserved = players.stream().anyMatch(p -> p.name.equals(player.name));
+    public void throwIfNameReserved(final String playerName) {
+        boolean nameReserved = players.stream().anyMatch(p -> p.name.equals(playerName));
         if ( nameReserved ) {
             throw new IllegalArgumentException("Player already exists.");
         }
+    }
 
+    public GameState addPlayer(final Player player) {
+        throwIfNameReserved(player.name);
         Set<Player> newPlayers = new HashSet<>(players);
         newPlayers.add(player);
         return new GameState(map, round, newPlayers, finishedPlayers, items, shootingLines);

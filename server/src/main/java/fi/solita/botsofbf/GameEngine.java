@@ -4,7 +4,9 @@ import fi.solita.botsofbf.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Component
 public final class GameEngine {
@@ -14,6 +16,7 @@ public final class GameEngine {
     private PlayerClient playerClient;
     private UiClient uiClient;
     private GameState currentState;
+    private Queue<Player> registeredPlayers = new ConcurrentLinkedQueue<Player>();
 
     @Autowired
     public GameEngine(GameState initialGameState, UiClient uiClient, PlayerClient playerClient) {
@@ -23,11 +26,11 @@ public final class GameEngine {
     }
 
     public RegisterResponse registerPlayer(String playerName, String url) {
+        currentState.throwIfNameReserved(playerName);
         Position randomValidPosition = currentState.map.randomFloorPosition();
         Player player = Player.create(playerName, url, randomValidPosition);
-        currentState = currentState.addPlayer(player);
+        registeredPlayers.add(player);
         System.out.println("Registered " + playerName + " " + url);
-        uiClient.notifyUi(playerName + " registered", currentState);
         return new RegisterResponse(player, currentState);
     }
 
@@ -35,16 +38,12 @@ public final class GameEngine {
         uiClient.sendChatMessageToUi(currentState.getPlayer(playerId), message);
     }
 
-    /**
-     * Voipi olla, että tämä kannattaisi kirjoittaa sellaiseksi, että
-     * vuoro kestää vähintään n millisekuntia, mutta voi kestää enemmänkin, jos joku botti on hidas.
-     * Botille pitää kuitenkin joku timeout olla.
-     * Saattaapi tulla ongelmaksi bottien tai verkon hitaus ja socket timeoutit.
-     * todo parempi systeemi
-     */
     public void tick() {
-        //int timeout = PAUSE_BETWEEN_ROUNDS_MILLIS / (currentState.players.size() == 0 ? 1 : currentState.players.size());
         int botAnswerTimeout = 500;
+        for (Player p : registeredPlayers) {
+            currentState = currentState.addPlayer(p);
+        }
+        registeredPlayers = new ConcurrentLinkedQueue<>();
         playRound(botAnswerTimeout);
         endRound();
     }
