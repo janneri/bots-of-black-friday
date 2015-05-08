@@ -79,8 +79,8 @@ public class ExampleBots {
                         .thenComparing(Comparator.comparing((Item_ item) -> item.position.x + item.position.y)))
                 .findFirst();
 
-        System.out.println("hunter is at " + hunterInGame.position
-                + " and hunting " + (huntedItem.isPresent() ? huntedItem.get().position : null));
+        //System.out.println("hunter is at " + hunterInGame.position
+         //       + " and hunting " + (huntedItem.isPresent() ? huntedItem.get().position : null));
 
         if (huntedItem.isPresent()) {
             Move nextMove = nextMoveToItem(hunterInGame.position, huntedItem.get().position, gameStateChanged.gameState.map);

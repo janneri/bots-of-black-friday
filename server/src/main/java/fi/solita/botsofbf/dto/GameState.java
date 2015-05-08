@@ -9,7 +9,7 @@ public class GameState {
     public static final int HEALTH_LOST_WHEN_INVALID_MOVE = 20;
     public final Map map;
     public final Set<Player> players;
-    public final Set<Player> finishedPlayers;
+    public final List<Player> finishedPlayers;
     public final Set<Item> items;
     public final int round;
     public final List<ShootingLine> shootingLines;
@@ -17,14 +17,14 @@ public class GameState {
     public GameState(final Map map) {
         this.map = map;
         this.round = 1;
-        this.finishedPlayers = new HashSet<>();
+        this.finishedPlayers = new ArrayList<>();
         this.players = new HashSet<>();
         this.items = new HashSet<>();
         this.shootingLines = new ArrayList<>();
     }
 
     private GameState(final Map map, final int round, final Set<Player> players,
-                      Set<Player> finishedPlayers, final Set<Item> items, final List<ShootingLine> shootingLines) {
+                      List<Player> finishedPlayers, final Set<Item> items, final List<ShootingLine> shootingLines) {
         this.map = map;
         this.round = round;
         this.players = players;
@@ -133,8 +133,23 @@ public class GameState {
         final Set<Item> newItems = itemWasPicked ? removeItem(newPlayer.position) : items;
 
         if ( map.exit.equals(newPlayer.position) ) {
-            finishedPlayers.add(newPlayer);
-            return new GameState(map, round, getOtherPlayers(newPlayer), finishedPlayers, newItems, newShootingLines);
+            final String pName = newPlayer.name;
+            Optional<Player> existing = finishedPlayers.stream().filter(p -> p.name.equals(pName)).findAny();
+            Player finishedPlayer = newPlayer;
+
+            if ( existing.isPresent() ) {
+                finishedPlayer = Arrays.asList(existing.get(), newPlayer).stream()
+                        .sorted((p1, p2) -> p2.score - p1.score)
+                        .findFirst()
+                        .get();
+            }
+
+            List<Player> newFinishedPlayers = finishedPlayers.stream()
+                    .filter(p -> !p.name.equals(pName)).collect(Collectors.toList());
+
+            newFinishedPlayers.add(finishedPlayer);
+
+            return new GameState(map, round, getOtherPlayers(newPlayer), newFinishedPlayers, newItems, newShootingLines);
         }
         else {
             return new GameState(map, round, newPlayers, finishedPlayers, newItems, newShootingLines);

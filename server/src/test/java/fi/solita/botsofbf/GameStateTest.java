@@ -100,6 +100,32 @@ public class GameStateTest {
     }
 
     @Test
+    public void finishedPlayerListContainsOneRowPerPlayerName() {
+        Player p1 = Player.create("p1", "url", Position.of(2, 1));
+        Player p2 = Player.create("p1", "url", Position.of(2, 1));
+        Player p3 = Player.create("p2", "url", Position.of(2, 1));
+        Item item = Item.create(100, 1, Position.of(2, 1));
+
+        GameState state = new GameState(Map.createMapFromLines(mapLines))
+                .addItem(item)
+                .addPlayer(p1)
+                .movePlayer(p1.id, Move.RIGHT)
+                .addPlayer(p2)
+                .movePlayer(p2.id, Move.PICK)
+                .movePlayer(p2.id, Move.RIGHT)
+                .addPlayer(p3)
+                .movePlayer(p3.id, Move.RIGHT);
+
+        assertEquals(0, state.players.size());
+        assertEquals(2, state.finishedPlayers.size());
+        System.out.println(state.finishedPlayers);
+        assertEquals("p1", state.finishedPlayers.get(0).name);
+        assertEquals(100, state.finishedPlayers.get(0).score);
+        assertEquals("p2", state.finishedPlayers.get(1).name);
+        assertEquals(0, state.finishedPlayers.get(1).score);
+    }
+
+    @Test
     public void pickItemIncreasesPlayerScoreAndDecreasesMoneyLeft() {
         Map map = Map.createMapFromLines(mapLines);
         Player player = createPlayerToMap(map);

@@ -125,4 +125,22 @@ public class Player {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", position=" + position +
+                ", score=" + score +
+                ", money=" + money +
+                ", state=" + state +
+                ", timeInState=" + timeInState +
+                ", lastItem=" + lastItem +
+                ", usableItems=" + usableItems +
+                ", actionCount=" + actionCount +
+                ", health=" + health +
+                '}';
+    }
 }
