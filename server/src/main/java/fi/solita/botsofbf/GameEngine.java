@@ -9,7 +9,7 @@ import java.util.UUID;
 @Component
 public final class GameEngine {
 
-    public static final int ROUND_DURATION_MILLIS = 500;
+    public static final int PAUSE_BETWEEN_ROUNDS_MILLIS = 300;
 
     private PlayerClient playerClient;
     private UiClient uiClient;
@@ -43,8 +43,9 @@ public final class GameEngine {
      * todo parempi systeemi
      */
     public void tick() {
-        int timeout = ROUND_DURATION_MILLIS / (currentState.players.size() == 0 ? 1 : currentState.players.size());
-        playRound(timeout);
+        //int timeout = PAUSE_BETWEEN_ROUNDS_MILLIS / (currentState.players.size() == 0 ? 1 : currentState.players.size());
+        int botAnswerTimeout = 500;
+        playRound(botAnswerTimeout);
         endRound();
     }
 
