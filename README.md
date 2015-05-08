@@ -1,4 +1,8 @@
-# bots-of-black-friday
+# Bots of black friday
+
+> Shoppers' favorite sale is always the day after Thanksgiving sale, a.k.a. Black Friday.
+
+![](bots.png)
 
 ## Pelin kulku
 
