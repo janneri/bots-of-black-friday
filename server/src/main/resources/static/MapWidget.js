@@ -97,6 +97,18 @@ var MapWidget = React.createClass({
       );
     };
 
+    var selectRounding = function(x, y, tiles) {
+      var topSame = y > 0 && tiles[y - 1][x] === tiles[y][x];
+      var bottomSame = y < tiles.length - 1 && tiles[y + 1][x] === tiles[y][x];
+
+      var leftSame = x > 0 && tiles[y][x - 1] === tiles[y][x];
+      var rightSame = x < tiles[y].length - 1 && tiles[y][x + 1] === tiles[y][x];
+      return {tl:!(topSame || leftSame),
+              tr:!(topSame || rightSame),
+              bl:!(bottomSame || leftSame),
+              br:!(bottomSame || rightSame)};
+    }
+
     var drawTiles = function(tiles) {
         if (!tiles) {
             return [];
@@ -105,7 +117,9 @@ var MapWidget = React.createClass({
         for (var y = 0; y < tiles.length; y++) {
             for (var x = 0; x < tiles[y].length; x++) {
                 if ( tiles[y][x] === 'x' ) {
-                  svgTiles.push(drawTile(x, y, "url(#Gradient3)"));
+                  var rounding = selectRounding(x, y, tiles);
+
+                  svgTiles.push(drawTile(x, y, "url(#Gradient3)", rounding));
                   //svgTiles.push(drawTile(x, y, "#494949"));
                 }
                 else if ( tiles[y][x] === 'o' ) {
@@ -119,18 +133,23 @@ var MapWidget = React.createClass({
         return svgTiles;
     };
 
-    var drawTile = function(x, y, color) {
+    var drawTile = function(x, y, color, rounding) {
+        var {tl=false, tr=false, bl=false, br=false} = rounding || {};
+
         return (
             <G key={"tile_" + x + "." + y}>
 
-                <Rectangle
-                    x={x << TILE_WIDTH_SHIFT_AMOUNT}
-                    y={y << TILE_WIDTH_SHIFT_AMOUNT}
-                    width={TILE_WIDTH_IN_PIXELS}
-                    height={TILE_WIDTH_IN_PIXELS}
-                    rx={TILE_WIDTH_IN_PIXELS / 2}
-                    ry={TILE_WIDTH_IN_PIXELS / 2}
-                    style={{fill: color}} />
+                    <path d={rounded_rect(
+                        x << TILE_WIDTH_SHIFT_AMOUNT,
+                        y << TILE_WIDTH_SHIFT_AMOUNT,
+                        TILE_WIDTH_IN_PIXELS,
+                        TILE_WIDTH_IN_PIXELS,
+                        4,
+                        tl,
+                        tr,
+                        bl,
+                        br
+                      )} stroke="none" fill={color}/>
             </G>
         );
     };
@@ -227,7 +246,6 @@ var MapWidget = React.createClass({
         if (tl) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + -r; }
         else { retval += "v" + -r; retval += "h" + r; }
         retval += "z";
-        console.log(retval);
         return retval;
     }
 
@@ -254,7 +272,7 @@ var MapWidget = React.createClass({
               <pattern id="floor-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
                 <image xlinkHref="floor.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
               </pattern>
-              <linearGradient id="Gradient3" x1="0" x2="1" y1="0" y2="1">
+              <linearGradient id="Gradient3" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stopColor="dark-gray"/>
                 <stop offset="50%" stopColor="HotPink"/>
                 <stop offset="100%" stopColor="dark-gray"/>
