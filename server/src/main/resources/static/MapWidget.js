@@ -1,7 +1,3 @@
-/**
- *
- * @jsx React.DOM
- */
 "use strict";
 
 var React = require('react');
@@ -13,49 +9,37 @@ var TILE_WIDTH_SHIFT_AMOUNT = 3;
 
 var SVGComponent = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <svg>{this.props.children}</svg>
-    );
+    return <svg {...this.props}>{this.props.children}</svg>;
   }
 });
 
 var Rectangle = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <rect>{this.props.children}</rect>
-    );
+    return <rect {...this.props}>{this.props.children}</rect>;
   }
 });
 
 var Line = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <line>{this.props.children}</line>
-    );
+    return <line {...this.props}>{this.props.children}</line>
   }
 });
 
 var G = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <g>{this.props.children}</g>
-    );
+    return <g {...this.props}>{this.props.children}</g>
   }
 });
 
 var Text = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <text>{this.props.children}</text>
-    );
+    return <text {...this.props}>{this.props.children}</text>
   }
 });
 
 var Circle = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <circle>{this.props.children}</circle>
-    );
+    return <circle {...this.props}>{this.props.children}</circle>
   }
 });
 
@@ -273,4 +257,3 @@ var MapWidget = React.createClass({
 });
 
 module.exports = MapWidget;
-
