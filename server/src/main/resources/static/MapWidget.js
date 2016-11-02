@@ -3,9 +3,9 @@
 var React = require('react');
 var _ = require('lodash');
 
-// easy to shift 3
-var TILE_WIDTH_IN_PIXELS = 8;
-var TILE_WIDTH_SHIFT_AMOUNT = 3;
+// easy to shift 4
+var TILE_WIDTH_IN_PIXELS = 16;
+var TILE_WIDTH_SHIFT_AMOUNT = 4;
 
 var SVGComponent = React.createClass({
   render: function() {
@@ -119,7 +119,7 @@ var MapWidget = React.createClass({
                 if ( tiles[y][x] === 'x' ) {
                   var rounding = selectRounding(x, y, tiles);
 
-                  svgTiles.push(drawTile(x, y, "url(#Gradient3)", rounding));
+                  svgTiles.push(drawTile(x, y, "url(#wall-pattern)", rounding));
                   //svgTiles.push(drawTile(x, y, "#494949"));
                 }
                 else if ( tiles[y][x] === 'o' ) {
@@ -168,9 +168,11 @@ var MapWidget = React.createClass({
     };
 
     var drawMapName = function(name) {
+      var fontSize = 20;
+      var textYpos = TILE_WIDTH_IN_PIXELS * 2 - fontSize / 2;
         return (
             <G key="map_name">
-                <Text x={TILE_WIDTH_IN_PIXELS} y={TILE_WIDTH_IN_PIXELS} fill="#FFFFFF" fontSize="10px">
+                <Text x={TILE_WIDTH_IN_PIXELS} y={textYpos} fill="#FFFFFF" fontSize={fontSize + 'px'}>
                 {name}
                 </Text>
             </G>
@@ -198,9 +200,15 @@ var MapWidget = React.createClass({
             r={TILE_WIDTH_IN_PIXELS >> 1}
             fill="#00ff00"/>
           <Text
+            x={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1}
+            y={((item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS) + 1}
+            style={{fill: 'white'}}>
+          {item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'}
+          </Text>
+          <Text
             x={item.position.x << TILE_WIDTH_SHIFT_AMOUNT}
             y={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
-            fill="#000000">
+            style={{fill: 'black'}}>
           {item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'}
           </Text>
         </G>
@@ -271,6 +279,9 @@ var MapWidget = React.createClass({
             </filter>
               <pattern id="floor-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
                 <image xlinkHref="floor.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
+              </pattern>
+              <pattern id="wall-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
+                <image xlinkHref="wall.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
               </pattern>
               <linearGradient id="Gradient3" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stopColor="dark-gray"/>

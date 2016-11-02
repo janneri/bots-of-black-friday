@@ -72,9 +72,9 @@
 	var React = require(5);
 	var _ = require(7);
 
-	// easy to shift 3
-	var TILE_WIDTH_IN_PIXELS = 8;
-	var TILE_WIDTH_SHIFT_AMOUNT = 3;
+	// easy to shift 4
+	var TILE_WIDTH_IN_PIXELS = 16;
+	var TILE_WIDTH_SHIFT_AMOUNT = 4;
 
 	var SVGComponent = React.createClass({
 	  displayName: 'SVGComponent',
@@ -231,7 +231,7 @@
 	          if (tiles[y][x] === 'x') {
 	            var rounding = selectRounding(x, y, tiles);
 
-	            svgTiles.push(drawTile(x, y, "url(#Gradient3)", rounding));
+	            svgTiles.push(drawTile(x, y, "url(#wall-pattern)", rounding));
 	            //svgTiles.push(drawTile(x, y, "#494949"));
 	          } else if (tiles[y][x] === 'o') {
 	            svgTiles.push(drawTile(x, y, "#CC00FF"));
@@ -275,12 +275,14 @@
 	    };
 
 	    var drawMapName = function drawMapName(name) {
+	      var fontSize = 20;
+	      var textYpos = TILE_WIDTH_IN_PIXELS * 2 - fontSize / 2;
 	      return React.createElement(
 	        G,
 	        { key: 'map_name' },
 	        React.createElement(
 	          Text,
-	          { x: TILE_WIDTH_IN_PIXELS, y: TILE_WIDTH_IN_PIXELS, fill: '#FFFFFF', fontSize: '10px' },
+	          { x: TILE_WIDTH_IN_PIXELS, y: textYpos, fill: '#FFFFFF', fontSize: fontSize + 'px' },
 	          name
 	        )
 	      );
@@ -310,9 +312,17 @@
 	        React.createElement(
 	          Text,
 	          {
+	            x: (item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1,
+	            y: (item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS + 1,
+	            style: { fill: 'white' } },
+	          item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'
+	        ),
+	        React.createElement(
+	          Text,
+	          {
 	            x: item.position.x << TILE_WIDTH_SHIFT_AMOUNT,
 	            y: (item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS,
-	            fill: '#000000' },
+	            style: { fill: 'black' } },
 	          item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'
 	        )
 	      );
@@ -425,6 +435,11 @@
 	            'pattern',
 	            { id: 'floor-pattern', x: '0', y: '0', width: TILE_WIDTH_IN_PIXELS * 12, height: TILE_WIDTH_IN_PIXELS * 12, patternUnits: 'userSpaceOnUse' },
 	            React.createElement('image', { xlinkHref: 'floor.jpg', x: '0', y: '0', width: TILE_WIDTH_IN_PIXELS * 12, height: TILE_WIDTH_IN_PIXELS * 12 })
+	          ),
+	          React.createElement(
+	            'pattern',
+	            { id: 'wall-pattern', x: '0', y: '0', width: TILE_WIDTH_IN_PIXELS * 12, height: TILE_WIDTH_IN_PIXELS * 12, patternUnits: 'userSpaceOnUse' },
+	            React.createElement('image', { xlinkHref: 'wall.jpg', x: '0', y: '0', width: TILE_WIDTH_IN_PIXELS * 12, height: TILE_WIDTH_IN_PIXELS * 12 })
 	          ),
 	          React.createElement(
 	            'linearGradient',
