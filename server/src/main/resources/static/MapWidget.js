@@ -19,6 +19,12 @@ var Rectangle = React.createClass({
   }
 });
 
+var Image = React.createClass({
+  render: function() {
+    return <image {...this.props}>{this.props.children}</image>;
+  }
+});
+
 var Line = React.createClass({
   render: function() {
     return <line {...this.props}>{this.props.children}</line>
@@ -99,7 +105,8 @@ var MapWidget = React.createClass({
         for (var y = 0; y < tiles.length; y++) {
             for (var x = 0; x < tiles[y].length; x++) {
                 if ( tiles[y][x] === 'x' ) {
-                    svgTiles.push(drawTile(x, y, "#494949"));
+                  svgTiles.push(drawTile(x, y, "url(#Gradient3)"));
+                  //svgTiles.push(drawTile(x, y, "#494949"));
                 }
                 else if ( tiles[y][x] === 'o' ) {
                     svgTiles.push(drawTile(x, y, "#CC00FF"));
@@ -115,12 +122,15 @@ var MapWidget = React.createClass({
     var drawTile = function(x, y, color) {
         return (
             <G key={"tile_" + x + "." + y}>
+
                 <Rectangle
                     x={x << TILE_WIDTH_SHIFT_AMOUNT}
                     y={y << TILE_WIDTH_SHIFT_AMOUNT}
                     width={TILE_WIDTH_IN_PIXELS}
                     height={TILE_WIDTH_IN_PIXELS}
-                    fill={color} />
+                    rx={TILE_WIDTH_IN_PIXELS / 2}
+                    ry={TILE_WIDTH_IN_PIXELS / 2}
+                    style={{fill: color}} />
             </G>
         );
     };
@@ -190,17 +200,73 @@ var MapWidget = React.createClass({
       );
     }
 
+    /*
+    x: x-coordinate
+    y: y-coordinate
+    w: width
+    h: height
+    r: corner radius
+    tl: top_left rounded?
+    tr: top_right rounded?
+    bl: bottom_left rounded?
+    br: bottom_right rounded?
+    */
+    var rounded_rect = function(x, y, w, h, r, tl, tr, bl, br) {
+        var retval;
+        retval  = "M" + (x + r) + "," + y;
+        retval += "h" + (w - 2*r);
+        if (tr) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + r; }
+        else { retval += "h" + r; retval += "v" + r; }
+        retval += "v" + (h - 2*r);
+        if (br) { retval += "a" + r + "," + r + " 0 0 1 " + -r + "," + r; }
+        else { retval += "v" + r; retval += "h" + -r; }
+        retval += "h" + (2*r - w);
+        if (bl) { retval += "a" + r + "," + r + " 0 0 1 " + -r + "," + -r; }
+        else { retval += "h" + -r; retval += "v" + -r; }
+        retval += "v" + (2*r - h);
+        if (tl) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + -r; }
+        else { retval += "v" + -r; retval += "h" + r; }
+        retval += "z";
+        console.log(retval);
+        return retval;
+    }
+
     return (
       <div>
         <SVGComponent height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT} width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}>
+            <defs>
+              <filter id="blur-effect-1">
+                <feGaussianBlur stdDeviation="2" />
+              </filter>
+              <filter id="shadow" width="1.5" height="1.5" x="-.25" y="-.25">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
+                <feColorMatrix result="bluralpha" type="matrix" values=
+                        "1 0 0 0   0
+                         0 1 0 0   0
+                         0 0 1 0   0
+                         0 0 0 0.4 0 "/>
+                <feOffset in="bluralpha" dx="3" dy="3" result="offsetBlur"/>
+                <feMerge>
+                    <feMergeNode in="offsetBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+              <pattern id="floor-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
+                <image xlinkHref="floor.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
+              </pattern>
+              <linearGradient id="Gradient3" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stopColor="dark-gray"/>
+                <stop offset="50%" stopColor="HotPink"/>
+                <stop offset="100%" stopColor="dark-gray"/>
+              </linearGradient>
+            </defs>
           <Rectangle
             key="store"
             x="0"
             y="0"
             width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}
             height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT}
-            fill="none"
-            stroke="crimson">
+            style={{fill:'url(#floor-pattern)', filter: 'url(#blur-effect-1)'}}>
           </Rectangle>
 
           <G>
