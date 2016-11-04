@@ -18,10 +18,10 @@ public class BotController {
     private static final char EXIT_TILE = 'o';
 
     // FIXME use correct server IP address
-    private static final String SERVER_ADDRESS = "http://localhost:9000";
+    private static final String SERVER_ADDRESS = "http://localhost:8080";
 
     private static final String MY_REST_API_PATH = "/move";
-    private static final String MY_REST_API_ADDRESS = "http://%s:8080" + MY_REST_API_PATH;
+    private static final String MY_REST_API_ADDRESS = "http://%s:9080" + MY_REST_API_PATH;
 
     private UUID myBotId;
 

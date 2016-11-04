@@ -1,61 +1,51 @@
-/**
- *
- * @jsx React.DOM
- */
 "use strict";
 
 var React = require('react');
 var _ = require('lodash');
 
-// easy to shift 3
-var TILE_WIDTH_IN_PIXELS = 8;
-var TILE_WIDTH_SHIFT_AMOUNT = 3;
+// easy to shift 4
+var TILE_WIDTH_IN_PIXELS = 16;
+var TILE_WIDTH_SHIFT_AMOUNT = 4;
 
 var SVGComponent = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <svg>{this.props.children}</svg>
-    );
+    return <svg {...this.props}>{this.props.children}</svg>;
   }
 });
 
 var Rectangle = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <rect>{this.props.children}</rect>
-    );
+    return <rect {...this.props}>{this.props.children}</rect>;
+  }
+});
+
+var Image = React.createClass({
+  render: function() {
+    return <image {...this.props}>{this.props.children}</image>;
   }
 });
 
 var Line = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <line>{this.props.children}</line>
-    );
+    return <line {...this.props}>{this.props.children}</line>
   }
 });
 
 var G = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <g>{this.props.children}</g>
-    );
+    return <g {...this.props}>{this.props.children}</g>
   }
 });
 
 var Text = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <text>{this.props.children}</text>
-    );
+    return <text {...this.props}>{this.props.children}</text>
   }
 });
 
 var Circle = React.createClass({
   render: function() {
-    return this.transferPropsTo(
-      <circle>{this.props.children}</circle>
-    );
+    return <circle {...this.props}>{this.props.children}</circle>
   }
 });
 
@@ -89,23 +79,42 @@ var MapWidget = React.createClass({
 
     var drawPlayer = function(player) {
       var color = player.state === "MOVE" ? "#ff0000" : "#0000ff";
+      var text = player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "");
       return (
       <G key={player.id}>
         <Rectangle
           x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
           y={player.position.y << TILE_WIDTH_SHIFT_AMOUNT}
-          width={TILE_WIDTH_IN_PIXELS}
-          height={TILE_WIDTH_IN_PIXELS}
-          fill={color}/>
+          width={TILE_WIDTH_IN_PIXELS - 1}
+          height={TILE_WIDTH_IN_PIXELS - 1}
+          style={{fill: color, filter: 'url(#shadow)'}}/>
+        <Text
+          x={(player.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1}
+          y={(player.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS + 1}
+          fill="white">
+          {text}
+        </Text>
         <Text
           x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
           y={(player.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
-          fill="#000000">
-          {player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "")}
+          fill="black">
+          {text}
         </Text>
       </G>
       );
     };
+
+    var selectRounding = function(x, y, tiles) {
+      var topSame = y > 0 && tiles[y - 1][x] === tiles[y][x];
+      var bottomSame = y < tiles.length - 1 && tiles[y + 1][x] === tiles[y][x];
+
+      var leftSame = x > 0 && tiles[y][x - 1] === tiles[y][x];
+      var rightSame = x < tiles[y].length - 1 && tiles[y][x + 1] === tiles[y][x];
+      return {tl:!(topSame || leftSame),
+              tr:!(topSame || rightSame),
+              bl:!(bottomSame || leftSame),
+              br:!(bottomSame || rightSame)};
+    }
 
     var drawTiles = function(tiles) {
         if (!tiles) {
@@ -115,7 +124,9 @@ var MapWidget = React.createClass({
         for (var y = 0; y < tiles.length; y++) {
             for (var x = 0; x < tiles[y].length; x++) {
                 if ( tiles[y][x] === 'x' ) {
-                    svgTiles.push(drawTile(x, y, "#494949"));
+                  var rounding = selectRounding(x, y, tiles);
+
+                  svgTiles.push(drawTile(x, y, "url(#wall-pattern)", rounding));
                 }
                 else if ( tiles[y][x] === 'o' ) {
                     svgTiles.push(drawTile(x, y, "#CC00FF"));
@@ -128,15 +139,22 @@ var MapWidget = React.createClass({
         return svgTiles;
     };
 
-    var drawTile = function(x, y, color) {
+    var drawTile = function(x, y, color, rounding) {
+        var {tl=false, tr=false, bl=false, br=false} = rounding || {};
+
         return (
             <G key={"tile_" + x + "." + y}>
-                <Rectangle
-                    x={x << TILE_WIDTH_SHIFT_AMOUNT}
-                    y={y << TILE_WIDTH_SHIFT_AMOUNT}
-                    width={TILE_WIDTH_IN_PIXELS}
-                    height={TILE_WIDTH_IN_PIXELS}
-                    fill={color} />
+              <path d={rounded_rect(
+                  x << TILE_WIDTH_SHIFT_AMOUNT,
+                  y << TILE_WIDTH_SHIFT_AMOUNT,
+                  TILE_WIDTH_IN_PIXELS,
+                  TILE_WIDTH_IN_PIXELS,
+                  6,
+                  tl,
+                  tr,
+                  bl,
+                  br
+                )} stroke="none" fill={color}/>
             </G>
         );
     };
@@ -155,9 +173,12 @@ var MapWidget = React.createClass({
     };
 
     var drawMapName = function(name) {
+      var fontSize = 20;
+      var textXpos = TILE_WIDTH_IN_PIXELS * 2;
+      var textYpos = TILE_WIDTH_IN_PIXELS * 2 - fontSize / 2;
         return (
             <G key="map_name">
-                <Text x={TILE_WIDTH_IN_PIXELS} y={TILE_WIDTH_IN_PIXELS} fill="#FFFFFF" fontSize="10px">
+                <Text x={textXpos} y={textYpos} fill="white" fontSize={fontSize + 'px'}>
                 {name}
                 </Text>
             </G>
@@ -177,18 +198,26 @@ var MapWidget = React.createClass({
     };
 
     var drawItem = function(item) {
+      var color = item.type === "WEAPON" ? "#ffff00" : "#00ff00";
+      var text = item.type === "WEAPON" ? item.price + ' €' : item.price + ' € -' + item.discountPercent + '%';
       return (
         <G key={item.position.x + "." + item.position.y}>
           <Circle
             cx={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
             cy={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
-            r={TILE_WIDTH_IN_PIXELS >> 1}
-            fill="#00ff00"/>
+            r={(TILE_WIDTH_IN_PIXELS >> 1) - 1}
+            style={{fill: color, filter: 'url(#shadow)'}}/>
+          <Text
+            x={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1}
+            y={((item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS) + 1}
+            style={{fill: 'white'}}>
+            {text}
+          </Text>
           <Text
             x={item.position.x << TILE_WIDTH_SHIFT_AMOUNT}
             y={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
-            fill="#000000">
-          {item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'}
+            style={{fill: 'black'}}>
+            {text}
           </Text>
         </G>
       );
@@ -200,23 +229,73 @@ var MapWidget = React.createClass({
           <td>{player.name}</td>
           <td>{player.actionCount + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "") }</td>
           <td>{player.health}</td>
-          <td>{player.money}&euro;</td>
-          <td>{player.score}&euro;</td>
+          <td>{player.money} &euro;</td>
+          <td>{player.score} &euro;</td>
         </tr>
       );
+    }
+
+    /*
+    x: x-coordinate
+    y: y-coordinate
+    w: width
+    h: height
+    r: corner radius
+    tl: top_left rounded?
+    tr: top_right rounded?
+    bl: bottom_left rounded?
+    br: bottom_right rounded?
+    */
+    var rounded_rect = function(x, y, w, h, r, tl, tr, bl, br) {
+        var retval;
+        retval  = "M" + (x + r) + "," + y;
+        retval += "h" + (w - 2*r);
+        if (tr) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + r; }
+        else { retval += "h" + r; retval += "v" + r; }
+        retval += "v" + (h - 2*r);
+        if (br) { retval += "a" + r + "," + r + " 0 0 1 " + -r + "," + r; }
+        else { retval += "v" + r; retval += "h" + -r; }
+        retval += "h" + (2*r - w);
+        if (bl) { retval += "a" + r + "," + r + " 0 0 1 " + -r + "," + -r; }
+        else { retval += "h" + -r; retval += "v" + -r; }
+        retval += "v" + (2*r - h);
+        if (tl) { retval += "a" + r + "," + r + " 0 0 1 " + r + "," + -r; }
+        else { retval += "v" + -r; retval += "h" + r; }
+        retval += "z";
+        return retval;
     }
 
     return (
       <div>
         <SVGComponent height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT} width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}>
+            <defs>
+              <filter id="shadow">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="1" />
+                <feOffset dx="1" dy="1" />
+                <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <pattern id="floor-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
+                <image xlinkHref="floor.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
+              </pattern>
+              <pattern id="wall-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
+                <image xlinkHref="wall.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
+              </pattern>
+              <linearGradient id="Gradient3" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="dark-gray"/>
+                <stop offset="50%" stopColor="HotPink"/>
+                <stop offset="100%" stopColor="dark-gray"/>
+              </linearGradient>
+            </defs>
           <Rectangle
             key="store"
             x="0"
             y="0"
             width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}
             height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT}
-            fill="none"
-            stroke="crimson">
+            style={{fill:'url(#floor-pattern)'}}>
           </Rectangle>
 
           <G>
@@ -273,4 +352,3 @@ var MapWidget = React.createClass({
 });
 
 module.exports = MapWidget;
-
