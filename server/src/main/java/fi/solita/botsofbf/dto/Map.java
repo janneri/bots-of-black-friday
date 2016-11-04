@@ -70,16 +70,10 @@ public class Map {
     }
 
     private static List<String> readClasspathResourceAsLines(String mapFileName) throws IOException {
-        final InputStream inputStream = ClassLoader.getSystemResourceAsStream("maps/" + mapFileName);
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-        List<String> lines = new ArrayList();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            lines.add(line);
+        try (final InputStream inputStream = Map.class.getClassLoader().getResourceAsStream("maps/" + mapFileName);
+             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+           return bufferedReader.lines().collect(Collectors.toList());
         }
-
-        return lines;
     }
 
     // todo map to Tile and use Stream::findFirst
