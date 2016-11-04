@@ -79,19 +79,26 @@ var MapWidget = React.createClass({
 
     var drawPlayer = function(player) {
       var color = player.state === "MOVE" ? "#ff0000" : "#0000ff";
+      var text = player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "");
       return (
       <G key={player.id}>
         <Rectangle
           x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
           y={player.position.y << TILE_WIDTH_SHIFT_AMOUNT}
-          width={TILE_WIDTH_IN_PIXELS}
-          height={TILE_WIDTH_IN_PIXELS}
-          fill={color}/>
+          width={TILE_WIDTH_IN_PIXELS - 1}
+          height={TILE_WIDTH_IN_PIXELS - 1}
+          style={{fill: color, filter: 'url(#shadow)'}}/>
+        <Text
+          x={(player.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1}
+          y={(player.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS + 1}
+          fill="white">
+          {text}
+        </Text>
         <Text
           x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
           y={(player.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
-          fill="#000000">
-          {player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "")}
+          fill="black">
+          {text}
         </Text>
       </G>
       );
@@ -120,7 +127,6 @@ var MapWidget = React.createClass({
                   var rounding = selectRounding(x, y, tiles);
 
                   svgTiles.push(drawTile(x, y, "url(#wall-pattern)", rounding));
-                  //svgTiles.push(drawTile(x, y, "#494949"));
                 }
                 else if ( tiles[y][x] === 'o' ) {
                     svgTiles.push(drawTile(x, y, "#CC00FF"));
@@ -138,18 +144,17 @@ var MapWidget = React.createClass({
 
         return (
             <G key={"tile_" + x + "." + y}>
-
-                    <path d={rounded_rect(
-                        x << TILE_WIDTH_SHIFT_AMOUNT,
-                        y << TILE_WIDTH_SHIFT_AMOUNT,
-                        TILE_WIDTH_IN_PIXELS,
-                        TILE_WIDTH_IN_PIXELS,
-                        4,
-                        tl,
-                        tr,
-                        bl,
-                        br
-                      )} stroke="none" fill={color}/>
+              <path d={rounded_rect(
+                  x << TILE_WIDTH_SHIFT_AMOUNT,
+                  y << TILE_WIDTH_SHIFT_AMOUNT,
+                  TILE_WIDTH_IN_PIXELS,
+                  TILE_WIDTH_IN_PIXELS,
+                  6,
+                  tl,
+                  tr,
+                  bl,
+                  br
+                )} stroke="none" fill={color}/>
             </G>
         );
     };
@@ -169,10 +174,11 @@ var MapWidget = React.createClass({
 
     var drawMapName = function(name) {
       var fontSize = 20;
+      var textXpos = TILE_WIDTH_IN_PIXELS * 2;
       var textYpos = TILE_WIDTH_IN_PIXELS * 2 - fontSize / 2;
         return (
             <G key="map_name">
-                <Text x={TILE_WIDTH_IN_PIXELS} y={textYpos} fill="#FFFFFF" fontSize={fontSize + 'px'}>
+                <Text x={textXpos} y={textYpos} fill="white" fontSize={fontSize + 'px'}>
                 {name}
                 </Text>
             </G>
@@ -192,24 +198,26 @@ var MapWidget = React.createClass({
     };
 
     var drawItem = function(item) {
+      var color = item.type === "WEAPON" ? "#ffff00" : "#00ff00";
+      var text = item.type === "WEAPON" ? item.price + ' €' : item.price + ' € -' + item.discountPercent + '%';
       return (
         <G key={item.position.x + "." + item.position.y}>
           <Circle
             cx={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
             cy={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
-            r={TILE_WIDTH_IN_PIXELS >> 1}
-            fill="#00ff00"/>
+            r={(TILE_WIDTH_IN_PIXELS >> 1) - 1}
+            style={{fill: color, filter: 'url(#shadow)'}}/>
           <Text
             x={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1}
             y={((item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS) + 1}
             style={{fill: 'white'}}>
-          {item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'}
+            {text}
           </Text>
           <Text
             x={item.position.x << TILE_WIDTH_SHIFT_AMOUNT}
             y={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS}
             style={{fill: 'black'}}>
-          {item.type === "WEAPON" ? "W " + item.price + '€' : item.price + '€ - ' + item.discountPercent + '%'}
+            {text}
           </Text>
         </G>
       );
@@ -221,8 +229,8 @@ var MapWidget = React.createClass({
           <td>{player.name}</td>
           <td>{player.actionCount + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "") }</td>
           <td>{player.health}</td>
-          <td>{player.money}&euro;</td>
-          <td>{player.score}&euro;</td>
+          <td>{player.money} &euro;</td>
+          <td>{player.score} &euro;</td>
         </tr>
       );
     }
@@ -261,22 +269,14 @@ var MapWidget = React.createClass({
       <div>
         <SVGComponent height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT} width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}>
             <defs>
-              <filter id="blur-effect-1">
-                <feGaussianBlur stdDeviation="2" />
-              </filter>
-              <filter id="shadow" width="1.5" height="1.5" x="-.25" y="-.25">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
-                <feColorMatrix result="bluralpha" type="matrix" values=
-                        "1 0 0 0   0
-                         0 1 0 0   0
-                         0 0 1 0   0
-                         0 0 0 0.4 0 "/>
-                <feOffset in="bluralpha" dx="3" dy="3" result="offsetBlur"/>
+              <filter id="shadow">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="1" />
+                <feOffset dx="1" dy="1" />
                 <feMerge>
-                    <feMergeNode in="offsetBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
                 </feMerge>
-            </filter>
+              </filter>
               <pattern id="floor-pattern" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12} patternUnits="userSpaceOnUse">
                 <image xlinkHref="floor.jpg" x="0" y="0" width={TILE_WIDTH_IN_PIXELS * 12} height={TILE_WIDTH_IN_PIXELS * 12}></image>
               </pattern>
@@ -295,7 +295,7 @@ var MapWidget = React.createClass({
             y="0"
             width={this.state.map.width << TILE_WIDTH_SHIFT_AMOUNT}
             height={this.state.map.height << TILE_WIDTH_SHIFT_AMOUNT}
-            style={{fill:'url(#floor-pattern)', filter: 'url(#blur-effect-1)'}}>
+            style={{fill:'url(#floor-pattern)'}}>
           </Rectangle>
 
           <G>
