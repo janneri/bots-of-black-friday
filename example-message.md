@@ -1,9 +1,30 @@
-#### Example message from server to bot
+# Example messages
 
-The situation when the bot registers.
+All messages are sent with MIME type of application/json, as POST requests.
+
+## Registration request from bot to server
+
+The REST endpoint is at /register, for example,
+http://localhost:8080/register.  In registration, each bot tells the
+endpoint where it will receive next move queries.
 
 ```
+{
+  "playerName": "MyPlayerName",
+  "url": "http://192.168.33.15:9080/move"
+}
+```
 
+The server replies with a complete game state.
+
+## Example message from server to bot
+
+POSTed on each move to the endpoint given by the bot at registration,
+and also given as a reply to bot registration.  The coordinates are
+usual computer-style coordinates: top left corner of the world is at
+(0,0).
+
+```
 {
   "id": "d011658d-0d8e-4d37-820b-166f8959647d",
   "player": {
@@ -173,5 +194,17 @@ The situation when the bot registers.
     "shootingLines": []
   }
 }
+```
+
+## Example reply from bot to server
+
+When the server requests a move by posting the current game state to the
+bot-provided URL, the bot should reply with a single JSON-encoded
+string.  For instance:
 
 ```
+"LEFT"
+```
+
+The only legal replies are "LEFT", "RIGHT", "UP", "DOWN", "PICK" and
+"USE".  The bot will exit automatically if it goes to the exit point.

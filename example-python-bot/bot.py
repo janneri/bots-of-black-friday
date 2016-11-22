@@ -29,7 +29,6 @@ def move():
     else: my_move = random.choice(possible_moves)
     print("Currently at %s, possible moves are %s, going to do %s" %
             (loc, possible_moves, my_move))
-    print(get_in(state, 'gameState', 'items'))
     return move_resp[my_move]
 
 def get_in(state, *args):

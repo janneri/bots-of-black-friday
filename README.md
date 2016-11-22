@@ -2,7 +2,7 @@
 
 > Shoppers' favorite sale is always the day after Thanksgiving sale, a.k.a. Black Friday.
 
-![](bots.png)
+![bots shopping to the death](bots.png)
 
 ## Running the server
 
