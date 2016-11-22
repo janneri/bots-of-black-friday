@@ -17,14 +17,53 @@ def register(nick):
             json=dict(playerName=nick, url=my_address))
     return jsonify(response.json()['player'])
 
-move_names = ('UP', 'DOWN', 'LEFT', 'RIGHT', 'PICK', 'USE')
-moves = dict((move, Response('"%s"' % move, mimetype='application/json'))
-        for move in move_names)
+move_resp = dict((move, Response('"%s"' % move, mimetype='application/json'))
+        for move in ('UP', 'DOWN', 'LEFT', 'RIGHT', 'PICK', 'USE'))
 
 @bot.route(move_endpoint, methods=['POST'])
 def move():
-    print(request.get_json()['playerState']['position'])
-    return random.choice(moves.values())
+    state = request.get_json()
+    loc = get_player_location(state)
+    possible_moves = get_legal_moves(state, loc)
+    if 'PICK' in possible_moves: my_move = 'PICK'
+    else: my_move = random.choice(possible_moves)
+    print("Currently at %s, possible moves are %s, going to do %s" %
+            (loc, possible_moves, my_move))
+    print(get_in(state, 'gameState', 'items'))
+    return move_resp[my_move]
+
+def get_in(state, *args):
+    if not args: return state
+    return get_in(state[args[0]], *args[1:])
+
+def get_player_location(state):
+    pos = get_in(state, 'playerState', 'position')
+    return position_to_location(pos)
+
+def position_to_location(pos): return (pos['x'], pos['y'])
+
+def get_tile_at(state, location):
+    x, y = location
+    map = get_in(state, 'gameState', 'map', 'tiles')
+    return map[y][x]
+
+def delta(loc, delta):
+    return (loc[0] + delta[0], loc[1] + delta[1])
+
+def get_legal_moves(state, location):
+    return get_legal_directions(state, location) + \
+            get_legal_actions(state, location)
+
+def get_legal_directions(state, location):
+    return [direction[0]
+            for direction in (('UP', (0, -1)), ('DOWN', (0, 1)),
+                ('LEFT', (-1, 0)), ('RIGHT', (1, 0)))
+            if get_tile_at(state, delta(location, direction[1])) != 'x']
+
+def get_legal_actions(state, location):
+    item_locs = (position_to_location(item['position'])
+            for item in get_in(state, 'gameState', 'items'))
+    return ['PICK'] if location in item_locs else []
 
 if __name__ == '__main__': bot.run(port=port, debug=True)
 
