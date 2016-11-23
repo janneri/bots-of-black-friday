@@ -168,23 +168,10 @@
 	    return { players: [], items: [], shootingLines: [{ fromPosition: { x: 1, y: 1 }, toPosition: { x: 50, y: 1 } }], map: { width: 0, height: 0, walls: [] } };
 	  },
 
-	  /**
-	   * When the component is mounted into the document - this is similar to a
-	   * constructor, but invoked when the instance is actually mounted into the
-	   * document. Here's, we'll just set up an animation loop that invokes our
-	   * method. Binding of `this.onTick` is not needed because all React methods
-	   * are automatically bound before being mounted.
-	   */
-	  componentDidMount: function componentDidMount() {},
-
 	  componentWillUnmount: function componentWillUnmount() {
 	    window.clearInterval(this._interval);
 	  },
 
-	  /**
-	   * This is the "main" method for any component. The React API allows you to
-	   * describe the structure of your UI component at *any* point in time.
-	   */
 	  render: function render() {
 
 	    var drawPlayer = function drawPlayer(player) {
@@ -300,7 +287,7 @@
 	    var drawShootingLine = function drawShootingLine(line) {
 	      return React.createElement(
 	        G,
-	        { key: "line." + line.fromPosition.x + "." + line.toPosition.x + line.fromPosition.y + "." + line.toPosition.y },
+	        { key: "line_" + line.fromPosition.x + "." + line.toPosition.x + line.fromPosition.y + "." + line.toPosition.y },
 	        React.createElement(Line, { x1: line.fromPosition.x << TILE_WIDTH_SHIFT_AMOUNT,
 	          y1: line.fromPosition.y << TILE_WIDTH_SHIFT_AMOUNT,
 	          x2: line.toPosition.x << TILE_WIDTH_SHIFT_AMOUNT,
@@ -314,7 +301,7 @@
 	      var text = item.type === "WEAPON" ? item.price + ' €' : item.price + ' € -' + item.discountPercent + '%';
 	      return React.createElement(
 	        G,
-	        { key: item.position.x + "." + item.position.y },
+	        { key: "item_" + item.position.x + "." + item.position.y },
 	        React.createElement(Circle, {
 	          cx: (item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1),
 	          cy: (item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1),
