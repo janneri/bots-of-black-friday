@@ -1,11 +1,16 @@
 package fi.solita.botsofbf;
 
-import fi.solita.botsofbf.dto.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.util.UUID;
+
+import fi.solita.botsofbf.dto.RegisterResponse;
+import fi.solita.botsofbf.dto.Registration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -17,11 +22,6 @@ public class GameController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public RegisterResponse register(@RequestBody Registration registration) {
         return gameEngine.registerPlayer(registration.playerName, registration.url);
-    }
-
-    @RequestMapping("/foo")
-    public @ResponseBody String foo() throws IOException {
-        return "bar";
     }
 
     @RequestMapping(value = "/{playerId}/say", method = RequestMethod.POST)
@@ -38,12 +38,5 @@ public class GameController {
     public void changeMap(@RequestBody String map) throws IOException {
         gameEngine.changeMap(map);
     }
-
-    /*
-    @RequestMapping(value = "/move", method = RequestMethod.POST)
-    public @ResponseBody GameState move(@RequestBody PlayerMove move) {
-        return gameEngine.movePlayer(UUID.fromString(move.id), move.move);
-    }
-    */
 
 }
