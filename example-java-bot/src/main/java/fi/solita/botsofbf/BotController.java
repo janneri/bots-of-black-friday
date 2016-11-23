@@ -24,12 +24,18 @@ public class BotController {
     private static final String MY_REST_API_ADDRESS = "http://%s:9080" + MY_REST_API_PATH;
 
     private UUID myBotId;
+    private int botVersion = 1;
 
 
     @RequestMapping(value = "/bot", method = RequestMethod.POST)
-    public void registerBot() throws UnknownHostException {
-        myBotId = registerPlayer("myUniqueBotName").id;
-        sendChatMessage(myBotId, "Hello!");
+    public void registerBot() throws UnknownHostException {        
+        myBotId = registerPlayer("myUniqueBotName " + botVersion).id;        
+        botVersion += 1;
+    }
+
+    @RequestMapping(value = "/chat", method = RequestMethod.POST)
+    public void chat(@RequestBody String message) {        
+        sendChatMessage(myBotId, message);
     }
 
     private RegisterResponse registerPlayer(String playerName) throws UnknownHostException {
