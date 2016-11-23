@@ -6,16 +6,36 @@
 
 ## Running the server
 
+**How to start**
 1. `cd server/`
 2. Prepare the frontend: `npm install && npm run-script build`
 3. Run the backend: `mvn spring-boot:run`
 
 After this, the GUI can be accessed from http://localhost:8080/
 
-## Development
+***How to create a new map***
+```
+sudo mkdir -m 777 -p /bobf-maps
+touch /bobf-maps/example-map
+echo "map name" >> /bobf-maps/example-map
+-- limit the number of items on map to 3
+echo 3 >> /bobf-maps/example-map
+echo "xxxxxxxxx" >> /bobf-maps/example-map
+-- x is wall, o is exit # is a trap which decreases bots health
+echo "x_o____#x" >> /bobf-maps/example-map
+echo "xxxxxxxxx" >> /bobf-maps/example-map
+```
 
-You can develop the frontend with npm run-script watch, but the backend
-does not support hot-reloading.
+***How to change the map***
+`curl -H "Content-Type: application/json" --data "example-map" localhost:8080/changemap/`
+
+***How to increase or decrease game speed***
+Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and reboot. The best value depends on network latency, bot count and bot quality.
+
+## Developing the server
+
+You can develop the frontend with `npm run watch`.
+The backend does not support live reloading, but you can run the app with your IDE, and most IDEs support hot deployment of static resources and Java code.
 
 ## Architecture
 
