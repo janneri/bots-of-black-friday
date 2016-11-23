@@ -52,7 +52,7 @@ public class BotController {
         Set<Item> items = gameStateChanged.gameState.items;
         Map map = gameStateChanged.gameState.map;
 
-        System.out.println("My player is at " + myPlayer.position);
+        System.out.println("My player is at " + myPlayer.position.x + ", " + myPlayer.position.y);
         System.out.println("The map has " + items.size() + " items");
         System.out.println("The map consists of " + map.tiles.size() + " x " + map.tiles.get(0).length() + " tiles");
 
