@@ -10,7 +10,6 @@ function loaded() {
   var map = ReactDOM.render(<MapWidget />, document.getElementById('map'));
   var chat = ReactDOM.render(<ChatWidget />, document.getElementById('chat'));
 
-  // TODO tila jotenkin järkevämmin
   Socket.connect(map, chat);
 
 }
