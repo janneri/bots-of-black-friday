@@ -9,19 +9,12 @@ var mapWidget = null;
 
 var Socket = {
 
-  setConnected: function(connected) {
-    document.getElementById('connect').disabled = connected;
-    document.getElementById('disconnect').disabled = !connected;
-  },
-
   connect: function(map, chat) {
     var socket = new SockJS('/hello');
     stompClient = Stomp.over(socket);
     stompClient.debug = null;
     var self = this;
     stompClient.connect({}, function (frame) {
-      self.setConnected(true);
-      //console.log('Connected: ' + frame);
       stompClient.subscribe('/topic/chat', function (message) {
         chat.handleChatMessage(message.body);
       });
@@ -34,15 +27,9 @@ var Socket = {
     mapWidget = map;
   },
 
-  disconnect: function() {
-    stompClient.disconnect();
-    this.setConnected(false);
-    console.log("Disconnected");
-  },
-
   handleGameEvent: function(event) {
     mapWidget.setState(event.gameState);
-  },
+  }
 
 
 };

@@ -57,7 +57,6 @@
 	  var map = ReactDOM.render(React.createElement(MapWidget, null), document.getElementById('map'));
 	  var chat = ReactDOM.render(React.createElement(ChatWidget, null), document.getElementById('chat'));
 
-	  // TODO tila jotenkin järkevämmin
 	  Socket.connect(map, chat);
 	}
 
@@ -645,19 +644,12 @@
 
 	var Socket = {
 
-	  setConnected: function setConnected(connected) {
-	    document.getElementById('connect').disabled = connected;
-	    document.getElementById('disconnect').disabled = !connected;
-	  },
-
 	  connect: function connect(map, chat) {
 	    var socket = new SockJS('/hello');
 	    stompClient = Stomp.over(socket);
 	    stompClient.debug = null;
 	    var self = this;
 	    stompClient.connect({}, function (frame) {
-	      self.setConnected(true);
-	      //console.log('Connected: ' + frame);
 	      stompClient.subscribe('/topic/chat', function (message) {
 	        chat.handleChatMessage(message.body);
 	      });
@@ -667,12 +659,6 @@
 	      });
 	    });
 	    mapWidget = map;
-	  },
-
-	  disconnect: function disconnect() {
-	    stompClient.disconnect();
-	    this.setConnected(false);
-	    console.log("Disconnected");
 	  },
 
 	  handleGameEvent: function handleGameEvent(event) {
