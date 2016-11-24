@@ -6,14 +6,16 @@
 
 ## Running the server
 
-**How to start**
+### How to start
+
 1. `cd server/`
 2. Prepare the frontend: `npm install && npm run-script build`
 3. Run the backend: `mvn spring-boot:run`
 
 After this, the GUI can be accessed from http://localhost:8080/
 
-***How to create a new map***
+### How to create a new map
+
 ```
 sudo mkdir -m 777 -p /bobf-maps
 touch /bobf-maps/example-map
@@ -26,10 +28,12 @@ echo "x_o____#x" >> /bobf-maps/example-map
 echo "xxxxxxxxx" >> /bobf-maps/example-map
 ```
 
-***How to change the map***
+### How to change the map
+
 `curl -H "Content-Type: application/json" --data "example-map" localhost:8080/changemap/`
 
-***How to increase or decrease game speed***
+### How to increase or decrease game speed
+
 Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and reboot. The best value depends on network latency, bot count and bot quality.
 
 ## Developing the server
