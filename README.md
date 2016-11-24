@@ -16,7 +16,7 @@ After this, the GUI can be accessed from http://localhost:8080/
 
 You can test the server by activating some self-hosted bots by:
 
-`curl -H 'Content-type: application/json' -d 5 http://localhost:8080/starthunters`
+`./server/cli starthunters 5`
 
 ### How to create a new map
 
@@ -34,11 +34,11 @@ echo "xxxxxxxxx" >> /bobf-maps/example-map
 
 ### How to change the map
 
-`curl -H "Content-Type: application/json" --data "example-map" localhost:8080/changemap/`
+`./server/cli changemap example-map`
 
 also works for the predefined maps (see server/src/main/resources/maps)
 
-`curl -H "Content-Type: application/json" --data "split_trap.map" localhost:8080/changemap/`
+`./server/cli changemap split_trap.map`
 
 ### How to increase or decrease game speed
 
