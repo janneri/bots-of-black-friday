@@ -32,6 +32,10 @@ echo "xxxxxxxxx" >> /bobf-maps/example-map
 
 `curl -H "Content-Type: application/json" --data "example-map" localhost:8080/changemap/`
 
+also works for the predefined maps (see server/src/main/resources/maps)
+
+`curl -H "Content-Type: application/json" --data "split_trap.map" localhost:8080/changemap/`
+
 ### How to increase or decrease game speed
 
 Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and reboot. The best value depends on network latency, bot count and bot quality.
