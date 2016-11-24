@@ -14,6 +14,10 @@
 
 After this, the GUI can be accessed from http://localhost:8080/
 
+You can test the server by activating some self-hosted bots by:
+
+`curl -H 'Content-type: application/json' -d 5 http://localhost:8080/starthunters`
+
 ### How to create a new map
 
 ```
@@ -38,7 +42,8 @@ also works for the predefined maps (see server/src/main/resources/maps)
 
 ### How to increase or decrease game speed
 
-Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and reboot. The best value depends on network latency, bot count and bot quality.
+Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and reboot. The best
+value depends on network latency, bot count and bot quality.
 
 ## Developing the server
 
@@ -85,7 +90,8 @@ reply) what they want to do.
   every N turns, where N is the area of the map (usually more than one
   thousand).  So you'd better leave the area when your health is running
   low.
-* The shops may have walls.
+* The shops may have walls, and traps.  Traps are invisible to players
+  but cause damage.
 
 ## Rajapinta
 
