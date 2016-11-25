@@ -73,6 +73,8 @@ reply) what they want to do.
 * Every bot has a given amount of money, which is spent on shopping.
 * The higher the value of items collected, the better will be the bot's
   position on the top list.
+* The "price" of an item is the price *before* discount, so it is *not*
+  the amount of money that will actually be spent when you pick it up.
 * When items have been collected, new ones are added on the map.
 * There's no time limit to exploring the shop.
 * Because it's Black Friday, some items are weapons that can be used to
