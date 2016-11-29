@@ -1,0 +1,4 @@
+#!/bin/sh
+
+curl -H 'Content-type: application/json' -d "$2" "http://localhost:8080/$1"
+

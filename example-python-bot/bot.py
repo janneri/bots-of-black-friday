@@ -64,5 +64,5 @@ def get_legal_actions(state, location):
             for item in get_in(state, 'gameState', 'items'))
     return ['PICK'] if location in item_locs else []
 
-if __name__ == '__main__': bot.run(port=port, debug=True)
+if __name__ == '__main__': bot.run(host='0.0.0.0', port=port, debug=True)
 
