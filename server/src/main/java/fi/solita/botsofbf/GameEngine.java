@@ -16,7 +16,7 @@ public final class GameEngine {
     private PlayerClient playerClient;
     private UiClient uiClient;
     private GameState currentState;
-    private Queue<Player> registeredPlayers = new ConcurrentLinkedQueue<Player>();
+    private Queue<Player> registeredPlayers = new ConcurrentLinkedQueue<>();
 
     @Autowired
     public GameEngine(GameState initialGameState, UiClient uiClient, PlayerClient playerClient) {
@@ -39,25 +39,24 @@ public final class GameEngine {
     }
 
     public void tick() {
-        int botAnswerTimeout = 2500;
         for (Player p : registeredPlayers) {
             currentState = currentState.addPlayer(p);
         }
         registeredPlayers = new ConcurrentLinkedQueue<>();
-        playRound(botAnswerTimeout);
+        playRound();
         endRound();
     }
 
-    private void playRound(int timeout) {
+    private void playRound() {
         for ( Player player : currentState.players ) {
-            currentState = playTurn(player, currentState, timeout);
+            currentState = playTurn(player, currentState);
         }
     }
 
-    private GameState playTurn(Player player, GameState fromState, int timeout) {
-        GameState newGameState = null;
+    private GameState playTurn(Player player, GameState fromState) {
+        GameState newGameState;
         try {
-            Move move = playerClient.askMoveFromPlayer(player, fromState, timeout);
+            Move move = playerClient.askMoveFromPlayer(player, fromState);
             newGameState = fromState.movePlayer(player.id, move);
             uiClient.notifyUi(player.name + " moved", newGameState);
         } catch (Exception e) {

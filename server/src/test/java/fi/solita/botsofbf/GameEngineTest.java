@@ -2,8 +2,8 @@ package fi.solita.botsofbf;
 
 
 import fi.solita.botsofbf.dto.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -12,9 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 public class GameEngineTest {
 
@@ -24,18 +23,9 @@ public class GameEngineTest {
     @Mock
     private UiClient uiClient;
 
-
-    private List<String> mapLines = Arrays.asList(
-            "halpahalli",
-            "5",
-            "xxxxxxx",
-            "x__o__x ",
-            "xxxxxxx");
-
-
-    @Before
+    @BeforeEach
     public void initMocks(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -43,7 +33,7 @@ public class GameEngineTest {
         Player player = createPlayerToPos(1, 0);
         GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "5", "x_o")))
                 .addPlayer(player);
-        Mockito.when(playerClient.askMoveFromPlayer(anyObject(), anyObject(), anyInt())).thenReturn(Move.LEFT);
+        Mockito.when(playerClient.askMoveFromPlayer(any(), any())).thenReturn(Move.LEFT);
         GameEngine gameEngine = new GameEngine(state, uiClient, playerClient);
 
         gameEngine.tick();
@@ -60,7 +50,7 @@ public class GameEngineTest {
                 .addPlayer(player.decreaseHealth(99))
                 .addPlayer(createPlayerToPos(1, 0));
 
-        Mockito.when(playerClient.askMoveFromPlayer(anyObject(), anyObject(), anyInt())).thenReturn(Move.LEFT);
+        Mockito.when(playerClient.askMoveFromPlayer(any(), any())).thenReturn(Move.LEFT);
         GameEngine gameEngine = new GameEngine(state, uiClient, playerClient);
 
         assertEquals(3, gameEngine.getCurrentState().players.size());
