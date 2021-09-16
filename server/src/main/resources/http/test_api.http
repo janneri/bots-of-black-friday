@@ -1,0 +1,34 @@
+
+### Register player:
+
+POST {{url}}/register
+Content-Type: application/json
+
+{
+    "playerName": "testbot2",
+    "url": "does not matter"
+}
+
+> {% client.global.set("playerId", response.body.id); %}
+
+
+### Get the current gamestate
+
+GET {{url}}/gamestate
+
+
+### Register your next move
+
+PUT {{url}}/{{playerId}}/move
+Content-Type: application/json
+
+"LEFT"
+
+
+### Say hello to others
+
+POST {{url}}/{{playerId}}/say
+Content-Type: application/json
+
+"hello!"
+

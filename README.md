@@ -14,9 +14,34 @@
 
 After this, the GUI can be accessed from http://localhost:8080/
 
-You can test the server by activating some self-hosted bots by:
+### How to create a bot?
 
-`./server/cli starthunters 5`
+First, register your bot:
+```json
+POST {{url}}/register
+Content-Type: application/json
+
+{
+    "playerName": "testbot2",
+}
+
+Note: The response contains an id, which you need to capture and use for the next calls. 
+```
+
+Then get the current gamestate:
+```
+GET {{url}}/gamestate
+```
+
+And register your next move:
+```
+PUT {{url}}/{{playerId}}/move
+Content-Type: application/json
+
+"LEFT"
+```
+
+The game ticks in about 1 second. If you  have about 1 second to 
 
 ### How to create a new map
 
@@ -52,22 +77,22 @@ The backend does not support live reloading, but you can run the app with your I
 
 ## Architecture
 
-The server and the bots both provide REST API's to each other: the
-server, for bots to register and tell where their REST endpoint is; the
-bots, to get the current game status from server and tell the server (in
-reply) what they want to do.
+Bots act as clients. 
+The clients have time until the next tick to register their next move to the server. 
+If they do it more than once, the previous move is overwritten. 
+On next tick the server calculates the next game state, which is accessible from another endpoint.
 
 ## Rules of the game
 
 ### In English
 
-* The server sends the current game situation to the bots.  Every bot
-  has to answer with some kind of action, be it movement (UP, DOWN,
-  LEFT, RIGHT), picking up an item (PICK) or using one (USE).
+* Bots act as clients. The clients have time until the next tick to register their next move to the server. 
+  If they do it more than once, the previous move is overwritten. 
+  On next tick the server calculates the next game state, which is accessible from another endpoint.
+* Available actions are movement (UP, DOWN, LEFT, RIGHT), picking up an item (PICK) or using one (USE).
 * Faulty responses are penalised by decreasing the bot's health.  Dead
   bots are removed from the shop by guards.  Faulty actions include
-  running into a wall, trying to pick nonexistent items, taking too long
-  to form a response, protocol errors etc.
+  running into a wall, trying to pick nonexistent items, etc.
 * The items in the shop have a price and a discount percentage.  The
   better the discount, the longer it takes to pick up.
 * Every bot has a given amount of money, which is spent on shopping.
@@ -88,15 +113,7 @@ reply) what they want to do.
   punished.
 * Don't go too early to the cash register.  You won't be able to get
   back.
-* You're in no hurry to leave the shop.  The server hits all bots after
-  every N turns, where N is the area of the map (usually more than one
-  thousand).  So you'd better leave the area when your health is running
-  low.
-* The shops may have walls, and traps.  Traps are invisible to players
-  but cause damage.
+* The shops may have walls, and traps. Traps cause damage but you can walk through them.
 
-## Rajapinta
 
-* Rajapinnan tietosisältö on nähtävissä esimerkkibotissa.  Voit katsoa
-  serverin lähettämää [esimerkkiviestiä](./example-message.md)
 

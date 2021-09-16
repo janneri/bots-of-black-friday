@@ -6,22 +6,22 @@ import org.springframework.stereotype.Component;
 
 import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Component
 public final class GameEngine {
 
-    public static final int PAUSE_BETWEEN_ROUNDS_MILLIS = 400;
+    public static final int PAUSE_BETWEEN_ROUNDS_MILLIS = 1000;
 
-    private PlayerClient playerClient;
     private UiClient uiClient;
     private GameState currentState;
     private Queue<Player> registeredPlayers = new ConcurrentLinkedQueue<>();
+    private ConcurrentHashMap<UUID, Move> currentMoves = new ConcurrentHashMap<>();
 
     @Autowired
-    public GameEngine(GameState initialGameState, UiClient uiClient, PlayerClient playerClient) {
+    public GameEngine(GameState initialGameState, UiClient uiClient) {
         this.currentState = initialGameState;
-        this.playerClient = playerClient;
         this.uiClient = uiClient;
     }
 
@@ -53,10 +53,14 @@ public final class GameEngine {
         }
     }
 
+    public void registerMove(UUID playerId, Move move) {
+        currentMoves.put(playerId, move);
+    }
+
     private GameState playTurn(Player player, GameState fromState) {
         GameState newGameState;
         try {
-            Move move = playerClient.askMoveFromPlayer(player, fromState);
+            Move move = currentMoves.get(player.id);
             newGameState = fromState.movePlayer(player.id, move);
             uiClient.notifyUi(player.name + " moved", newGameState);
         } catch (Exception e) {
@@ -85,4 +89,5 @@ public final class GameEngine {
     public GameState getCurrentState() {
         return currentState;
     }
+
 }
