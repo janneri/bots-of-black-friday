@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan
 @EnableAutoConfiguration
-public class Application {
+public class BotApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(BotApplication.class, args);
     }
 
 
