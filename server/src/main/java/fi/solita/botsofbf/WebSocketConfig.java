@@ -18,7 +18,10 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/hello").withSockJS();
+		registry.addEndpoint("/hello")
+				// Azure will respond with 403, because of CORS without this.
+				.setAllowedOriginPatterns("http://localhost", "https://bots-of-black-friday.azurewebsites.net")
+				.withSockJS();
 	}
 
 }
