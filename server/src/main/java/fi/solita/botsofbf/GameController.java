@@ -1,18 +1,9 @@
 package fi.solita.botsofbf;
 
-import fi.solita.botsofbf.dto.GameState;
-import fi.solita.botsofbf.dto.Move;
-import fi.solita.botsofbf.dto.RegisterResponse;
-import fi.solita.botsofbf.dto.Registration;
+import fi.solita.botsofbf.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.UUID;
 
 
@@ -48,8 +39,8 @@ public class GameController {
     }
 
     @PostMapping(value = "/changemap")
-    public void changeMap(@RequestBody String map) throws IOException {
-        gameEngine.changeMap(map);
+    public void changeMap(@RequestBody ChangeMap map) {
+        gameEngine.changeMap(map.mapFileName);
     }
 
 }
