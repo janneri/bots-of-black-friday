@@ -18,6 +18,7 @@ GET {{url}}/gamestate
 
 
 ### Register your next move
+# One of UP, DOWN, LEFT, RIGHT, PICK, USE
 
 PUT {{url}}/{{playerId}}/move
 Content-Type: application/json

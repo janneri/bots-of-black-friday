@@ -1,0 +1,16 @@
+
+### Restart the game
+
+POST {{url}}/restart
+Content-Type: application/json
+
+
+### Change map
+# The default.map is the easiest.
+# After default.map, maybe try out split.map and split_trap.map.
+# The hardest one is the ikea.map.
+
+POST {{url}}/changemap
+Content-Type: application/json
+
+"split_trap.map"
