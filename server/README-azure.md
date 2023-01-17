@@ -16,7 +16,7 @@ When running multiple instances of the game, use bots-of-black-friday, bots-of-b
 ```
 export BOTS_OF_BLACK_FRIDAY_APP_NAME=...<must be unique, for example bots-of-black-friday>
 export BOTS_OF_BLACK_FRIDAY_SID=...<use az login to find out the correct sid>
-export BOTS_OF_BLACK_FRIDAY_RG=...<use your name, for example janne_rintanen_rg>
+export BOTS_OF_BLACK_FRIDAY_AZURE_RG=...<use your name, for example janne_rintanen_rg>
 export BOTS_OF_BLACK_FRIDAY_AZURE_OWNER=...<Solita convention, use you username>
 export BOTS_OF_BLACK_FRIDAY_AZURE_DUE_DATE=...<Solita convention, for example 2023-05-05>
 export BOTS_OF_BLACK_FRIDAY_AZURE_AUTHTYPE=...
