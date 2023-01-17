@@ -42,9 +42,9 @@
               <version>1.14.0</version>
               <configuration>
                 <schemaVersion>v2</schemaVersion>
-                <subscriptionId>todo</subscriptionId>
-                <resourceGroup>todo</resourceGroup>
-                <appName>bots-of-black-friday</appName>
+                <subscriptionId>${env.BOTS_OF_BLACK_FRIDAY_AZURE_SID}</subscriptionId>
+                <resourceGroup>${env.BOTS_OF_BLACK_FRIDAY_AZURE_RG}</resourceGroup>
+                <appName>${env.BOTS_OF_BLACK_FRIDAY_AZURE_APP_NAME}</appName>
                 <pricingTier>S1</pricingTier>
                 <region>northeurope</region>
                 <runtime>
