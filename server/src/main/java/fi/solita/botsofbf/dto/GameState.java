@@ -126,8 +126,8 @@ public class GameState {
             newPlayer = movePlayer(player, move);
         }
 
-        if ( newPlayer.actionCount % (map.height * map.width) == 0 ) {
-            newPlayer = newPlayer.decreaseHealth(33);
+        if ( newPlayer.actionCount % 50 == 0 ) {
+            newPlayer = newPlayer.decreaseHealth(10);
         }
 
 
