@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 public class GameState {
 
     public static final int HEALTH_LOST_WHEN_ATTACKED = 50;
+    /** Every N moves causes health to decrease. */
+    public static final int AGING_MOVE_COUNT = 50;
+    public static final int HEALTH_LOST_WHEN_AGED = 10;
     public static final int HEALTH_LOST_WHEN_INVALID_MOVE = 20;
     public final Map map;
     public final Set<Player> players;
@@ -126,8 +129,8 @@ public class GameState {
             newPlayer = movePlayer(player, move);
         }
 
-        if ( newPlayer.actionCount % 50 == 0 ) {
-            newPlayer = newPlayer.decreaseHealth(10);
+        if (newPlayer.actionCount % AGING_MOVE_COUNT == 0 ) {
+            newPlayer = newPlayer.decreaseHealth(HEALTH_LOST_WHEN_AGED);
         }
 
 

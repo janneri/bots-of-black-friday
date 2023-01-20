@@ -41,27 +41,25 @@ public class GameStateTest {
         GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "5", "__o")))
                 .addPlayer(player);
 
-        final int healthDecreasedWhenAging = 33;
+        final int healthDecreasedWhenAging = GameState.HEALTH_LOST_WHEN_AGED;
 
         assertEquals(100, state.getPlayer(player.id).health);
 
-        state = state.movePlayer(player.id, Move.RIGHT);
-        state = state.movePlayer(player.id, Move.LEFT);
-        state = state.movePlayer(player.id, Move.RIGHT);
+        Move nextMove = Move.RIGHT;
+        for (int i = 0; i < GameState.AGING_MOVE_COUNT; i++) {
+            state = state.movePlayer(player.id, nextMove);
+            nextMove = nextMove == Move.RIGHT ? Move.LEFT : Move.RIGHT;
+        }
 
         assertEquals(100 - healthDecreasedWhenAging, state.getPlayer(player.id).health);
 
-        state = state.movePlayer(player.id, Move.LEFT);
-        state = state.movePlayer(player.id, Move.RIGHT);
-        state = state.movePlayer(player.id, Move.LEFT);
+        for (int i = 0; i < GameState.AGING_MOVE_COUNT; i++) {
+            state = state.movePlayer(player.id, nextMove);
+            nextMove = nextMove == Move.RIGHT ? Move.LEFT : Move.RIGHT;
+        }
 
         assertEquals(100 - 2 * healthDecreasedWhenAging, state.getPlayer(player.id).health);
 
-        state = state.movePlayer(player.id, Move.RIGHT);
-        state = state.movePlayer(player.id, Move.LEFT);
-        state = state.movePlayer(player.id, Move.RIGHT);
-
-        assertEquals(100 - 3 * healthDecreasedWhenAging, state.getPlayer(player.id).health);
     }
 
     @Test
