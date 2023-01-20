@@ -173,7 +173,7 @@ public class GameState {
             return newPlayer;
         }
         else {
-            throw new IllegalStateException(String.format("Invalid move from", player.name));
+            throw new IllegalStateException(String.format("Invalid move from %s to unmovable pos %s", player.position, newPos));
         }
     }
 

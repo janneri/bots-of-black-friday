@@ -30,7 +30,7 @@ public final class GameEngine {
         Position randomValidPosition = currentState.map.randomFloorPosition();
         Player player = Player.create(playerName, url, randomValidPosition);
         registeredPlayers.add(player);
-        System.out.println("Registered " + playerName + " " + url);
+        System.out.println("Registered " + playerName);
         return new RegisterResponse(player, currentState);
     }
 
