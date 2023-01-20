@@ -1,5 +1,7 @@
 package fi.solita.botsofbf.dto;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,7 +57,7 @@ public class GameState {
 
     public GameState newRound() {
         List<ShootingLine> newShootingLines = shootingLines.stream()
-                .map(line -> line.incAge())
+                .map(ShootingLine::incAge)
                 .filter(line -> line.age < 3)
                 .collect(Collectors.toList());
         return new GameState(map, round + 1, players, finishedPlayers, items, newShootingLines);
@@ -198,8 +200,16 @@ public class GameState {
         }
     }
 
+    private static Random random;
     private static int randomBetween(int min, int max) {
-        return new Random().nextInt(max - min + 1) + min;
+        try {
+            if (random == null) {
+                random = SecureRandom.getInstanceStrong();
+            }
+            return random.nextInt(max - min + 1) + min;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
