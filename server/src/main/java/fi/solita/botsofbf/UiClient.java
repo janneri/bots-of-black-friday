@@ -1,6 +1,7 @@
 package fi.solita.botsofbf;
 
 import fi.solita.botsofbf.dto.GameState;
+import fi.solita.botsofbf.dto.Map;
 import fi.solita.botsofbf.dto.Player;
 import fi.solita.botsofbf.events.GameStateChanged;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class UiClient {
 
     public void notifyUi(String reason, GameState newGameState) {
         template.convertAndSend("/topic/events", GameStateChanged.create(reason, newGameState, null));
+    }
+
+    public void resetMap(Map map) {
+        template.convertAndSend("/topic/events", GameStateChanged.create(null, null, map));
     }
 
     public void sendChatMessageToUi(Player player, String message) {

@@ -103,9 +103,9 @@ public class GameStateTest {
 
     @Test
     public void finishedPlayerListContainsOneRowPerPlayerName() {
-        Player p1 = Player.create("p1", "url", Position.of(2, 1));
-        Player p2 = Player.create("p1", "url", Position.of(2, 1));
-        Player p3 = Player.create("p2", "url", Position.of(2, 1));
+        Player p1 = Player.create("p1", Position.of(2, 1));
+        Player p2 = Player.create("p1", Position.of(2, 1));
+        Player p3 = Player.create("p2", Position.of(2, 1));
         Item item = Item.create(100, 1, Position.of(2, 1));
 
         GameState state = new GameState(Map.createMapFromLines(mapLines))
@@ -235,7 +235,7 @@ public class GameStateTest {
 
 
     private Player createPlayerToPos(int x, int y) {
-        return Player.create(UUID.randomUUID().toString(), "url", Position.of(x, y));
+        return Player.create(UUID.randomUUID().toString(), Position.of(x, y));
     }
 
     private Player createPlayerToMap(Map map) {

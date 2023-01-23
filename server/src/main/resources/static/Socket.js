@@ -28,7 +28,12 @@ var Socket = {
   },
 
   handleGameEvent: function(event) {
-    mapWidget.setState(event.gameState);
+    if (event.newMap !== null) {
+      mapWidget.setState({map: event.newMap});
+    }
+    else {
+      mapWidget.setState(event.gameState);
+    }
   }
 
 

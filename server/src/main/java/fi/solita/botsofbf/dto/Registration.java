@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Registration {
     public String playerName;
-    public String url;
 
-    public Registration(@JsonProperty("playerName") String playerName, @JsonProperty("url") String url) {
+    public Registration(@JsonProperty("playerName") String playerName) {
         this.playerName = playerName;
-        this.url = url;
     }
 }

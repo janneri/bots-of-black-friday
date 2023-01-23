@@ -52,7 +52,18 @@ var Circle = React.createClass({
 var MapWidget = React.createClass({
 
   getInitialState: function() {
-    return {players: [], items: [], shootingLines: [{fromPosition: {x: 1, y: 1}, toPosition: {x: 50, y: 1}}], map: {width: 0, height: 0, walls: []}};
+    return {players: [], items: [], shootingLines: [], map: {width: 0, height: 0, tiles: []}};
+  },
+
+  componentDidMount: function() {
+      fetch('/map')
+          .then((response) => {
+              if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json()
+          })
+          .then(data => this.setState({map: data}));
   },
 
   componentWillUnmount: function() {

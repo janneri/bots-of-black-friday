@@ -15,7 +15,7 @@ public class GameController {
 
     @PostMapping(value = "/register")
     public RegisterResponse register(@RequestBody Registration registration) {
-        return gameEngine.registerPlayer(registration.playerName, registration.url);
+        return gameEngine.registerPlayer(registration.playerName);
     }
 
     @PostMapping(value = "/{playerId}/say")
@@ -31,6 +31,11 @@ public class GameController {
     @GetMapping(value = "/gamestate")
     public GameState getCurrentGameState() {
         return gameEngine.getCurrentState();
+    }
+
+    @GetMapping(value = "/map")
+    public Map getMap() {
+        return gameEngine.getCurrentState().map;
     }
 
     @PostMapping(value = "/restart")

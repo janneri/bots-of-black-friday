@@ -57,7 +57,7 @@ public class GameEngineTest {
 
 
     private Player createPlayerToPos(int x, int y) {
-        return Player.create(UUID.randomUUID().toString(), "url", Position.of(x, y));
+        return Player.create(UUID.randomUUID().toString(), Position.of(x, y));
     }
 
 }

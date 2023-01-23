@@ -1,5 +1,7 @@
 package fi.solita.botsofbf.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
@@ -12,6 +14,8 @@ public class GameState {
     public static final int AGING_MOVE_COUNT = 50;
     public static final int HEALTH_LOST_WHEN_AGED = 10;
     public static final int HEALTH_LOST_WHEN_INVALID_MOVE = 20;
+
+    @JsonIgnore
     public final Map map;
     public final Set<Player> players;
     public final List<Player> finishedPlayers;

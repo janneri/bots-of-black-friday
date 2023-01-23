@@ -25,13 +25,13 @@ public final class GameEngine {
         this.uiClient = uiClient;
     }
 
-    public RegisterResponse registerPlayer(String playerName, String url) {
+    public RegisterResponse registerPlayer(String playerName) {
         currentState.throwIfNameReserved(playerName);
         Position randomValidPosition = currentState.map.randomFloorPosition();
-        Player player = Player.create(playerName, url, randomValidPosition);
+        Player player = Player.create(playerName, randomValidPosition);
         registeredPlayers.add(player);
         System.out.println("Registered " + playerName);
-        return new RegisterResponse(player, currentState);
+        return new RegisterResponse(player, currentState.map);
     }
 
     public void say(UUID playerId, String message) {
@@ -66,7 +66,7 @@ public final class GameEngine {
         } catch (Exception e) {
             System.out.println(player.name + " is fucking up: " + e.getMessage());
             newGameState = fromState.addInvalidMove(player);
-            uiClient.notifyUi(player.name + " is fucking up: " + e.getMessage(), currentState);
+            uiClient.notifyUi(player.name + " is messing up: " + e.getMessage(), currentState);
         }
 
         return newGameState.removeDeadPlayers();
@@ -84,6 +84,7 @@ public final class GameEngine {
 
     public void changeMap(String map) {
         currentState = new GameState(Map.readMapFromFile(map));
+        uiClient.resetMap(currentState.map);
     }
 
     public GameState getCurrentState() {
