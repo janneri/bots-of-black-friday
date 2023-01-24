@@ -32,14 +32,25 @@ export const register = (playerName: string): Promise<RegisterResponse> => {
 };
 
 interface GameStateResponse {
-  players: any[];
-  finishedPlayers: any[];
+  players: Player[];
+  finishedPlayers: Player[];
   items: Item[];
   round: number;
   shootingLines: any[];
 }
+
 export const getGameState = (): Promise<GameStateResponse> => {
   return fetch(`${getUrl()}/gamestate`).then((response: Response) =>
     response.json()
   );
+};
+
+type Move = "UP" | "DOWN" | "RIGHT" | "LEFT" | "PICK" | "USE" | "randomMove";
+
+export const move = (playerId: String, move: Move): Promise<Response> => {
+  return fetch(`${getUrl()}/${playerId}/move`, {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify(move),
+  });
 };
