@@ -1,5 +1,6 @@
 import { Player } from "./types/Player";
 import { GameMap } from "./types/GameMap";
+import { Item } from "./types/Item";
 
 const LOCAL_URL = "http://localhost:8080";
 const PROD_URL = "https://bots-of-black-friday.azurewebsites.net";
@@ -28,4 +29,17 @@ export const register = (playerName: string): Promise<RegisterResponse> => {
     headers: headers,
     body: JSON.stringify({ playerName: playerName }),
   }).then((response: Response) => response.json());
+};
+
+interface GameStateResponse {
+  players: any[];
+  finishedPlayers: any[];
+  items: Item[];
+  round: number;
+  shootingLines: any[];
+}
+export const getGameState = (): Promise<GameStateResponse> => {
+  return fetch(`${getUrl()}/gamestate`).then((response: Response) =>
+    response.json()
+  );
 };
