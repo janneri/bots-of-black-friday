@@ -62,3 +62,7 @@ export const say = (playerId: string, message: string): Promise<Response> => {
     body: JSON.stringify(message),
   });
 };
+
+export const getMap = (): Promise<GameMap> => {
+  return fetch(`${getUrl()}/map`).then((response) => response.json());
+};
