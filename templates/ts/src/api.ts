@@ -47,10 +47,18 @@ export const getGameState = (): Promise<GameStateResponse> => {
 
 type Move = "UP" | "DOWN" | "RIGHT" | "LEFT" | "PICK" | "USE" | "randomMove";
 
-export const move = (playerId: String, move: Move): Promise<Response> => {
+export const move = (playerId: string, move: Move): Promise<Response> => {
   return fetch(`${getUrl()}/${playerId}/move`, {
     method: "PUT",
     headers: headers,
     body: JSON.stringify(move),
+  });
+};
+
+export const say = (playerId: string, message: string): Promise<Response> => {
+  return fetch(`${getUrl()}/${playerId}/say`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(message),
   });
 };
