@@ -4,3 +4,4 @@ Api calls to bot server are implemented in `src/api.ts`. These use fetch api on 
 
 By default running with `npm start` connects to the game server in the cloud. If you want to run against a local instance, set environment variable `NODE_ENV=development`.
 
+Go ahead and implement your bot in index.ts! Enjoy!
