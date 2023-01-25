@@ -1,6 +1,6 @@
-import { Player } from "./types/Player";
 import { GameMap } from "./types/GameMap";
 import { GameState } from "./types/GameState";
+import { RegisterResponse } from "./types/RegisterResponse";
 
 const LOCAL_URL = "http://localhost:8080";
 const PROD_URL = "https://bots-of-black-friday.azurewebsites.net";
@@ -15,12 +15,6 @@ const getUrl = (): string => {
 const headers = {
   "content-type": "application/json;charset=UTF-8",
 };
-
-interface RegisterResponse {
-  id: string;
-  player: Player;
-  map: GameMap;
-}
 
 export const register = (playerName: string): Promise<RegisterResponse> => {
   console.log(`${getUrl()}/register`);
