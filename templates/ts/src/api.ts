@@ -37,7 +37,7 @@ export const getGameState = (): Promise<GameState> => {
   );
 };
 
-type Move = "UP" | "DOWN" | "RIGHT" | "LEFT" | "PICK" | "USE" | "randomMove";
+type Move = "UP" | "DOWN" | "RIGHT" | "LEFT" | "PICK" | "USE";
 
 export const move = (playerId: string, move: Move): Promise<Response> => {
   return fetch(`${getUrl()}/${playerId}/move`, {
