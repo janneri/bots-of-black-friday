@@ -1,6 +1,7 @@
 import { GameMap } from "./types/GameMap";
 import { GameState } from "./types/GameState";
 import { RegisterResponse } from "./types/RegisterResponse";
+import { Move } from "./types/Move";
 
 const LOCAL_URL = "http://localhost:8080";
 const PROD_URL = "https://bots-of-black-friday.azurewebsites.net";
@@ -30,8 +31,6 @@ export const getGameState = (): Promise<GameState> => {
     response.json()
   );
 };
-
-type Move = "UP" | "DOWN" | "RIGHT" | "LEFT" | "PICK" | "USE";
 
 export const move = (playerId: string, move: Move): Promise<Response> => {
   return fetch(`${getUrl()}/${playerId}/move`, {
