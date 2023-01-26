@@ -23,7 +23,9 @@
                       :accept       :json
                       :as           :json})))
 
-(defn move [player-id command]
+(defn move
+  "Allowed moves: UP, DOWN, RIGHT, LEFT, PICK, USE"
+  [player-id command]
   (client/put (str (url) "/" player-id "/move")
               {:content-type :json
                :accept       :json
