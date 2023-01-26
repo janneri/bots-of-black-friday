@@ -42,19 +42,11 @@ The clients have time until the next tick to register their next move to the ser
 If they do it more than once, the previous move is overwritten.
 On next tick the server calculates the next game state, which is accessible from another endpoint.
 
-## Running the server
+## Creating a bot
 
-You can run the server locally for developing your bot. It's not needed though, as you can use the deployed server instance.
+``templates/`` directory has two project templates that you can use to get started: One for TypeScript and one for Clojure. Even if you don't end up using either one, it is recommended to look through the TypeScript template to see all the available api calls, their parameters and return types.
 
-### How to start
-
-1. `cd server/`
-2. Prepare the frontend: `npm install && npm run-script build`
-3. Run the backend: `mvn spring-boot:run`
-
-After this, the GUI can be accessed from http://localhost:8080/
-
-### How to create a bot?
+### Basic bot usage
 
 First, register your bot:
 ```json
@@ -64,9 +56,8 @@ Content-Type: application/json
 {
     "playerName": "testbot2",
 }
-
-Note: The response contains an id, which you need to capture and use for the next calls. 
 ```
+Note: The response contains an id, which you need to capture and use for the next calls. 
 
 Then get the current gamestate:
 ```
@@ -81,7 +72,20 @@ Content-Type: application/json
 "LEFT"
 ```
 
-The game ticks in about 1 second. If you  have about 1 second to
+The game ticks in 1 second, so your bot needs to have a second between each move you make.
+
+## Running the server
+
+You can run the server locally for developing your bot. It's not needed though, as you can use the deployed server instance.
+
+### How to start
+
+1. `cd server/`
+2. Prepare the frontend: `npm install && npm run-script build`
+3. Run the backend: `mvn spring-boot:run`
+
+After this, the GUI can be accessed from http://localhost:8080/
+
 
 ### Admin instructions
 
