@@ -10,7 +10,7 @@
   If they do it more than once, the previous move is overwritten. 
   On next tick the server calculates the next game state, which is accessible from another endpoint.
 * Available actions are movement (UP, DOWN, LEFT, RIGHT), picking up an item (PICK) or using one (USE).
-* Faulty responses are penalised by decreasing the bot's health.  Dead
+* Faulty moves are penalised by decreasing the bot's health.  Dead
   bots are removed from the shop by guards.  Faulty actions include
   running into a wall, trying to pick nonexistent items, etc.
 * The items in the shop have a price and a discount percentage.  The
@@ -21,7 +21,7 @@
 * The "price" of an item is the price *before* discount, so it is *not*
   the amount of money that will actually be spent when you pick it up.
 * When items have been collected, new ones are added on the map.
-* There's no time limit to exploring the shop.
+* There's no time limit to exploring the shop, but your health decreases because shopping is hard.
 * Because it's Black Friday, some items are weapons that can be used to
   harm the shopper that is the farthest away from the shooter
   (calculated as the manhattan distance between players, and not taking
@@ -29,18 +29,10 @@
 * Weapons always hit and cannot be dodged.
 * A weapon can only be used once.
 * When the bot is out of money, it has to exit the shop by the cash
-  register.  After this it is safely out of the game.  Stealing will be
-  punished.
+  register.  After this it is safely out of the game.
 * Don't go too early to the cash register.  You won't be able to get
   back.
 * The shops may have walls, and traps. Traps cause damage but you can walk through them.
-
-## Architecture
-
-Bots act as clients.
-The clients have time until the next tick to register their next move to the server.
-If they do it more than once, the previous move is overwritten.
-On next tick the server calculates the next game state, which is accessible from another endpoint.
 
 ## Creating a bot
 
@@ -57,7 +49,7 @@ Content-Type: application/json
     "playerName": "testbot2",
 }
 ```
-Note: The response contains an id, which you need to capture and use for the next calls. 
+Note: The response contains the map and an id, which you need to capture and use for the next calls.
 
 Then get the current gamestate:
 ```
@@ -72,7 +64,7 @@ Content-Type: application/json
 "LEFT"
 ```
 
-The game ticks in 1 second, so your bot needs to have a second between each move you make.
+The game ticks in 1 second, so your bot needs to wait a second between each move you make.
 
 ## Running the server
 
