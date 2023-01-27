@@ -3,12 +3,19 @@
             [cheshire.core :as json]))
 
 (def local-url "http://localhost:8080")
-(def prod-url "https://bots-of-black-friday.azurewebsites.net")
+(def prod-url "")
 
 (defn url []
-  (if (= (System/getenv "ENV") "development")
-    local-url
-    prod-url))
+  (cond
+    (= (System/getenv "ENV") "development") local-url
+    (= prod-url "") (do
+                      (println "Please set prod-url to point at the server of your Code Camp location instance:")
+                      (println "Oulu: https://bots-of-black-friday-oulu.azurewebsites.net")
+                      (println "Tampere: https://bots-of-black-friday-tampere.azurewebsites.net")
+                      (println "Turku: https://bots-of-black-friday-turku.azurewebsites.net")
+                      (println "Helsinki: https://bots-of-black-friday-helsinki.azurewebsites.net")
+                      (System/exit 1))
+    :else prod-url))
 
 (defn register [player-name]
   (:body (client/post (str (url) "/register")

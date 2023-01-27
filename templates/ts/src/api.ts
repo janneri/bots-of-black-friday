@@ -4,11 +4,22 @@ import { RegisterResponse } from "./types/RegisterResponse";
 import { Move } from "./types/Move";
 
 const LOCAL_URL = "http://localhost:8080";
-const PROD_URL = "https://bots-of-black-friday.azurewebsites.net";
+let PROD_URL = "";
 
 const getUrl = (): string => {
   if (process.env.NODE_ENV === "development") {
     return LOCAL_URL;
+  }
+
+  if (PROD_URL === "") {
+    console.log(
+      "Please set PROD_URL to point at the server of your Code Camp location instance:"
+    );
+    console.log("Oulu: https://bots-of-black-friday-oulu.azurewebsites.net");
+    console.log("Tampere: https://bots-of-black-friday-tampere.azurewebsites.net");
+    console.log("Turku: https://bots-of-black-friday-turku.azurewebsites.net");
+    console.log("Helsinki https://bots-of-black-friday-helsinki.azurewebsites.net");
+    process.exit(1);
   }
   return PROD_URL;
 };
