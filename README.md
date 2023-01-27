@@ -83,27 +83,14 @@ After this, the GUI can be accessed from http://localhost:8080/
 
 The following are only needed for the administrator of the game server.
 
-#### How to create a new map
+#### How to create a map?
 
-```
-sudo mkdir -m 777 -p /bobf-maps
-touch /bobf-maps/example-map
-echo "map name" >> /bobf-maps/example-map
--- limit the number of items on map to 3
-echo 3 >> /bobf-maps/example-map
-echo "xxxxxxxxx" >> /bobf-maps/example-map
--- x is wall, o is exit # is a trap which decreases bots health
-echo "x_o____#x" >> /bobf-maps/example-map
-echo "xxxxxxxxx" >> /bobf-maps/example-map
-```
+Copy and paste existing maps, such as the default.map. You need to package and redeploy after adding new maps.
 
-#### How to change the map
+#### How to change the map?
 
-`./server/cli changemap example-map`
-
-also works for the predefined maps (see server/src/main/resources/maps)
-
-`./server/cli changemap split_trap.map`
+* Changing the map resets the scoreboard and the whole gamestate.
+* Use the moderator_api.http-file. Be sure to use the correct environment (add it to the http-client.env.json-file if necessary).
 
 #### How to increase or decrease game speed
 
