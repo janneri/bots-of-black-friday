@@ -22,10 +22,9 @@
   the amount of money that will actually be spent when you pick it up.
 * When items have been collected, new ones are added on the map.
 * There's no time limit to exploring the shop, but your health decreases because shopping is hard.
-* Because it's Black Friday, some items are weapons that can be used to
-  harm the shopper that is the farthest away from the shooter
+* Some items are weapons that can be used to drain energy from the shopper that is the farthest away from the drainer
   (calculated as the manhattan distance between players, and not taking
-  into account walls).
+  into account walls). The bot that used the weapon receives some health back when used.
 * Weapons always hit and cannot be dodged.
 * A weapon can only be used once.
 * When the bot is out of money, it has to exit the shop by the cash
