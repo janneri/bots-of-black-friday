@@ -63,6 +63,13 @@ public class Player {
                 this.health - amount, this.usableItems);
     }
 
+    public Player increaseHealth(int amount) {
+        int newHealthAmount = Math.min(this.health + amount, INITIAL_HEALTH_LEFT);
+        return new Player(this.id, this.name, position, this.actionCount,
+                this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(),
+                newHealthAmount, this.usableItems);
+    }
+
     public Player cancelState() {
         return new Player(this.id, this.name, position, this.actionCount + 1,
                 this.score, this.money, PlayerState.MOVE, 0, Optional.<Item>empty(),
@@ -89,7 +96,7 @@ public class Player {
 
         if (timeInState + 1 >= item.getPickTime()) {
             ArrayList<Item> newItems = new ArrayList<>(this.usableItems);
-            if ( item.isUsable && item.type == Item.Type.WEAPON ) {
+            if (item.isUsable && item.type == Item.Type.WEAPON) {
                 newItems.add(item);
             }
 

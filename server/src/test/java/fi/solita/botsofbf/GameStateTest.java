@@ -186,6 +186,38 @@ public class GameStateTest {
     }
 
     @Test
+    public void shootingIncreasesPlayersHealth() {
+        Map map = Map.createMapFromLines(mapLines);
+        Player shooter = createPlayerToMap(map).decreaseHealth(10);
+        Player targetPlayer = createPlayerToMap(map);
+
+        GameState state = new GameState(map)
+                .addPlayer(shooter)
+                .addPlayer(targetPlayer)
+                .addItem(Item.createWeapon(1, 1, shooter.position))
+                .movePlayer(shooter.id, Move.PICK)
+                .movePlayer(shooter.id, Move.USE);
+
+        assertEquals(shooter.health + GameState.HEALTH_GAINED_WHEN_ATTACKING, state.getPlayer(shooter.id).health);
+    }
+
+    @Test
+    public void drainingHealthCantGiveMoreHealthThanInitialHealth() {
+        Map map = Map.createMapFromLines(mapLines);
+        Player shooter = createPlayerToMap(map);
+        Player targetPlayer = createPlayerToMap(map);
+
+        GameState state = new GameState(map)
+                .addPlayer(shooter)
+                .addPlayer(targetPlayer)
+                .addItem(Item.createWeapon(1, 1, shooter.position))
+                .movePlayer(shooter.id, Move.PICK)
+                .movePlayer(shooter.id, Move.USE);
+
+        assertEquals(Player.INITIAL_HEALTH_LEFT, state.getPlayer(shooter.id).health);
+    }
+
+    @Test
     public void shootingAWeaponRecordsAShootingLineToBeDisplayedAtMap() {
         Map map = Map.createMapFromLines(mapLines);
         Player shooter = createPlayerToMap(map);
