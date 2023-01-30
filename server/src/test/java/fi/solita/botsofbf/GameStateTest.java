@@ -170,89 +170,89 @@ public class GameStateTest {
     }
 
     @Test
-    public void shootingDecreasesTargetPlayersHealth() {
+    public void drainingDecreasesTargetPlayersHealth() {
         Map map = Map.createMapFromLines(mapLines);
-        Player shooter = createPlayerToMap(map);
+        Player drainer = createPlayerToMap(map);
         Player targetPlayer = createPlayerToMap(map);
 
         GameState state = new GameState(map)
-                .addPlayer(shooter)
+                .addPlayer(drainer)
                 .addPlayer(targetPlayer)
-                .addItem(Item.createWeapon(1, 1, shooter.position))
-                .movePlayer(shooter.id, Move.PICK)
-                .movePlayer(shooter.id, Move.USE);
+                .addItem(Item.createWeapon(1, 1, drainer.position))
+                .movePlayer(drainer.id, Move.PICK)
+                .movePlayer(drainer.id, Move.USE);
 
         assertEquals(targetPlayer.health - GameState.HEALTH_LOST_WHEN_ATTACKED, state.getPlayer(targetPlayer.id).health);
     }
 
     @Test
-    public void shootingIncreasesPlayersHealth() {
+    public void drainingIncreasesPlayersHealth() {
         Map map = Map.createMapFromLines(mapLines);
-        Player shooter = createPlayerToMap(map).decreaseHealth(10);
+        Player drainer = createPlayerToMap(map).decreaseHealth(10);
         Player targetPlayer = createPlayerToMap(map);
 
         GameState state = new GameState(map)
-                .addPlayer(shooter)
+                .addPlayer(drainer)
                 .addPlayer(targetPlayer)
-                .addItem(Item.createWeapon(1, 1, shooter.position))
-                .movePlayer(shooter.id, Move.PICK)
-                .movePlayer(shooter.id, Move.USE);
+                .addItem(Item.createWeapon(1, 1, drainer.position))
+                .movePlayer(drainer.id, Move.PICK)
+                .movePlayer(drainer.id, Move.USE);
 
-        assertEquals(shooter.health + GameState.HEALTH_GAINED_WHEN_ATTACKING, state.getPlayer(shooter.id).health);
+        assertEquals(drainer.health + GameState.HEALTH_GAINED_WHEN_ATTACKING, state.getPlayer(drainer.id).health);
     }
 
     @Test
     public void drainingHealthCantGiveMoreHealthThanInitialHealth() {
         Map map = Map.createMapFromLines(mapLines);
-        Player shooter = createPlayerToMap(map);
+        Player drainer = createPlayerToMap(map);
         Player targetPlayer = createPlayerToMap(map);
 
         GameState state = new GameState(map)
-                .addPlayer(shooter)
+                .addPlayer(drainer)
                 .addPlayer(targetPlayer)
-                .addItem(Item.createWeapon(1, 1, shooter.position))
-                .movePlayer(shooter.id, Move.PICK)
-                .movePlayer(shooter.id, Move.USE);
+                .addItem(Item.createWeapon(1, 1, drainer.position))
+                .movePlayer(drainer.id, Move.PICK)
+                .movePlayer(drainer.id, Move.USE);
 
-        assertEquals(Player.INITIAL_HEALTH_LEFT, state.getPlayer(shooter.id).health);
+        assertEquals(Player.INITIAL_HEALTH_LEFT, state.getPlayer(drainer.id).health);
     }
 
     @Test
-    public void shootingAWeaponRecordsAShootingLineToBeDisplayedAtMap() {
+    public void usingAWeaponRecordsAShootingLineToBeDisplayedAtMap() {
         Map map = Map.createMapFromLines(mapLines);
-        Player shooter = createPlayerToMap(map);
+        Player drainer = createPlayerToMap(map);
         Player targetPlayer = createPlayerToMap(map);
 
         GameState state = new GameState(map)
-                .addPlayer(shooter)
+                .addPlayer(drainer)
                 .addPlayer(targetPlayer)
-                .addItem(Item.createWeapon(1, 1, shooter.position))
-                .movePlayer(shooter.id, Move.PICK)
-                .movePlayer(shooter.id, Move.USE);
+                .addItem(Item.createWeapon(1, 1, drainer.position))
+                .movePlayer(drainer.id, Move.PICK)
+                .movePlayer(drainer.id, Move.USE);
 
         assertEquals(1, state.shootingLines.size());
         ShootingLine shootingLine = state.shootingLines.get(0);
-        assertEquals(shooter.position, shootingLine.fromPosition);
+        assertEquals(drainer.position, shootingLine.fromPosition);
         assertEquals(targetPlayer.position, shootingLine.toPosition);
     }
 
     @Test
     public void usingAnItemMakesItUnusable() {
         Map map = Map.createMapFromLines(mapLines);
-        Player shooter = createPlayerToMap(map);
+        Player drainer = createPlayerToMap(map);
         Player targetPlayer = createPlayerToMap(map);
 
         GameState state = new GameState(map)
-                .addPlayer(shooter)
+                .addPlayer(drainer)
                 .addPlayer(targetPlayer)
-                .addItem(Item.createWeapon(1, 1, shooter.position))
-                .movePlayer(shooter.id, Move.PICK);
+                .addItem(Item.createWeapon(1, 1, drainer.position))
+                .movePlayer(drainer.id, Move.PICK);
 
-        assertTrue(state.getPlayer(shooter.id).hasUnusedWeapon());
+        assertTrue(state.getPlayer(drainer.id).hasUnusedWeapon());
 
-        state = state.movePlayer(shooter.id, Move.USE);
+        state = state.movePlayer(drainer.id, Move.USE);
 
-        assertFalse(state.getPlayer(shooter.id).hasUnusedWeapon());
+        assertFalse(state.getPlayer(drainer.id).hasUnusedWeapon());
     }
 
     private void assertMoveThrows(GameState state, Player player, Move move) {
