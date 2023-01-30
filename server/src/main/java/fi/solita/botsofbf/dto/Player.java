@@ -58,16 +58,17 @@ public class Player {
     }
 
     public Player decreaseHealth(int amount) {
-        return new Player(this.id, this.name, position, this.actionCount,
-                this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(),
-                this.health - amount, this.usableItems);
+        return updateHealth(this.health - amount);
     }
 
     public Player increaseHealth(int amount) {
-        int newHealthAmount = Math.min(this.health + amount, INITIAL_HEALTH_LEFT);
+        return updateHealth(Math.min(this.health + amount, INITIAL_HEALTH_LEFT));
+    }
+
+    private Player updateHealth(int newHealth) {
         return new Player(this.id, this.name, position, this.actionCount,
                 this.score, this.money, this.state, this.timeInState, Optional.<Item>empty(),
-                newHealthAmount, this.usableItems);
+                newHealth, this.usableItems);
     }
 
     public Player cancelState() {
