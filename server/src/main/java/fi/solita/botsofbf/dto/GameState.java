@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class GameState {
 
     public static final int HEALTH_LOST_WHEN_ATTACKED = 50;
+    public static final int HEALTH_GAINED_WHEN_ATTACKING = 10;
     /** Every N moves causes health to decrease. */
     public static final int AGING_MOVE_COUNT = 50;
     public static final int HEALTH_LOST_WHEN_AGED = 10;
@@ -126,6 +127,7 @@ public class GameState {
             if ( furthestPlayer.isPresent() ) {
                 affectedPlayer = Optional.of(furthestPlayer.get().decreaseHealth(HEALTH_LOST_WHEN_ATTACKED));
                 newPlayer = player.useFirstUsableItem();
+                newPlayer = newPlayer.increaseHealth(HEALTH_GAINED_WHEN_ATTACKING);
                 newShootingLines.add(ShootingLine.of(player.position, furthestPlayer.get().position));
             }
         }
