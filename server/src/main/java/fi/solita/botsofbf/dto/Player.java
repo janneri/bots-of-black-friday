@@ -105,6 +105,9 @@ public class Player {
                     this.score + item.price, this.money - item.discountedPrice, PlayerState.MOVE, 0, Optional.of(item),
                     this.health, newItems);
 
+            if (item.type == Item.Type.POTION) {
+                player = player.increaseHealth(Item.POTION_HEALTH_RESTORE_AMOUNT);
+            }
             return new PickResult(true, player);
         } else {
             Player player = new Player(this.id, this.name, this.position, this.actionCount + 1,
