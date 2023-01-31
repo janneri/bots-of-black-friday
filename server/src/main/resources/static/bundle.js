@@ -69,7 +69,7 @@
 	"use strict";
 
 	var React = require(5);
-	var _ = require(8);
+	var _ = require(7);
 
 	// easy to shift 4
 	var TILE_WIDTH_IN_PIXELS = 16;
@@ -308,27 +308,33 @@
 	      );
 	    };
 
-	    var getItemColor = function getItemColor(item) {
+	    var getItemEmoji = function getItemEmoji(item) {
 	      switch (item.type) {
 	        case "WEAPON":
-	          return "#5e5e05";
+	          // 🪄
+	          return '\uD83E\uDE84';
 	        case "POTION":
-	          return "#0b055e";
+	          // 🍺
+	          return '\uD83C\uDF7A';
 	        default:
-	          return "#00ff00";
+	          // 🎁
+	          return '\uD83C\uDF81';
 	      }
 	    };
+
 	    var drawItem = function drawItem(item) {
-	      var color = getItemColor(item);
 	      var text = item.type === "WEAPON" ? item.price + ' \u20AC' : item.price + ' \u20AC -' + item.discountPercent + '%';
 	      return React.createElement(
 	        G,
 	        { key: "item_" + item.position.x + "." + item.position.y },
-	        React.createElement(Circle, {
-	          cx: (item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1),
-	          cy: (item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1),
-	          r: (TILE_WIDTH_IN_PIXELS >> 1) - 1,
-	          style: { fill: color, filter: 'url(#shadow)' } }),
+	        React.createElement(
+	          Text,
+	          {
+	            x: item.position.x << TILE_WIDTH_SHIFT_AMOUNT,
+	            y: (item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + TILE_WIDTH_IN_PIXELS,
+	            r: (TILE_WIDTH_IN_PIXELS >> 1) - 1 },
+	          getItemEmoji(item)
+	        ),
 	        React.createElement(
 	          Text,
 	          {
@@ -600,7 +606,7 @@
 	"use strict";
 
 	var React = require(5);
-	var _ = require(8);
+	var _ = require(7);
 
 	var ChatWidget = React.createClass({
 	  displayName: 'ChatWidget',
@@ -659,7 +665,7 @@
 	"use strict";
 
 	var SockJS = require(6);
-	var Stomp = require(7);
+	var Stomp = require(8);
 	var MapWidget = require(1);
 
 	var stompClient = null;
@@ -701,7 +707,7 @@
 
 	'use strict';
 
-	module.exports = require(9);
+	module.exports = require(10);
 
 /***/ },
 /* 5 */
@@ -709,7 +715,7 @@
 
 	'use strict';
 
-	module.exports = require(10);
+	module.exports = require(9);
 
 /***/ },
 /* 6 */
@@ -3109,28 +3115,6 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports, require) {
-
-	'use strict';
-
-	// Copyright (C) 2013 [Jeff Mesnil](http://jmesnil.net/)
-	//
-	//   Stomp Over WebSocket http://www.jmesnil.net/stomp-websocket/doc/ | Apache License V2.0
-	//
-	// The library can be used in node.js app to connect to STOMP brokers over TCP 
-	// or Web sockets.
-
-	// Root of the `stompjs module`
-
-	var Stomp = require(11);
-	var StompNode = require(12);
-
-	module.exports = Stomp.Stomp;
-	module.exports.overTCP = StompNode.overTCP;
-	module.exports.overWS = StompNode.overWS;
-
-/***/ },
-/* 8 */
 /***/ function(module, exports, require) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(require, module, global) {'use strict';
@@ -14766,7 +14750,7 @@
 	  var _ = runInContext();
 
 	  // Some AMD build optimizers like r.js check for condition patterns like the following:
-	  if ('function' == 'function' && _typeof(require(78)) == 'object' && require(78)) {
+	  if ('function' == 'function' && _typeof(require(80)) == 'object' && require(80)) {
 	    // Expose lodash to the global object when an AMD loader is present to avoid
 	    // errors in cases where lodash is loaded by a script tag and not intended
 	    // as an AMD module. See http://requirejs.org/docs/errors.html#mismatch for
@@ -14794,125 +14778,32 @@
 	      root._ = _;
 	    }
 	}).call(undefined);
-	/* WEBPACK VAR INJECTION */}.call(exports, require, require(91)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, require, require(90)(module), (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactDOM
-	 */
-
-	/* globals __REACT_DEVTOOLS_GLOBAL_HOOK__*/
 
 	'use strict';
 
-	var ReactDOMComponentTree = require(13);
-	var ReactDefaultInjection = require(14);
-	var ReactMount = require(15);
-	var ReactReconciler = require(16);
-	var ReactUpdates = require(17);
-	var ReactVersion = require(18);
+	// Copyright (C) 2013 [Jeff Mesnil](http://jmesnil.net/)
+	//
+	//   Stomp Over WebSocket http://www.jmesnil.net/stomp-websocket/doc/ | Apache License V2.0
+	//
+	// The library can be used in node.js app to connect to STOMP brokers over TCP 
+	// or Web sockets.
 
-	var findDOMNode = require(19);
-	var getHostComponentFromComposite = require(20);
-	var renderSubtreeIntoContainer = require(21);
-	var warning = require(79);
+	// Root of the `stompjs module`
 
-	ReactDefaultInjection.inject();
+	var Stomp = require(11);
+	var StompNode = require(12);
 
-	var ReactDOM = {
-	  findDOMNode: findDOMNode,
-	  render: ReactMount.render,
-	  unmountComponentAtNode: ReactMount.unmountComponentAtNode,
-	  version: ReactVersion,
-
-	  /* eslint-disable camelcase */
-	  unstable_batchedUpdates: ReactUpdates.batchedUpdates,
-	  unstable_renderSubtreeIntoContainer: renderSubtreeIntoContainer
-	};
-
-	// Inject the runtime into a devtools global hook regardless of browser.
-	// Allows for debugging when the hook is injected on the page.
-	/* eslint-enable camelcase */
-	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
-	  __REACT_DEVTOOLS_GLOBAL_HOOK__.inject({
-	    ComponentTree: {
-	      getClosestInstanceFromNode: ReactDOMComponentTree.getClosestInstanceFromNode,
-	      getNodeFromInstance: function getNodeFromInstance(inst) {
-	        // inst is an internal instance (but could be a composite)
-	        if (inst._renderedComponent) {
-	          inst = getHostComponentFromComposite(inst);
-	        }
-	        if (inst) {
-	          return ReactDOMComponentTree.getNodeFromInstance(inst);
-	        } else {
-	          return null;
-	        }
-	      }
-	    },
-	    Mount: ReactMount,
-	    Reconciler: ReactReconciler
-	  });
-	}
-
-	if (true) {
-	  var ExecutionEnvironment = require(80);
-	  if (ExecutionEnvironment.canUseDOM && window.top === window.self) {
-
-	    // First check if devtools is not installed
-	    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === 'undefined') {
-	      // If we're in Chrome or Firefox, provide a download link if not installed.
-	      if (navigator.userAgent.indexOf('Chrome') > -1 && navigator.userAgent.indexOf('Edge') === -1 || navigator.userAgent.indexOf('Firefox') > -1) {
-	        // Firefox does not have the issue with devtools loaded over file://
-	        var showFileUrlMessage = window.location.protocol.indexOf('http') === -1 && navigator.userAgent.indexOf('Firefox') === -1;
-	        console.debug('Download the React DevTools ' + (showFileUrlMessage ? 'and use an HTTP server (instead of a file: URL) ' : '') + 'for a better development experience: ' + 'https://fb.me/react-devtools');
-	      }
-	    }
-
-	    var testFunc = function testFn() {};
-	    true ? warning((testFunc.name || testFunc.toString()).indexOf('testFn') !== -1, 'It looks like you\'re using a minified copy of the development build ' + 'of React. When deploying React apps to production, make sure to use ' + 'the production build which skips development warnings and is faster. ' + 'See https://fb.me/react-minification for more details.') : void 0;
-
-	    // If we're in IE8, check to see if we are in compatibility mode and provide
-	    // information on preventing compatibility mode
-	    var ieCompatibilityMode = document.documentMode && document.documentMode < 8;
-
-	    true ? warning(!ieCompatibilityMode, 'Internet Explorer is running in compatibility mode; please add the ' + 'following tag to your HTML to prevent this from happening: ' + '<meta http-equiv="X-UA-Compatible" content="IE=edge" />') : void 0;
-
-	    var expectedFeatures = [
-	    // shims
-	    Array.isArray, Array.prototype.every, Array.prototype.forEach, Array.prototype.indexOf, Array.prototype.map, Date.now, Function.prototype.bind, Object.keys, String.prototype.split, String.prototype.trim];
-
-	    for (var i = 0; i < expectedFeatures.length; i++) {
-	      if (!expectedFeatures[i]) {
-	        true ? warning(false, 'One or more ES5 shims expected by React are not available: ' + 'https://fb.me/react-warning-polyfills') : void 0;
-	        break;
-	      }
-	    }
-	  }
-	}
-
-	if (true) {
-	  var ReactInstrumentation = require(22);
-	  var ReactDOMUnknownPropertyHook = require(23);
-	  var ReactDOMNullInputValuePropHook = require(24);
-
-	  ReactInstrumentation.debugTool.addHook(ReactDOMUnknownPropertyHook);
-	  ReactInstrumentation.debugTool.addHook(ReactDOMNullInputValuePropHook);
-	}
-
-	module.exports = ReactDOM;
+	module.exports = Stomp.Stomp;
+	module.exports.overTCP = StompNode.overTCP;
+	module.exports.overWS = StompNode.overWS;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -14940,7 +14831,7 @@
 	var ReactVersion = require(18);
 
 	var onlyChild = require(32);
-	var warning = require(79);
+	var warning = require(83);
 
 	var createElement = ReactElement.createElement;
 	var createFactory = ReactElement.createFactory;
@@ -15004,6 +14895,121 @@
 	};
 
 	module.exports = React;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactDOM
+	 */
+
+	/* globals __REACT_DEVTOOLS_GLOBAL_HOOK__*/
+
+	'use strict';
+
+	var ReactDOMComponentTree = require(13);
+	var ReactDefaultInjection = require(14);
+	var ReactMount = require(15);
+	var ReactReconciler = require(16);
+	var ReactUpdates = require(17);
+	var ReactVersion = require(18);
+
+	var findDOMNode = require(19);
+	var getHostComponentFromComposite = require(20);
+	var renderSubtreeIntoContainer = require(21);
+	var warning = require(83);
+
+	ReactDefaultInjection.inject();
+
+	var ReactDOM = {
+	  findDOMNode: findDOMNode,
+	  render: ReactMount.render,
+	  unmountComponentAtNode: ReactMount.unmountComponentAtNode,
+	  version: ReactVersion,
+
+	  /* eslint-disable camelcase */
+	  unstable_batchedUpdates: ReactUpdates.batchedUpdates,
+	  unstable_renderSubtreeIntoContainer: renderSubtreeIntoContainer
+	};
+
+	// Inject the runtime into a devtools global hook regardless of browser.
+	// Allows for debugging when the hook is injected on the page.
+	/* eslint-enable camelcase */
+	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined' && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.inject === 'function') {
+	  __REACT_DEVTOOLS_GLOBAL_HOOK__.inject({
+	    ComponentTree: {
+	      getClosestInstanceFromNode: ReactDOMComponentTree.getClosestInstanceFromNode,
+	      getNodeFromInstance: function getNodeFromInstance(inst) {
+	        // inst is an internal instance (but could be a composite)
+	        if (inst._renderedComponent) {
+	          inst = getHostComponentFromComposite(inst);
+	        }
+	        if (inst) {
+	          return ReactDOMComponentTree.getNodeFromInstance(inst);
+	        } else {
+	          return null;
+	        }
+	      }
+	    },
+	    Mount: ReactMount,
+	    Reconciler: ReactReconciler
+	  });
+	}
+
+	if (true) {
+	  var ExecutionEnvironment = require(84);
+	  if (ExecutionEnvironment.canUseDOM && window.top === window.self) {
+
+	    // First check if devtools is not installed
+	    if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === 'undefined') {
+	      // If we're in Chrome or Firefox, provide a download link if not installed.
+	      if (navigator.userAgent.indexOf('Chrome') > -1 && navigator.userAgent.indexOf('Edge') === -1 || navigator.userAgent.indexOf('Firefox') > -1) {
+	        // Firefox does not have the issue with devtools loaded over file://
+	        var showFileUrlMessage = window.location.protocol.indexOf('http') === -1 && navigator.userAgent.indexOf('Firefox') === -1;
+	        console.debug('Download the React DevTools ' + (showFileUrlMessage ? 'and use an HTTP server (instead of a file: URL) ' : '') + 'for a better development experience: ' + 'https://fb.me/react-devtools');
+	      }
+	    }
+
+	    var testFunc = function testFn() {};
+	    true ? warning((testFunc.name || testFunc.toString()).indexOf('testFn') !== -1, 'It looks like you\'re using a minified copy of the development build ' + 'of React. When deploying React apps to production, make sure to use ' + 'the production build which skips development warnings and is faster. ' + 'See https://fb.me/react-minification for more details.') : void 0;
+
+	    // If we're in IE8, check to see if we are in compatibility mode and provide
+	    // information on preventing compatibility mode
+	    var ieCompatibilityMode = document.documentMode && document.documentMode < 8;
+
+	    true ? warning(!ieCompatibilityMode, 'Internet Explorer is running in compatibility mode; please add the ' + 'following tag to your HTML to prevent this from happening: ' + '<meta http-equiv="X-UA-Compatible" content="IE=edge" />') : void 0;
+
+	    var expectedFeatures = [
+	    // shims
+	    Array.isArray, Array.prototype.every, Array.prototype.forEach, Array.prototype.indexOf, Array.prototype.map, Date.now, Function.prototype.bind, Object.keys, String.prototype.split, String.prototype.trim];
+
+	    for (var i = 0; i < expectedFeatures.length; i++) {
+	      if (!expectedFeatures[i]) {
+	        true ? warning(false, 'One or more ES5 shims expected by React are not available: ' + 'https://fb.me/react-warning-polyfills') : void 0;
+	        break;
+	      }
+	    }
+	  }
+	}
+
+	if (true) {
+	  var ReactInstrumentation = require(22);
+	  var ReactDOMUnknownPropertyHook = require(23);
+	  var ReactDOMNullInputValuePropHook = require(24);
+
+	  ReactInstrumentation.debugTool.addHook(ReactDOMUnknownPropertyHook);
+	  ReactInstrumentation.debugTool.addHook(ReactDOMNullInputValuePropHook);
+	}
+
+	module.exports = ReactDOM;
 
 /***/ },
 /* 11 */
@@ -15519,7 +15525,7 @@
 
 	  Stomp = require(11);
 
-	  net = require(123);
+	  net = require(150);
 
 	  Stomp.Stomp.setInterval = function (interval, f) {
 	    return setInterval(f, interval);
@@ -15636,7 +15642,7 @@
 	var DOMProperty = require(36);
 	var ReactDOMComponentFlags = require(37);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	var ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 	var Flags = ReactDOMComponentFlags;
@@ -15931,12 +15937,12 @@
 	var ReactUpdateQueue = require(67);
 	var ReactUpdates = require(17);
 
-	var emptyObject = require(82);
+	var emptyObject = require(86);
 	var instantiateReactComponent = require(68);
-	var invariant = require(81);
+	var invariant = require(85);
 	var setInnerHTML = require(69);
 	var shouldUpdateReactComponent = require(70);
-	var warning = require(79);
+	var warning = require(83);
 
 	var ATTR_NAME = DOMProperty.ID_ATTRIBUTE_NAME;
 	var ROOT_ATTR_NAME = DOMProperty.ROOT_ATTRIBUTE_NAME;
@@ -16455,7 +16461,7 @@
 	var ReactRef = require(55);
 	var ReactInstrumentation = require(22);
 
-	var warning = require(79);
+	var warning = require(83);
 
 	/**
 	 * Helper to call ReactRef.attachRefs with this composite component, split out
@@ -16634,7 +16640,7 @@
 	var ReactReconciler = require(16);
 	var Transaction = require(59);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	var dirtyComponents = [];
 	var updateBatchNumber = 0;
@@ -16907,8 +16913,8 @@
 	var ReactInstanceMap = require(65);
 
 	var getHostComponentFromComposite = require(20);
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	/**
 	 * Returns the DOM node rendered by this element.
@@ -17024,7 +17030,7 @@
 	var debugTool = null;
 
 	if (true) {
-	  var ReactDebugTool = require(77);
+	  var ReactDebugTool = require(72);
 	  debugTool = ReactDebugTool;
 	}
 
@@ -17048,10 +17054,10 @@
 	'use strict';
 
 	var DOMProperty = require(36);
-	var EventPluginRegistry = require(72);
-	var ReactComponentTreeHook = require(73);
+	var EventPluginRegistry = require(73);
+	var ReactComponentTreeHook = require(74);
 
-	var warning = require(79);
+	var warning = require(83);
 
 	if (true) {
 	  var reactProps = {
@@ -17164,9 +17170,9 @@
 
 	'use strict';
 
-	var ReactComponentTreeHook = require(73);
+	var ReactComponentTreeHook = require(74);
 
-	var warning = require(79);
+	var warning = require(83);
 
 	var didWarnValueNull = false;
 
@@ -17215,8 +17221,8 @@
 	var PooledClass = require(57);
 	var ReactElement = require(30);
 
-	var emptyFunction = require(83);
-	var traverseAllChildren = require(74);
+	var emptyFunction = require(87);
+	var traverseAllChildren = require(75);
 
 	var twoArgumentPooler = PooledClass.twoArgumentPooler;
 	var fourArgumentPooler = PooledClass.fourArgumentPooler;
@@ -17411,12 +17417,12 @@
 
 	var _prodInvariant = require(35);
 
-	var ReactNoopUpdateQueue = require(75);
+	var ReactNoopUpdateQueue = require(76);
 
-	var canDefineProperty = require(76);
-	var emptyObject = require(82);
-	var invariant = require(81);
-	var warning = require(79);
+	var canDefineProperty = require(77);
+	var emptyObject = require(86);
+	var invariant = require(85);
+	var warning = require(83);
 
 	/**
 	 * Base class helpers for the updating state of a component.
@@ -17535,9 +17541,9 @@
 	var _assign = require(34);
 
 	var ReactComponent = require(26);
-	var ReactNoopUpdateQueue = require(75);
+	var ReactNoopUpdateQueue = require(76);
 
-	var emptyObject = require(82);
+	var emptyObject = require(86);
 
 	/**
 	 * Base class helpers for the updating state of a component.
@@ -17586,15 +17592,15 @@
 
 	var ReactComponent = require(26);
 	var ReactElement = require(30);
-	var ReactPropTypeLocations = require(84);
-	var ReactPropTypeLocationNames = require(85);
-	var ReactNoopUpdateQueue = require(75);
+	var ReactPropTypeLocations = require(78);
+	var ReactPropTypeLocationNames = require(79);
+	var ReactNoopUpdateQueue = require(76);
 
-	var emptyObject = require(82);
-	var invariant = require(81);
-	var keyMirror = require(86);
-	var keyOf = require(87);
-	var warning = require(79);
+	var emptyObject = require(86);
+	var invariant = require(85);
+	var keyMirror = require(88);
+	var keyOf = require(89);
+	var warning = require(83);
 
 	var MIXINS_KEY = keyOf({ mixins: null });
 
@@ -18499,8 +18505,8 @@
 
 	var ReactCurrentOwner = require(62);
 
-	var warning = require(79);
-	var canDefineProperty = require(76);
+	var warning = require(83);
+	var canDefineProperty = require(77);
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 	// The Symbol used to tag the ReactElement type. If there is no native Symbol
@@ -18851,12 +18857,12 @@
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var ReactElement = require(30);
-	var ReactPropTypeLocationNames = require(85);
-	var ReactPropTypesSecret = require(90);
+	var ReactPropTypeLocationNames = require(79);
+	var ReactPropTypesSecret = require(81);
 
-	var emptyFunction = require(83);
-	var getIteratorFn = require(89);
-	var warning = require(79);
+	var emptyFunction = require(87);
+	var getIteratorFn = require(82);
+	var warning = require(83);
 
 	/**
 	 * Collection of methods that allow declaration and validation of props that are
@@ -19289,7 +19295,7 @@
 
 	var ReactElement = require(30);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Returns the first child in a collection of children and verifies that there
@@ -19339,15 +19345,15 @@
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var ReactCurrentOwner = require(62);
-	var ReactComponentTreeHook = require(73);
+	var ReactComponentTreeHook = require(74);
 	var ReactElement = require(30);
-	var ReactPropTypeLocations = require(84);
+	var ReactPropTypeLocations = require(78);
 
-	var checkReactTypeSpec = require(88);
+	var checkReactTypeSpec = require(91);
 
-	var canDefineProperty = require(76);
-	var getIteratorFn = require(89);
-	var warning = require(79);
+	var canDefineProperty = require(77);
+	var getIteratorFn = require(82);
+	var warning = require(83);
 
 	function getDeclarationErrorAddendum() {
 	  if (ReactCurrentOwner.current) {
@@ -19705,7 +19711,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	function checkMask(value, bitmask) {
 	  return (value & bitmask) === bitmask;
@@ -19941,12 +19947,12 @@
 
 	var EventConstants = require(92);
 	var EventPropagators = require(93);
-	var ExecutionEnvironment = require(80);
-	var FallbackCompositionState = require(95);
-	var SyntheticCompositionEvent = require(96);
-	var SyntheticInputEvent = require(97);
+	var ExecutionEnvironment = require(84);
+	var FallbackCompositionState = require(94);
+	var SyntheticCompositionEvent = require(95);
+	var SyntheticInputEvent = require(96);
 
-	var keyOf = require(87);
+	var keyOf = require(89);
 
 	var END_KEYCODES = [9, 13, 27, 32]; // Tab, Return, Esc, Space
 	var START_KEYCODE = 229;
@@ -20335,17 +20341,17 @@
 	'use strict';
 
 	var EventConstants = require(92);
-	var EventPluginHub = require(104);
+	var EventPluginHub = require(97);
 	var EventPropagators = require(93);
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 	var ReactDOMComponentTree = require(13);
 	var ReactUpdates = require(17);
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
-	var getEventTarget = require(117);
-	var isEventSupported = require(113);
-	var isTextInputElement = require(118);
-	var keyOf = require(87);
+	var getEventTarget = require(99);
+	var isEventSupported = require(100);
+	var isTextInputElement = require(101);
+	var keyOf = require(89);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -20664,7 +20670,7 @@
 
 	'use strict';
 
-	var keyOf = require(87);
+	var keyOf = require(89);
 
 	/**
 	 * Module that is injectable into `EventPluginHub`, that specifies a
@@ -20699,9 +20705,9 @@
 	var EventConstants = require(92);
 	var EventPropagators = require(93);
 	var ReactDOMComponentTree = require(13);
-	var SyntheticMouseEvent = require(94);
+	var SyntheticMouseEvent = require(102);
 
-	var keyOf = require(87);
+	var keyOf = require(89);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -21023,8 +21029,8 @@
 
 	'use strict';
 
-	var DOMChildrenOperations = require(98);
-	var ReactDOMIDOperations = require(99);
+	var DOMChildrenOperations = require(103);
+	var ReactDOMIDOperations = require(104);
 
 	/**
 	 * Abstracts away all functionality of the reconciler that requires knowledge of
@@ -21065,35 +21071,35 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var AutoFocusUtils = require(100);
-	var CSSPropertyOperations = require(101);
+	var AutoFocusUtils = require(105);
+	var CSSPropertyOperations = require(106);
 	var DOMLazyTree = require(60);
-	var DOMNamespaces = require(102);
+	var DOMNamespaces = require(107);
 	var DOMProperty = require(36);
-	var DOMPropertyOperations = require(103);
+	var DOMPropertyOperations = require(108);
 	var EventConstants = require(92);
-	var EventPluginHub = require(104);
-	var EventPluginRegistry = require(72);
+	var EventPluginHub = require(97);
+	var EventPluginRegistry = require(73);
 	var ReactBrowserEventEmitter = require(61);
-	var ReactDOMButton = require(105);
+	var ReactDOMButton = require(109);
 	var ReactDOMComponentFlags = require(37);
 	var ReactDOMComponentTree = require(13);
-	var ReactDOMInput = require(106);
-	var ReactDOMOption = require(107);
-	var ReactDOMSelect = require(108);
-	var ReactDOMTextarea = require(109);
+	var ReactDOMInput = require(110);
+	var ReactDOMOption = require(111);
+	var ReactDOMSelect = require(112);
+	var ReactDOMTextarea = require(113);
 	var ReactInstrumentation = require(22);
-	var ReactMultiChild = require(110);
-	var ReactServerRenderingTransaction = require(111);
+	var ReactMultiChild = require(114);
+	var ReactServerRenderingTransaction = require(115);
 
-	var emptyFunction = require(83);
-	var escapeTextContentForBrowser = require(112);
-	var invariant = require(81);
-	var isEventSupported = require(113);
-	var keyOf = require(87);
-	var shallowEqual = require(114);
-	var validateDOMNesting = require(115);
-	var warning = require(79);
+	var emptyFunction = require(87);
+	var escapeTextContentForBrowser = require(116);
+	var invariant = require(85);
+	var isEventSupported = require(100);
+	var keyOf = require(89);
+	var shallowEqual = require(117);
+	var validateDOMNesting = require(118);
+	var warning = require(83);
 
 	var Flags = ReactDOMComponentFlags;
 	var deleteListener = EventPluginHub.deleteListener;
@@ -22138,7 +22144,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Return the lowest common ancestor of A and B, or null if they are in
@@ -22280,13 +22286,13 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var DOMChildrenOperations = require(98);
+	var DOMChildrenOperations = require(103);
 	var DOMLazyTree = require(60);
 	var ReactDOMComponentTree = require(13);
 
-	var escapeTextContentForBrowser = require(112);
-	var invariant = require(81);
-	var validateDOMNesting = require(115);
+	var escapeTextContentForBrowser = require(116);
+	var invariant = require(85);
+	var validateDOMNesting = require(118);
 
 	/**
 	 * Text nodes violate a couple assumptions that React makes about components:
@@ -22451,7 +22457,7 @@
 	var ReactUpdates = require(17);
 	var Transaction = require(59);
 
-	var emptyFunction = require(83);
+	var emptyFunction = require(87);
 
 	var RESET_BATCHED_UPDATES = {
 	  initialize: emptyFunction,
@@ -22521,14 +22527,14 @@
 
 	var _assign = require(34);
 
-	var EventListener = require(125);
-	var ExecutionEnvironment = require(80);
+	var EventListener = require(119);
+	var ExecutionEnvironment = require(84);
 	var PooledClass = require(57);
 	var ReactDOMComponentTree = require(13);
 	var ReactUpdates = require(17);
 
-	var getEventTarget = require(117);
-	var getUnboundedScrollPosition = require(126);
+	var getEventTarget = require(99);
+	var getUnboundedScrollPosition = require(120);
 
 	/**
 	 * Find the deepest React component completely containing the root of the
@@ -22682,13 +22688,13 @@
 	'use strict';
 
 	var DOMProperty = require(36);
-	var EventPluginHub = require(104);
-	var EventPluginUtils = require(119);
-	var ReactComponentEnvironment = require(120);
+	var EventPluginHub = require(97);
+	var EventPluginUtils = require(122);
+	var ReactComponentEnvironment = require(123);
 	var ReactClass = require(28);
-	var ReactEmptyComponent = require(121);
+	var ReactEmptyComponent = require(124);
 	var ReactBrowserEventEmitter = require(61);
-	var ReactHostComponent = require(122);
+	var ReactHostComponent = require(125);
 	var ReactUpdates = require(17);
 
 	var ReactInjection = {
@@ -22727,7 +22733,7 @@
 	var CallbackQueue = require(56);
 	var PooledClass = require(57);
 	var ReactBrowserEventEmitter = require(61);
-	var ReactInputSelection = require(124);
+	var ReactInputSelection = require(121);
 	var ReactInstrumentation = require(22);
 	var Transaction = require(59);
 	var ReactUpdateQueue = require(67);
@@ -23214,15 +23220,15 @@
 
 	var EventConstants = require(92);
 	var EventPropagators = require(93);
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 	var ReactDOMComponentTree = require(13);
-	var ReactInputSelection = require(124);
-	var SyntheticEvent = require(116);
+	var ReactInputSelection = require(121);
+	var SyntheticEvent = require(98);
 
-	var getActiveElement = require(127);
-	var isTextInputElement = require(118);
-	var keyOf = require(87);
-	var shallowEqual = require(114);
+	var getActiveElement = require(136);
+	var isTextInputElement = require(101);
+	var keyOf = require(89);
+	var shallowEqual = require(117);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -23416,25 +23422,25 @@
 	var _prodInvariant = require(35);
 
 	var EventConstants = require(92);
-	var EventListener = require(125);
+	var EventListener = require(119);
 	var EventPropagators = require(93);
 	var ReactDOMComponentTree = require(13);
-	var SyntheticAnimationEvent = require(128);
-	var SyntheticClipboardEvent = require(129);
-	var SyntheticEvent = require(116);
-	var SyntheticFocusEvent = require(130);
-	var SyntheticKeyboardEvent = require(131);
-	var SyntheticMouseEvent = require(94);
-	var SyntheticDragEvent = require(132);
-	var SyntheticTouchEvent = require(133);
-	var SyntheticTransitionEvent = require(134);
-	var SyntheticUIEvent = require(135);
-	var SyntheticWheelEvent = require(136);
+	var SyntheticAnimationEvent = require(126);
+	var SyntheticClipboardEvent = require(127);
+	var SyntheticEvent = require(98);
+	var SyntheticFocusEvent = require(128);
+	var SyntheticKeyboardEvent = require(129);
+	var SyntheticMouseEvent = require(102);
+	var SyntheticDragEvent = require(130);
+	var SyntheticTouchEvent = require(131);
+	var SyntheticTransitionEvent = require(132);
+	var SyntheticUIEvent = require(133);
+	var SyntheticWheelEvent = require(134);
 
-	var emptyFunction = require(83);
-	var getEventCharCode = require(137);
-	var invariant = require(81);
-	var keyOf = require(87);
+	var emptyFunction = require(87);
+	var getEventCharCode = require(135);
+	var invariant = require(85);
+	var keyOf = require(89);
 
 	var topLevelTypes = EventConstants.topLevelTypes;
 
@@ -24053,7 +24059,7 @@
 
 	'use strict';
 
-	var ReactOwner = require(138);
+	var ReactOwner = require(137);
 
 	var ReactRef = {};
 
@@ -24143,7 +24149,7 @@
 
 	var PooledClass = require(57);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * A specialized pseudo-event module to help keep track of components waiting to
@@ -24251,7 +24257,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Static poolers. Several custom versions for each potential number of
@@ -24404,7 +24410,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * `Transaction` creates a black box that is able to wrap any method such that
@@ -24640,11 +24646,11 @@
 
 	'use strict';
 
-	var DOMNamespaces = require(102);
+	var DOMNamespaces = require(107);
 	var setInnerHTML = require(69);
 
-	var createMicrosoftUnsafeLocalFunction = require(139);
-	var setTextContent = require(140);
+	var createMicrosoftUnsafeLocalFunction = require(138);
+	var setTextContent = require(139);
 
 	var ELEMENT_NODE_TYPE = 1;
 	var DOCUMENT_FRAGMENT_NODE_TYPE = 11;
@@ -24766,12 +24772,12 @@
 	var _assign = require(34);
 
 	var EventConstants = require(92);
-	var EventPluginRegistry = require(72);
-	var ReactEventEmitterMixin = require(141);
-	var ViewportMetrics = require(142);
+	var EventPluginRegistry = require(73);
+	var ReactEventEmitterMixin = require(140);
+	var ViewportMetrics = require(141);
 
-	var getVendorPrefixedEventName = require(143);
-	var isEventSupported = require(113);
+	var getVendorPrefixedEventName = require(142);
+	var isEventSupported = require(100);
 
 	/**
 	 * Summary of `ReactBrowserEventEmitter` event handling:
@@ -25134,7 +25140,7 @@
 
 	'use strict';
 
-	var validateDOMNesting = require(115);
+	var validateDOMNesting = require(118);
 
 	var DOC_NODE_TYPE = 9;
 
@@ -25248,7 +25254,7 @@
 
 	'use strict';
 
-	var adler32 = require(144);
+	var adler32 = require(143);
 
 	var TAG_END = /\/?>/;
 	var COMMENT_START = /^<\!\-\-/;
@@ -25312,8 +25318,8 @@
 	var ReactInstrumentation = require(22);
 	var ReactUpdates = require(17);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	function enqueueUpdate(internalInstance) {
 	  ReactUpdates.enqueueUpdate(internalInstance);
@@ -25541,12 +25547,12 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var ReactCompositeComponent = require(145);
-	var ReactEmptyComponent = require(121);
-	var ReactHostComponent = require(122);
+	var ReactCompositeComponent = require(144);
+	var ReactEmptyComponent = require(124);
+	var ReactHostComponent = require(125);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	// To avoid a cyclic dependency, we create the final class in this module
 	var ReactCompositeComponentWrapper = function ReactCompositeComponentWrapper(element) {
@@ -25662,13 +25668,13 @@
 
 	'use strict';
 
-	var ExecutionEnvironment = require(80);
-	var DOMNamespaces = require(102);
+	var ExecutionEnvironment = require(84);
+	var DOMNamespaces = require(107);
 
 	var WHITESPACE_TEST = /^[ \r\n\t\f]/;
 	var NONVISIBLE_TEST = /<(!--|link|noscript|meta|script|style)[ \r\n\t\f\/>]/;
 
-	var createMicrosoftUnsafeLocalFunction = require(139);
+	var createMicrosoftUnsafeLocalFunction = require(138);
 
 	// SVG temp container for IE lacking innerHTML
 	var reusableSVGContainer;
@@ -25819,7 +25825,7 @@
 
 	var ReactElement = require(30);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	var ReactNodeTypes = {
 	  HOST: 0,
@@ -25847,6 +25853,312 @@
 /***/ function(module, exports, require) {
 
 	/**
+	 * Copyright 2016-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactDebugTool
+	 */
+
+	'use strict';
+
+	var ReactInvalidSetStateWarningHook = require(145);
+	var ReactHostOperationHistoryHook = require(146);
+	var ReactComponentTreeHook = require(74);
+	var ReactChildrenMutationWarningHook = require(147);
+	var ExecutionEnvironment = require(84);
+
+	var performanceNow = require(148);
+	var warning = require(83);
+
+	var hooks = [];
+	var didHookThrowForEvent = {};
+
+	function callHook(event, fn, context, arg1, arg2, arg3, arg4, arg5) {
+	  try {
+	    fn.call(context, arg1, arg2, arg3, arg4, arg5);
+	  } catch (e) {
+	    true ? warning(didHookThrowForEvent[event], 'Exception thrown by hook while handling %s: %s', event, e + '\n' + e.stack) : void 0;
+	    didHookThrowForEvent[event] = true;
+	  }
+	}
+
+	function emitEvent(event, arg1, arg2, arg3, arg4, arg5) {
+	  for (var i = 0; i < hooks.length; i++) {
+	    var hook = hooks[i];
+	    var fn = hook[event];
+	    if (fn) {
+	      callHook(event, fn, hook, arg1, arg2, arg3, arg4, arg5);
+	    }
+	  }
+	}
+
+	var _isProfiling = false;
+	var flushHistory = [];
+	var lifeCycleTimerStack = [];
+	var currentFlushNesting = 0;
+	var currentFlushMeasurements = null;
+	var currentFlushStartTime = null;
+	var currentTimerDebugID = null;
+	var currentTimerStartTime = null;
+	var currentTimerNestedFlushDuration = null;
+	var currentTimerType = null;
+
+	var lifeCycleTimerHasWarned = false;
+
+	function clearHistory() {
+	  ReactComponentTreeHook.purgeUnmountedComponents();
+	  ReactHostOperationHistoryHook.clearHistory();
+	}
+
+	function getTreeSnapshot(registeredIDs) {
+	  return registeredIDs.reduce(function (tree, id) {
+	    var ownerID = ReactComponentTreeHook.getOwnerID(id);
+	    var parentID = ReactComponentTreeHook.getParentID(id);
+	    tree[id] = {
+	      displayName: ReactComponentTreeHook.getDisplayName(id),
+	      text: ReactComponentTreeHook.getText(id),
+	      updateCount: ReactComponentTreeHook.getUpdateCount(id),
+	      childIDs: ReactComponentTreeHook.getChildIDs(id),
+	      // Text nodes don't have owners but this is close enough.
+	      ownerID: ownerID || ReactComponentTreeHook.getOwnerID(parentID),
+	      parentID: parentID
+	    };
+	    return tree;
+	  }, {});
+	}
+
+	function resetMeasurements() {
+	  var previousStartTime = currentFlushStartTime;
+	  var previousMeasurements = currentFlushMeasurements || [];
+	  var previousOperations = ReactHostOperationHistoryHook.getHistory();
+
+	  if (currentFlushNesting === 0) {
+	    currentFlushStartTime = null;
+	    currentFlushMeasurements = null;
+	    clearHistory();
+	    return;
+	  }
+
+	  if (previousMeasurements.length || previousOperations.length) {
+	    var registeredIDs = ReactComponentTreeHook.getRegisteredIDs();
+	    flushHistory.push({
+	      duration: performanceNow() - previousStartTime,
+	      measurements: previousMeasurements || [],
+	      operations: previousOperations || [],
+	      treeSnapshot: getTreeSnapshot(registeredIDs)
+	    });
+	  }
+
+	  clearHistory();
+	  currentFlushStartTime = performanceNow();
+	  currentFlushMeasurements = [];
+	}
+
+	function checkDebugID(debugID) {
+	  var allowRoot = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+	  if (allowRoot && debugID === 0) {
+	    return;
+	  }
+	  if (!debugID) {
+	    true ? warning(false, 'ReactDebugTool: debugID may not be empty.') : void 0;
+	  }
+	}
+
+	function beginLifeCycleTimer(debugID, timerType) {
+	  if (currentFlushNesting === 0) {
+	    return;
+	  }
+	  if (currentTimerType && !lifeCycleTimerHasWarned) {
+	    true ? warning(false, 'There is an internal error in the React performance measurement code. ' + 'Did not expect %s timer to start while %s timer is still in ' + 'progress for %s instance.', timerType, currentTimerType || 'no', debugID === currentTimerDebugID ? 'the same' : 'another') : void 0;
+	    lifeCycleTimerHasWarned = true;
+	  }
+	  currentTimerStartTime = performanceNow();
+	  currentTimerNestedFlushDuration = 0;
+	  currentTimerDebugID = debugID;
+	  currentTimerType = timerType;
+	}
+
+	function endLifeCycleTimer(debugID, timerType) {
+	  if (currentFlushNesting === 0) {
+	    return;
+	  }
+	  if (currentTimerType !== timerType && !lifeCycleTimerHasWarned) {
+	    true ? warning(false, 'There is an internal error in the React performance measurement code. ' + 'We did not expect %s timer to stop while %s timer is still in ' + 'progress for %s instance. Please report this as a bug in React.', timerType, currentTimerType || 'no', debugID === currentTimerDebugID ? 'the same' : 'another') : void 0;
+	    lifeCycleTimerHasWarned = true;
+	  }
+	  if (_isProfiling) {
+	    currentFlushMeasurements.push({
+	      timerType: timerType,
+	      instanceID: debugID,
+	      duration: performanceNow() - currentTimerStartTime - currentTimerNestedFlushDuration
+	    });
+	  }
+	  currentTimerStartTime = null;
+	  currentTimerNestedFlushDuration = null;
+	  currentTimerDebugID = null;
+	  currentTimerType = null;
+	}
+
+	function pauseCurrentLifeCycleTimer() {
+	  var currentTimer = {
+	    startTime: currentTimerStartTime,
+	    nestedFlushStartTime: performanceNow(),
+	    debugID: currentTimerDebugID,
+	    timerType: currentTimerType
+	  };
+	  lifeCycleTimerStack.push(currentTimer);
+	  currentTimerStartTime = null;
+	  currentTimerNestedFlushDuration = null;
+	  currentTimerDebugID = null;
+	  currentTimerType = null;
+	}
+
+	function resumeCurrentLifeCycleTimer() {
+	  var _lifeCycleTimerStack$ = lifeCycleTimerStack.pop();
+
+	  var startTime = _lifeCycleTimerStack$.startTime;
+	  var nestedFlushStartTime = _lifeCycleTimerStack$.nestedFlushStartTime;
+	  var debugID = _lifeCycleTimerStack$.debugID;
+	  var timerType = _lifeCycleTimerStack$.timerType;
+
+	  var nestedFlushDuration = performanceNow() - nestedFlushStartTime;
+	  currentTimerStartTime = startTime;
+	  currentTimerNestedFlushDuration += nestedFlushDuration;
+	  currentTimerDebugID = debugID;
+	  currentTimerType = timerType;
+	}
+
+	var ReactDebugTool = {
+	  addHook: function addHook(hook) {
+	    hooks.push(hook);
+	  },
+	  removeHook: function removeHook(hook) {
+	    for (var i = 0; i < hooks.length; i++) {
+	      if (hooks[i] === hook) {
+	        hooks.splice(i, 1);
+	        i--;
+	      }
+	    }
+	  },
+	  isProfiling: function isProfiling() {
+	    return _isProfiling;
+	  },
+	  beginProfiling: function beginProfiling() {
+	    if (_isProfiling) {
+	      return;
+	    }
+
+	    _isProfiling = true;
+	    flushHistory.length = 0;
+	    resetMeasurements();
+	    ReactDebugTool.addHook(ReactHostOperationHistoryHook);
+	  },
+	  endProfiling: function endProfiling() {
+	    if (!_isProfiling) {
+	      return;
+	    }
+
+	    _isProfiling = false;
+	    resetMeasurements();
+	    ReactDebugTool.removeHook(ReactHostOperationHistoryHook);
+	  },
+	  getFlushHistory: function getFlushHistory() {
+	    return flushHistory;
+	  },
+	  onBeginFlush: function onBeginFlush() {
+	    currentFlushNesting++;
+	    resetMeasurements();
+	    pauseCurrentLifeCycleTimer();
+	    emitEvent('onBeginFlush');
+	  },
+	  onEndFlush: function onEndFlush() {
+	    resetMeasurements();
+	    currentFlushNesting--;
+	    resumeCurrentLifeCycleTimer();
+	    emitEvent('onEndFlush');
+	  },
+	  onBeginLifeCycleTimer: function onBeginLifeCycleTimer(debugID, timerType) {
+	    checkDebugID(debugID);
+	    emitEvent('onBeginLifeCycleTimer', debugID, timerType);
+	    beginLifeCycleTimer(debugID, timerType);
+	  },
+	  onEndLifeCycleTimer: function onEndLifeCycleTimer(debugID, timerType) {
+	    checkDebugID(debugID);
+	    endLifeCycleTimer(debugID, timerType);
+	    emitEvent('onEndLifeCycleTimer', debugID, timerType);
+	  },
+	  onBeginProcessingChildContext: function onBeginProcessingChildContext() {
+	    emitEvent('onBeginProcessingChildContext');
+	  },
+	  onEndProcessingChildContext: function onEndProcessingChildContext() {
+	    emitEvent('onEndProcessingChildContext');
+	  },
+	  onHostOperation: function onHostOperation(debugID, type, payload) {
+	    checkDebugID(debugID);
+	    emitEvent('onHostOperation', debugID, type, payload);
+	  },
+	  onSetState: function onSetState() {
+	    emitEvent('onSetState');
+	  },
+	  onSetChildren: function onSetChildren(debugID, childDebugIDs) {
+	    checkDebugID(debugID);
+	    childDebugIDs.forEach(checkDebugID);
+	    emitEvent('onSetChildren', debugID, childDebugIDs);
+	  },
+	  onBeforeMountComponent: function onBeforeMountComponent(debugID, element, parentDebugID) {
+	    checkDebugID(debugID);
+	    checkDebugID(parentDebugID, true);
+	    emitEvent('onBeforeMountComponent', debugID, element, parentDebugID);
+	  },
+	  onMountComponent: function onMountComponent(debugID) {
+	    checkDebugID(debugID);
+	    emitEvent('onMountComponent', debugID);
+	  },
+	  onBeforeUpdateComponent: function onBeforeUpdateComponent(debugID, element) {
+	    checkDebugID(debugID);
+	    emitEvent('onBeforeUpdateComponent', debugID, element);
+	  },
+	  onUpdateComponent: function onUpdateComponent(debugID) {
+	    checkDebugID(debugID);
+	    emitEvent('onUpdateComponent', debugID);
+	  },
+	  onBeforeUnmountComponent: function onBeforeUnmountComponent(debugID) {
+	    checkDebugID(debugID);
+	    emitEvent('onBeforeUnmountComponent', debugID);
+	  },
+	  onUnmountComponent: function onUnmountComponent(debugID) {
+	    checkDebugID(debugID);
+	    emitEvent('onUnmountComponent', debugID);
+	  },
+	  onTestEvent: function onTestEvent() {
+	    emitEvent('onTestEvent');
+	  }
+	};
+
+	// TODO remove these when RN/www gets updated
+	ReactDebugTool.addDevtool = ReactDebugTool.addHook;
+	ReactDebugTool.removeDevtool = ReactDebugTool.removeHook;
+
+	ReactDebugTool.addHook(ReactInvalidSetStateWarningHook);
+	ReactDebugTool.addHook(ReactComponentTreeHook);
+	ReactDebugTool.addHook(ReactChildrenMutationWarningHook);
+	var url = ExecutionEnvironment.canUseDOM && window.location.href || '';
+	if (/[?&]react_perf\b/.test(url)) {
+	  ReactDebugTool.beginProfiling();
+	}
+
+	module.exports = ReactDebugTool;
+
+/***/ },
+/* 73 */
+/***/ function(module, exports, require) {
+
+	/**
 	 * Copyright 2013-present, Facebook, Inc.
 	 * All rights reserved.
 	 *
@@ -25861,7 +26173,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Injectable ordering of event plugins.
@@ -26095,7 +26407,7 @@
 	module.exports = EventPluginRegistry;
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26117,8 +26429,8 @@
 
 	var ReactCurrentOwner = require(62);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	function isNative(fn) {
 	  // Based on isNative() from Lodash
@@ -26443,7 +26755,7 @@
 	module.exports = ReactComponentTreeHook;
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26466,10 +26778,10 @@
 	var ReactCurrentOwner = require(62);
 	var ReactElement = require(30);
 
-	var getIteratorFn = require(89);
-	var invariant = require(81);
-	var KeyEscapeUtils = require(146);
-	var warning = require(79);
+	var getIteratorFn = require(82);
+	var invariant = require(85);
+	var KeyEscapeUtils = require(149);
+	var warning = require(83);
 
 	var SEPARATOR = '.';
 	var SUBSEPARATOR = ':';
@@ -26617,7 +26929,7 @@
 	module.exports = traverseAllChildren;
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26633,7 +26945,7 @@
 
 	'use strict';
 
-	var warning = require(79);
+	var warning = require(83);
 
 	function warnNoop(publicInstance, callerName) {
 	  if (true) {
@@ -26718,7 +27030,7 @@
 	module.exports = ReactNoopUpdateQueue;
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -26747,313 +27059,63 @@
 	module.exports = canDefineProperty;
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, require) {
 
 	/**
-	 * Copyright 2016-present, Facebook, Inc.
+	 * Copyright 2013-present, Facebook, Inc.
 	 * All rights reserved.
 	 *
 	 * This source code is licensed under the BSD-style license found in the
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule ReactDebugTool
+	 * @providesModule ReactPropTypeLocations
 	 */
 
 	'use strict';
 
-	var ReactInvalidSetStateWarningHook = require(147);
-	var ReactHostOperationHistoryHook = require(148);
-	var ReactComponentTreeHook = require(73);
-	var ReactChildrenMutationWarningHook = require(149);
-	var ExecutionEnvironment = require(80);
+	var keyMirror = require(88);
 
-	var performanceNow = require(150);
-	var warning = require(79);
+	var ReactPropTypeLocations = keyMirror({
+	  prop: null,
+	  context: null,
+	  childContext: null
+	});
 
-	var hooks = [];
-	var didHookThrowForEvent = {};
-
-	function callHook(event, fn, context, arg1, arg2, arg3, arg4, arg5) {
-	  try {
-	    fn.call(context, arg1, arg2, arg3, arg4, arg5);
-	  } catch (e) {
-	    true ? warning(didHookThrowForEvent[event], 'Exception thrown by hook while handling %s: %s', event, e + '\n' + e.stack) : void 0;
-	    didHookThrowForEvent[event] = true;
-	  }
-	}
-
-	function emitEvent(event, arg1, arg2, arg3, arg4, arg5) {
-	  for (var i = 0; i < hooks.length; i++) {
-	    var hook = hooks[i];
-	    var fn = hook[event];
-	    if (fn) {
-	      callHook(event, fn, hook, arg1, arg2, arg3, arg4, arg5);
-	    }
-	  }
-	}
-
-	var _isProfiling = false;
-	var flushHistory = [];
-	var lifeCycleTimerStack = [];
-	var currentFlushNesting = 0;
-	var currentFlushMeasurements = null;
-	var currentFlushStartTime = null;
-	var currentTimerDebugID = null;
-	var currentTimerStartTime = null;
-	var currentTimerNestedFlushDuration = null;
-	var currentTimerType = null;
-
-	var lifeCycleTimerHasWarned = false;
-
-	function clearHistory() {
-	  ReactComponentTreeHook.purgeUnmountedComponents();
-	  ReactHostOperationHistoryHook.clearHistory();
-	}
-
-	function getTreeSnapshot(registeredIDs) {
-	  return registeredIDs.reduce(function (tree, id) {
-	    var ownerID = ReactComponentTreeHook.getOwnerID(id);
-	    var parentID = ReactComponentTreeHook.getParentID(id);
-	    tree[id] = {
-	      displayName: ReactComponentTreeHook.getDisplayName(id),
-	      text: ReactComponentTreeHook.getText(id),
-	      updateCount: ReactComponentTreeHook.getUpdateCount(id),
-	      childIDs: ReactComponentTreeHook.getChildIDs(id),
-	      // Text nodes don't have owners but this is close enough.
-	      ownerID: ownerID || ReactComponentTreeHook.getOwnerID(parentID),
-	      parentID: parentID
-	    };
-	    return tree;
-	  }, {});
-	}
-
-	function resetMeasurements() {
-	  var previousStartTime = currentFlushStartTime;
-	  var previousMeasurements = currentFlushMeasurements || [];
-	  var previousOperations = ReactHostOperationHistoryHook.getHistory();
-
-	  if (currentFlushNesting === 0) {
-	    currentFlushStartTime = null;
-	    currentFlushMeasurements = null;
-	    clearHistory();
-	    return;
-	  }
-
-	  if (previousMeasurements.length || previousOperations.length) {
-	    var registeredIDs = ReactComponentTreeHook.getRegisteredIDs();
-	    flushHistory.push({
-	      duration: performanceNow() - previousStartTime,
-	      measurements: previousMeasurements || [],
-	      operations: previousOperations || [],
-	      treeSnapshot: getTreeSnapshot(registeredIDs)
-	    });
-	  }
-
-	  clearHistory();
-	  currentFlushStartTime = performanceNow();
-	  currentFlushMeasurements = [];
-	}
-
-	function checkDebugID(debugID) {
-	  var allowRoot = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
-
-	  if (allowRoot && debugID === 0) {
-	    return;
-	  }
-	  if (!debugID) {
-	    true ? warning(false, 'ReactDebugTool: debugID may not be empty.') : void 0;
-	  }
-	}
-
-	function beginLifeCycleTimer(debugID, timerType) {
-	  if (currentFlushNesting === 0) {
-	    return;
-	  }
-	  if (currentTimerType && !lifeCycleTimerHasWarned) {
-	    true ? warning(false, 'There is an internal error in the React performance measurement code. ' + 'Did not expect %s timer to start while %s timer is still in ' + 'progress for %s instance.', timerType, currentTimerType || 'no', debugID === currentTimerDebugID ? 'the same' : 'another') : void 0;
-	    lifeCycleTimerHasWarned = true;
-	  }
-	  currentTimerStartTime = performanceNow();
-	  currentTimerNestedFlushDuration = 0;
-	  currentTimerDebugID = debugID;
-	  currentTimerType = timerType;
-	}
-
-	function endLifeCycleTimer(debugID, timerType) {
-	  if (currentFlushNesting === 0) {
-	    return;
-	  }
-	  if (currentTimerType !== timerType && !lifeCycleTimerHasWarned) {
-	    true ? warning(false, 'There is an internal error in the React performance measurement code. ' + 'We did not expect %s timer to stop while %s timer is still in ' + 'progress for %s instance. Please report this as a bug in React.', timerType, currentTimerType || 'no', debugID === currentTimerDebugID ? 'the same' : 'another') : void 0;
-	    lifeCycleTimerHasWarned = true;
-	  }
-	  if (_isProfiling) {
-	    currentFlushMeasurements.push({
-	      timerType: timerType,
-	      instanceID: debugID,
-	      duration: performanceNow() - currentTimerStartTime - currentTimerNestedFlushDuration
-	    });
-	  }
-	  currentTimerStartTime = null;
-	  currentTimerNestedFlushDuration = null;
-	  currentTimerDebugID = null;
-	  currentTimerType = null;
-	}
-
-	function pauseCurrentLifeCycleTimer() {
-	  var currentTimer = {
-	    startTime: currentTimerStartTime,
-	    nestedFlushStartTime: performanceNow(),
-	    debugID: currentTimerDebugID,
-	    timerType: currentTimerType
-	  };
-	  lifeCycleTimerStack.push(currentTimer);
-	  currentTimerStartTime = null;
-	  currentTimerNestedFlushDuration = null;
-	  currentTimerDebugID = null;
-	  currentTimerType = null;
-	}
-
-	function resumeCurrentLifeCycleTimer() {
-	  var _lifeCycleTimerStack$ = lifeCycleTimerStack.pop();
-
-	  var startTime = _lifeCycleTimerStack$.startTime;
-	  var nestedFlushStartTime = _lifeCycleTimerStack$.nestedFlushStartTime;
-	  var debugID = _lifeCycleTimerStack$.debugID;
-	  var timerType = _lifeCycleTimerStack$.timerType;
-
-	  var nestedFlushDuration = performanceNow() - nestedFlushStartTime;
-	  currentTimerStartTime = startTime;
-	  currentTimerNestedFlushDuration += nestedFlushDuration;
-	  currentTimerDebugID = debugID;
-	  currentTimerType = timerType;
-	}
-
-	var ReactDebugTool = {
-	  addHook: function addHook(hook) {
-	    hooks.push(hook);
-	  },
-	  removeHook: function removeHook(hook) {
-	    for (var i = 0; i < hooks.length; i++) {
-	      if (hooks[i] === hook) {
-	        hooks.splice(i, 1);
-	        i--;
-	      }
-	    }
-	  },
-	  isProfiling: function isProfiling() {
-	    return _isProfiling;
-	  },
-	  beginProfiling: function beginProfiling() {
-	    if (_isProfiling) {
-	      return;
-	    }
-
-	    _isProfiling = true;
-	    flushHistory.length = 0;
-	    resetMeasurements();
-	    ReactDebugTool.addHook(ReactHostOperationHistoryHook);
-	  },
-	  endProfiling: function endProfiling() {
-	    if (!_isProfiling) {
-	      return;
-	    }
-
-	    _isProfiling = false;
-	    resetMeasurements();
-	    ReactDebugTool.removeHook(ReactHostOperationHistoryHook);
-	  },
-	  getFlushHistory: function getFlushHistory() {
-	    return flushHistory;
-	  },
-	  onBeginFlush: function onBeginFlush() {
-	    currentFlushNesting++;
-	    resetMeasurements();
-	    pauseCurrentLifeCycleTimer();
-	    emitEvent('onBeginFlush');
-	  },
-	  onEndFlush: function onEndFlush() {
-	    resetMeasurements();
-	    currentFlushNesting--;
-	    resumeCurrentLifeCycleTimer();
-	    emitEvent('onEndFlush');
-	  },
-	  onBeginLifeCycleTimer: function onBeginLifeCycleTimer(debugID, timerType) {
-	    checkDebugID(debugID);
-	    emitEvent('onBeginLifeCycleTimer', debugID, timerType);
-	    beginLifeCycleTimer(debugID, timerType);
-	  },
-	  onEndLifeCycleTimer: function onEndLifeCycleTimer(debugID, timerType) {
-	    checkDebugID(debugID);
-	    endLifeCycleTimer(debugID, timerType);
-	    emitEvent('onEndLifeCycleTimer', debugID, timerType);
-	  },
-	  onBeginProcessingChildContext: function onBeginProcessingChildContext() {
-	    emitEvent('onBeginProcessingChildContext');
-	  },
-	  onEndProcessingChildContext: function onEndProcessingChildContext() {
-	    emitEvent('onEndProcessingChildContext');
-	  },
-	  onHostOperation: function onHostOperation(debugID, type, payload) {
-	    checkDebugID(debugID);
-	    emitEvent('onHostOperation', debugID, type, payload);
-	  },
-	  onSetState: function onSetState() {
-	    emitEvent('onSetState');
-	  },
-	  onSetChildren: function onSetChildren(debugID, childDebugIDs) {
-	    checkDebugID(debugID);
-	    childDebugIDs.forEach(checkDebugID);
-	    emitEvent('onSetChildren', debugID, childDebugIDs);
-	  },
-	  onBeforeMountComponent: function onBeforeMountComponent(debugID, element, parentDebugID) {
-	    checkDebugID(debugID);
-	    checkDebugID(parentDebugID, true);
-	    emitEvent('onBeforeMountComponent', debugID, element, parentDebugID);
-	  },
-	  onMountComponent: function onMountComponent(debugID) {
-	    checkDebugID(debugID);
-	    emitEvent('onMountComponent', debugID);
-	  },
-	  onBeforeUpdateComponent: function onBeforeUpdateComponent(debugID, element) {
-	    checkDebugID(debugID);
-	    emitEvent('onBeforeUpdateComponent', debugID, element);
-	  },
-	  onUpdateComponent: function onUpdateComponent(debugID) {
-	    checkDebugID(debugID);
-	    emitEvent('onUpdateComponent', debugID);
-	  },
-	  onBeforeUnmountComponent: function onBeforeUnmountComponent(debugID) {
-	    checkDebugID(debugID);
-	    emitEvent('onBeforeUnmountComponent', debugID);
-	  },
-	  onUnmountComponent: function onUnmountComponent(debugID) {
-	    checkDebugID(debugID);
-	    emitEvent('onUnmountComponent', debugID);
-	  },
-	  onTestEvent: function onTestEvent() {
-	    emitEvent('onTestEvent');
-	  }
-	};
-
-	// TODO remove these when RN/www gets updated
-	ReactDebugTool.addDevtool = ReactDebugTool.addHook;
-	ReactDebugTool.removeDevtool = ReactDebugTool.removeHook;
-
-	ReactDebugTool.addHook(ReactInvalidSetStateWarningHook);
-	ReactDebugTool.addHook(ReactComponentTreeHook);
-	ReactDebugTool.addHook(ReactChildrenMutationWarningHook);
-	var url = ExecutionEnvironment.canUseDOM && window.location.href || '';
-	if (/[?&]react_perf\b/.test(url)) {
-	  ReactDebugTool.beginProfiling();
-	}
-
-	module.exports = ReactDebugTool;
+	module.exports = ReactPropTypeLocations;
 
 /***/ },
-/* 78 */
+/* 79 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactPropTypeLocationNames
+	 */
+
+	'use strict';
+
+	var ReactPropTypeLocationNames = {};
+
+	if (true) {
+	  ReactPropTypeLocationNames = {
+	    prop: 'prop',
+	    context: 'context',
+	    childContext: 'child context'
+	  };
+	}
+
+	module.exports = ReactPropTypeLocationNames;
+
+/***/ },
+/* 80 */
 /***/ function(module, exports, require) {
 
 	/* WEBPACK VAR INJECTION */(function(require, __webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -27061,7 +27123,74 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, require, {}))
 
 /***/ },
-/* 79 */
+/* 81 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactPropTypesSecret
+	 */
+
+	'use strict';
+
+	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+	module.exports = ReactPropTypesSecret;
+
+/***/ },
+/* 82 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule getIteratorFn
+	 * 
+	 */
+
+	'use strict';
+
+	/* global Symbol */
+
+	var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+	var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+	/**
+	 * Returns the iterator method function contained on the iterable object.
+	 *
+	 * Be sure to invoke the function with the iterable as context:
+	 *
+	 *     var iteratorFn = getIteratorFn(myIterable);
+	 *     if (iteratorFn) {
+	 *       var iterator = iteratorFn.call(myIterable);
+	 *       ...
+	 *     }
+	 *
+	 * @param {?object} maybeIterable
+	 * @return {?function}
+	 */
+	function getIteratorFn(maybeIterable) {
+	  var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+	  if (typeof iteratorFn === 'function') {
+	    return iteratorFn;
+	  }
+	}
+
+	module.exports = getIteratorFn;
+
+/***/ },
+/* 83 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27074,7 +27203,7 @@
 
 	'use strict';
 
-	var emptyFunction = require(83);
+	var emptyFunction = require(87);
 
 	/**
 	 * Similar to invariant but only logs a warning if the condition is not met.
@@ -27128,7 +27257,7 @@
 	module.exports = warning;
 
 /***/ },
-/* 80 */
+/* 84 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27166,7 +27295,7 @@
 	module.exports = ExecutionEnvironment;
 
 /***/ },
-/* 81 */
+/* 85 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27224,7 +27353,7 @@
 	module.exports = invariant;
 
 /***/ },
-/* 82 */
+/* 86 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27246,7 +27375,7 @@
 	module.exports = emptyObject;
 
 /***/ },
-/* 83 */
+/* 87 */
 /***/ function(module, exports, require) {
 
 	"use strict";
@@ -27287,63 +27416,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 84 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactPropTypeLocations
-	 */
-
-	'use strict';
-
-	var keyMirror = require(86);
-
-	var ReactPropTypeLocations = keyMirror({
-	  prop: null,
-	  context: null,
-	  childContext: null
-	});
-
-	module.exports = ReactPropTypeLocations;
-
-/***/ },
-/* 85 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactPropTypeLocationNames
-	 */
-
-	'use strict';
-
-	var ReactPropTypeLocationNames = {};
-
-	if (true) {
-	  ReactPropTypeLocationNames = {
-	    prop: 'prop',
-	    context: 'context',
-	    childContext: 'child context'
-	  };
-	}
-
-	module.exports = ReactPropTypeLocationNames;
-
-/***/ },
-/* 86 */
+/* 88 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -27357,7 +27430,7 @@
 
 	'use strict';
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Constructs an enumeration with keys equal to their value.
@@ -27393,7 +27466,7 @@
 	module.exports = keyMirror;
 
 /***/ },
-/* 87 */
+/* 89 */
 /***/ function(module, exports, require) {
 
 	"use strict";
@@ -27431,7 +27504,24 @@
 	module.exports = keyOf;
 
 /***/ },
-/* 88 */
+/* 90 */
+/***/ function(module, exports, require) {
+
+	"use strict";
+
+	module.exports = function (module) {
+		if (!module.webpackPolyfill) {
+			module.deprecate = function () {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	};
+
+/***/ },
+/* 91 */
 /***/ function(module, exports, require) {
 
 	/* WEBPACK VAR INJECTION */(function(require, process) {/**
@@ -27451,11 +27541,11 @@
 
 	var _prodInvariant = require(35);
 
-	var ReactPropTypeLocationNames = require(85);
-	var ReactPropTypesSecret = require(90);
+	var ReactPropTypeLocationNames = require(79);
+	var ReactPropTypesSecret = require(81);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	var ReactComponentTreeHook;
 
@@ -27465,7 +27555,7 @@
 	  // https://github.com/facebook/react/issues/7240
 	  // Remove the inline requires when we don't need them anymore:
 	  // https://github.com/facebook/react/pull/7178
-	  ReactComponentTreeHook = require(73);
+	  ReactComponentTreeHook = require(74);
 	}
 
 	var loggedTypeFailures = {};
@@ -27507,7 +27597,7 @@
 
 	        if (true) {
 	          if (!ReactComponentTreeHook) {
-	            ReactComponentTreeHook = require(73);
+	            ReactComponentTreeHook = require(74);
 	          }
 	          if (debugID !== null) {
 	            componentStackInfo = ReactComponentTreeHook.getStackAddendumByID(debugID);
@@ -27526,90 +27616,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, require, require(152)))
 
 /***/ },
-/* 89 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule getIteratorFn
-	 * 
-	 */
-
-	'use strict';
-
-	/* global Symbol */
-
-	var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-	var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-	/**
-	 * Returns the iterator method function contained on the iterable object.
-	 *
-	 * Be sure to invoke the function with the iterable as context:
-	 *
-	 *     var iteratorFn = getIteratorFn(myIterable);
-	 *     if (iteratorFn) {
-	 *       var iterator = iteratorFn.call(myIterable);
-	 *       ...
-	 *     }
-	 *
-	 * @param {?object} maybeIterable
-	 * @return {?function}
-	 */
-	function getIteratorFn(maybeIterable) {
-	  var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-	  if (typeof iteratorFn === 'function') {
-	    return iteratorFn;
-	  }
-	}
-
-	module.exports = getIteratorFn;
-
-/***/ },
-/* 90 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactPropTypesSecret
-	 */
-
-	'use strict';
-
-	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-	module.exports = ReactPropTypesSecret;
-
-/***/ },
-/* 91 */
-/***/ function(module, exports, require) {
-
-	"use strict";
-
-	module.exports = function (module) {
-		if (!module.webpackPolyfill) {
-			module.deprecate = function () {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	};
-
-/***/ },
 /* 92 */
 /***/ function(module, exports, require) {
 
@@ -27626,7 +27632,7 @@
 
 	'use strict';
 
-	var keyMirror = require(86);
+	var keyMirror = require(88);
 
 	var PropagationPhases = keyMirror({ bubbled: null, captured: null });
 
@@ -27729,12 +27735,12 @@
 	'use strict';
 
 	var EventConstants = require(92);
-	var EventPluginHub = require(104);
-	var EventPluginUtils = require(119);
+	var EventPluginHub = require(97);
+	var EventPluginUtils = require(122);
 
-	var accumulateInto = require(155);
-	var forEachAccumulated = require(156);
-	var warning = require(79);
+	var accumulateInto = require(153);
+	var forEachAccumulated = require(154);
+	var warning = require(83);
 
 	var PropagationPhases = EventConstants.PropagationPhases;
 	var getListener = EventPluginHub.getListener;
@@ -27865,83 +27871,6 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule SyntheticMouseEvent
-	 */
-
-	'use strict';
-
-	var SyntheticUIEvent = require(135);
-	var ViewportMetrics = require(142);
-
-	var getEventModifierState = require(153);
-
-	/**
-	 * @interface MouseEvent
-	 * @see http://www.w3.org/TR/DOM-Level-3-Events/
-	 */
-	var MouseEventInterface = {
-	  screenX: null,
-	  screenY: null,
-	  clientX: null,
-	  clientY: null,
-	  ctrlKey: null,
-	  shiftKey: null,
-	  altKey: null,
-	  metaKey: null,
-	  getModifierState: getEventModifierState,
-	  button: function button(event) {
-	    // Webkit, Firefox, IE9+
-	    // which:  1 2 3
-	    // button: 0 1 2 (standard)
-	    var button = event.button;
-	    if ('which' in event) {
-	      return button;
-	    }
-	    // IE<9
-	    // which:  undefined
-	    // button: 0 0 0
-	    // button: 1 4 2 (onmouseup)
-	    return button === 2 ? 2 : button === 4 ? 1 : 0;
-	  },
-	  buttons: null,
-	  relatedTarget: function relatedTarget(event) {
-	    return event.relatedTarget || (event.fromElement === event.srcElement ? event.toElement : event.fromElement);
-	  },
-	  // "Proprietary" Interface.
-	  pageX: function pageX(event) {
-	    return 'pageX' in event ? event.pageX : event.clientX + ViewportMetrics.currentScrollLeft;
-	  },
-	  pageY: function pageY(event) {
-	    return 'pageY' in event ? event.pageY : event.clientY + ViewportMetrics.currentScrollTop;
-	  }
-	};
-
-	/**
-	 * @param {object} dispatchConfig Configuration used to dispatch this event.
-	 * @param {string} dispatchMarker Marker identifying the event target.
-	 * @param {object} nativeEvent Native browser event.
-	 * @extends {SyntheticUIEvent}
-	 */
-	function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEventTarget) {
-	  return SyntheticUIEvent.call(this, dispatchConfig, dispatchMarker, nativeEvent, nativeEventTarget);
-	}
-
-	SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
-
-	module.exports = SyntheticMouseEvent;
-
-/***/ },
-/* 95 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
 	 * @providesModule FallbackCompositionState
 	 */
 
@@ -27951,7 +27880,7 @@
 
 	var PooledClass = require(57);
 
-	var getTextContentAccessor = require(154);
+	var getTextContentAccessor = require(155);
 
 	/**
 	 * This helper class stores information about text content of a target node,
@@ -28031,7 +27960,7 @@
 	module.exports = FallbackCompositionState;
 
 /***/ },
-/* 96 */
+/* 95 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28047,7 +27976,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
 	/**
 	 * @interface Event
@@ -28072,7 +28001,7 @@
 	module.exports = SyntheticCompositionEvent;
 
 /***/ },
-/* 97 */
+/* 96 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28088,7 +28017,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
 	/**
 	 * @interface Event
@@ -28114,735 +28043,7 @@
 	module.exports = SyntheticInputEvent;
 
 /***/ },
-/* 98 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule DOMChildrenOperations
-	 */
-
-	'use strict';
-
-	var DOMLazyTree = require(60);
-	var Danger = require(158);
-	var ReactMultiChildUpdateTypes = require(159);
-	var ReactDOMComponentTree = require(13);
-	var ReactInstrumentation = require(22);
-
-	var createMicrosoftUnsafeLocalFunction = require(139);
-	var setInnerHTML = require(69);
-	var setTextContent = require(140);
-
-	function getNodeAfter(parentNode, node) {
-	  // Special case for text components, which return [open, close] comments
-	  // from getHostNode.
-	  if (Array.isArray(node)) {
-	    node = node[1];
-	  }
-	  return node ? node.nextSibling : parentNode.firstChild;
-	}
-
-	/**
-	 * Inserts `childNode` as a child of `parentNode` at the `index`.
-	 *
-	 * @param {DOMElement} parentNode Parent node in which to insert.
-	 * @param {DOMElement} childNode Child node to insert.
-	 * @param {number} index Index at which to insert the child.
-	 * @internal
-	 */
-	var insertChildAt = createMicrosoftUnsafeLocalFunction(function (parentNode, childNode, referenceNode) {
-	  // We rely exclusively on `insertBefore(node, null)` instead of also using
-	  // `appendChild(node)`. (Using `undefined` is not allowed by all browsers so
-	  // we are careful to use `null`.)
-	  parentNode.insertBefore(childNode, referenceNode);
-	});
-
-	function insertLazyTreeChildAt(parentNode, childTree, referenceNode) {
-	  DOMLazyTree.insertTreeBefore(parentNode, childTree, referenceNode);
-	}
-
-	function moveChild(parentNode, childNode, referenceNode) {
-	  if (Array.isArray(childNode)) {
-	    moveDelimitedText(parentNode, childNode[0], childNode[1], referenceNode);
-	  } else {
-	    insertChildAt(parentNode, childNode, referenceNode);
-	  }
-	}
-
-	function removeChild(parentNode, childNode) {
-	  if (Array.isArray(childNode)) {
-	    var closingComment = childNode[1];
-	    childNode = childNode[0];
-	    removeDelimitedText(parentNode, childNode, closingComment);
-	    parentNode.removeChild(closingComment);
-	  }
-	  parentNode.removeChild(childNode);
-	}
-
-	function moveDelimitedText(parentNode, openingComment, closingComment, referenceNode) {
-	  var node = openingComment;
-	  while (true) {
-	    var nextNode = node.nextSibling;
-	    insertChildAt(parentNode, node, referenceNode);
-	    if (node === closingComment) {
-	      break;
-	    }
-	    node = nextNode;
-	  }
-	}
-
-	function removeDelimitedText(parentNode, startNode, closingComment) {
-	  while (true) {
-	    var node = startNode.nextSibling;
-	    if (node === closingComment) {
-	      // The closing comment is removed by ReactMultiChild.
-	      break;
-	    } else {
-	      parentNode.removeChild(node);
-	    }
-	  }
-	}
-
-	function replaceDelimitedText(openingComment, closingComment, stringText) {
-	  var parentNode = openingComment.parentNode;
-	  var nodeAfterComment = openingComment.nextSibling;
-	  if (nodeAfterComment === closingComment) {
-	    // There are no text nodes between the opening and closing comments; insert
-	    // a new one if stringText isn't empty.
-	    if (stringText) {
-	      insertChildAt(parentNode, document.createTextNode(stringText), nodeAfterComment);
-	    }
-	  } else {
-	    if (stringText) {
-	      // Set the text content of the first node after the opening comment, and
-	      // remove all following nodes up until the closing comment.
-	      setTextContent(nodeAfterComment, stringText);
-	      removeDelimitedText(parentNode, nodeAfterComment, closingComment);
-	    } else {
-	      removeDelimitedText(parentNode, openingComment, closingComment);
-	    }
-	  }
-
-	  if (true) {
-	    ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(openingComment)._debugID, 'replace text', stringText);
-	  }
-	}
-
-	var dangerouslyReplaceNodeWithMarkup = Danger.dangerouslyReplaceNodeWithMarkup;
-	if (true) {
-	  dangerouslyReplaceNodeWithMarkup = function dangerouslyReplaceNodeWithMarkup(oldChild, markup, prevInstance) {
-	    Danger.dangerouslyReplaceNodeWithMarkup(oldChild, markup);
-	    if (prevInstance._debugID !== 0) {
-	      ReactInstrumentation.debugTool.onHostOperation(prevInstance._debugID, 'replace with', markup.toString());
-	    } else {
-	      var nextInstance = ReactDOMComponentTree.getInstanceFromNode(markup.node);
-	      if (nextInstance._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onHostOperation(nextInstance._debugID, 'mount', markup.toString());
-	      }
-	    }
-	  };
-	}
-
-	/**
-	 * Operations for updating with DOM children.
-	 */
-	var DOMChildrenOperations = {
-
-	  dangerouslyReplaceNodeWithMarkup: dangerouslyReplaceNodeWithMarkup,
-
-	  replaceDelimitedText: replaceDelimitedText,
-
-	  /**
-	   * Updates a component's children by processing a series of updates. The
-	   * update configurations are each expected to have a `parentNode` property.
-	   *
-	   * @param {array<object>} updates List of update configurations.
-	   * @internal
-	   */
-	  processUpdates: function processUpdates(parentNode, updates) {
-	    if (true) {
-	      var parentNodeDebugID = ReactDOMComponentTree.getInstanceFromNode(parentNode)._debugID;
-	    }
-
-	    for (var k = 0; k < updates.length; k++) {
-	      var update = updates[k];
-	      switch (update.type) {
-	        case ReactMultiChildUpdateTypes.INSERT_MARKUP:
-	          insertLazyTreeChildAt(parentNode, update.content, getNodeAfter(parentNode, update.afterNode));
-	          if (true) {
-	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'insert child', { toIndex: update.toIndex, content: update.content.toString() });
-	          }
-	          break;
-	        case ReactMultiChildUpdateTypes.MOVE_EXISTING:
-	          moveChild(parentNode, update.fromNode, getNodeAfter(parentNode, update.afterNode));
-	          if (true) {
-	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'move child', { fromIndex: update.fromIndex, toIndex: update.toIndex });
-	          }
-	          break;
-	        case ReactMultiChildUpdateTypes.SET_MARKUP:
-	          setInnerHTML(parentNode, update.content);
-	          if (true) {
-	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'replace children', update.content.toString());
-	          }
-	          break;
-	        case ReactMultiChildUpdateTypes.TEXT_CONTENT:
-	          setTextContent(parentNode, update.content);
-	          if (true) {
-	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'replace text', update.content.toString());
-	          }
-	          break;
-	        case ReactMultiChildUpdateTypes.REMOVE_NODE:
-	          removeChild(parentNode, update.fromNode);
-	          if (true) {
-	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'remove child', { fromIndex: update.fromIndex });
-	          }
-	          break;
-	      }
-	    }
-	  }
-
-	};
-
-	module.exports = DOMChildrenOperations;
-
-/***/ },
-/* 99 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactDOMIDOperations
-	 */
-
-	'use strict';
-
-	var DOMChildrenOperations = require(98);
-	var ReactDOMComponentTree = require(13);
-
-	/**
-	 * Operations used to process updates to DOM nodes.
-	 */
-	var ReactDOMIDOperations = {
-
-	  /**
-	   * Updates a component's children by processing a series of updates.
-	   *
-	   * @param {array<object>} updates List of update configurations.
-	   * @internal
-	   */
-	  dangerouslyProcessChildrenUpdates: function dangerouslyProcessChildrenUpdates(parentInst, updates) {
-	    var node = ReactDOMComponentTree.getNodeFromInstance(parentInst);
-	    DOMChildrenOperations.processUpdates(node, updates);
-	  }
-	};
-
-	module.exports = ReactDOMIDOperations;
-
-/***/ },
-/* 100 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule AutoFocusUtils
-	 */
-
-	'use strict';
-
-	var ReactDOMComponentTree = require(13);
-
-	var focusNode = require(157);
-
-	var AutoFocusUtils = {
-	  focusDOMComponent: function focusDOMComponent() {
-	    focusNode(ReactDOMComponentTree.getNodeFromInstance(this));
-	  }
-	};
-
-	module.exports = AutoFocusUtils;
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule CSSPropertyOperations
-	 */
-
-	'use strict';
-
-	var CSSProperty = require(162);
-	var ExecutionEnvironment = require(80);
-	var ReactInstrumentation = require(22);
-
-	var camelizeStyleName = require(163);
-	var dangerousStyleValue = require(164);
-	var hyphenateStyleName = require(165);
-	var memoizeStringOnly = require(166);
-	var warning = require(79);
-
-	var processStyleName = memoizeStringOnly(function (styleName) {
-	  return hyphenateStyleName(styleName);
-	});
-
-	var hasShorthandPropertyBug = false;
-	var styleFloatAccessor = 'cssFloat';
-	if (ExecutionEnvironment.canUseDOM) {
-	  var tempStyle = document.createElement('div').style;
-	  try {
-	    // IE8 throws "Invalid argument." if resetting shorthand style properties.
-	    tempStyle.font = '';
-	  } catch (e) {
-	    hasShorthandPropertyBug = true;
-	  }
-	  // IE8 only supports accessing cssFloat (standard) as styleFloat
-	  if (document.documentElement.style.cssFloat === undefined) {
-	    styleFloatAccessor = 'styleFloat';
-	  }
-	}
-
-	if (true) {
-	  // 'msTransform' is correct, but the other prefixes should be capitalized
-	  var badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/;
-
-	  // style values shouldn't contain a semicolon
-	  var badStyleValueWithSemicolonPattern = /;\s*$/;
-
-	  var warnedStyleNames = {};
-	  var warnedStyleValues = {};
-	  var warnedForNaNValue = false;
-
-	  var warnHyphenatedStyleName = function warnHyphenatedStyleName(name, owner) {
-	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
-	      return;
-	    }
-
-	    warnedStyleNames[name] = true;
-	    true ? warning(false, 'Unsupported style property %s. Did you mean %s?%s', name, camelizeStyleName(name), checkRenderMessage(owner)) : void 0;
-	  };
-
-	  var warnBadVendoredStyleName = function warnBadVendoredStyleName(name, owner) {
-	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
-	      return;
-	    }
-
-	    warnedStyleNames[name] = true;
-	    true ? warning(false, 'Unsupported vendor-prefixed style property %s. Did you mean %s?%s', name, name.charAt(0).toUpperCase() + name.slice(1), checkRenderMessage(owner)) : void 0;
-	  };
-
-	  var warnStyleValueWithSemicolon = function warnStyleValueWithSemicolon(name, value, owner) {
-	    if (warnedStyleValues.hasOwnProperty(value) && warnedStyleValues[value]) {
-	      return;
-	    }
-
-	    warnedStyleValues[value] = true;
-	    true ? warning(false, 'Style property values shouldn\'t contain a semicolon.%s ' + 'Try "%s: %s" instead.', checkRenderMessage(owner), name, value.replace(badStyleValueWithSemicolonPattern, '')) : void 0;
-	  };
-
-	  var warnStyleValueIsNaN = function warnStyleValueIsNaN(name, value, owner) {
-	    if (warnedForNaNValue) {
-	      return;
-	    }
-
-	    warnedForNaNValue = true;
-	    true ? warning(false, '`NaN` is an invalid value for the `%s` css style property.%s', name, checkRenderMessage(owner)) : void 0;
-	  };
-
-	  var checkRenderMessage = function checkRenderMessage(owner) {
-	    if (owner) {
-	      var name = owner.getName();
-	      if (name) {
-	        return ' Check the render method of `' + name + '`.';
-	      }
-	    }
-	    return '';
-	  };
-
-	  /**
-	   * @param {string} name
-	   * @param {*} value
-	   * @param {ReactDOMComponent} component
-	   */
-	  var warnValidStyle = function warnValidStyle(name, value, component) {
-	    var owner;
-	    if (component) {
-	      owner = component._currentElement._owner;
-	    }
-	    if (name.indexOf('-') > -1) {
-	      warnHyphenatedStyleName(name, owner);
-	    } else if (badVendoredStyleNamePattern.test(name)) {
-	      warnBadVendoredStyleName(name, owner);
-	    } else if (badStyleValueWithSemicolonPattern.test(value)) {
-	      warnStyleValueWithSemicolon(name, value, owner);
-	    }
-
-	    if (typeof value === 'number' && isNaN(value)) {
-	      warnStyleValueIsNaN(name, value, owner);
-	    }
-	  };
-	}
-
-	/**
-	 * Operations for dealing with CSS properties.
-	 */
-	var CSSPropertyOperations = {
-
-	  /**
-	   * Serializes a mapping of style properties for use as inline styles:
-	   *
-	   *   > createMarkupForStyles({width: '200px', height: 0})
-	   *   "width:200px;height:0;"
-	   *
-	   * Undefined values are ignored so that declarative programming is easier.
-	   * The result should be HTML-escaped before insertion into the DOM.
-	   *
-	   * @param {object} styles
-	   * @param {ReactDOMComponent} component
-	   * @return {?string}
-	   */
-	  createMarkupForStyles: function createMarkupForStyles(styles, component) {
-	    var serialized = '';
-	    for (var styleName in styles) {
-	      if (!styles.hasOwnProperty(styleName)) {
-	        continue;
-	      }
-	      var styleValue = styles[styleName];
-	      if (true) {
-	        warnValidStyle(styleName, styleValue, component);
-	      }
-	      if (styleValue != null) {
-	        serialized += processStyleName(styleName) + ':';
-	        serialized += dangerousStyleValue(styleName, styleValue, component) + ';';
-	      }
-	    }
-	    return serialized || null;
-	  },
-
-	  /**
-	   * Sets the value for multiple styles on a node.  If a value is specified as
-	   * '' (empty string), the corresponding style property will be unset.
-	   *
-	   * @param {DOMElement} node
-	   * @param {object} styles
-	   * @param {ReactDOMComponent} component
-	   */
-	  setValueForStyles: function setValueForStyles(node, styles, component) {
-	    if (true) {
-	      ReactInstrumentation.debugTool.onHostOperation(component._debugID, 'update styles', styles);
-	    }
-
-	    var style = node.style;
-	    for (var styleName in styles) {
-	      if (!styles.hasOwnProperty(styleName)) {
-	        continue;
-	      }
-	      if (true) {
-	        warnValidStyle(styleName, styles[styleName], component);
-	      }
-	      var styleValue = dangerousStyleValue(styleName, styles[styleName], component);
-	      if (styleName === 'float' || styleName === 'cssFloat') {
-	        styleName = styleFloatAccessor;
-	      }
-	      if (styleValue) {
-	        style[styleName] = styleValue;
-	      } else {
-	        var expansion = hasShorthandPropertyBug && CSSProperty.shorthandPropertyExpansions[styleName];
-	        if (expansion) {
-	          // Shorthand property that IE8 won't like unsetting, so unset each
-	          // component to placate it
-	          for (var individualStyleName in expansion) {
-	            style[individualStyleName] = '';
-	          }
-	        } else {
-	          style[styleName] = '';
-	        }
-	      }
-	    }
-	  }
-
-	};
-
-	module.exports = CSSPropertyOperations;
-
-/***/ },
-/* 102 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule DOMNamespaces
-	 */
-
-	'use strict';
-
-	var DOMNamespaces = {
-	  html: 'http://www.w3.org/1999/xhtml',
-	  mathml: 'http://www.w3.org/1998/Math/MathML',
-	  svg: 'http://www.w3.org/2000/svg'
-	};
-
-	module.exports = DOMNamespaces;
-
-/***/ },
-/* 103 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule DOMPropertyOperations
-	 */
-
-	'use strict';
-
-	var DOMProperty = require(36);
-	var ReactDOMComponentTree = require(13);
-	var ReactInstrumentation = require(22);
-
-	var quoteAttributeValueForBrowser = require(161);
-	var warning = require(79);
-
-	var VALID_ATTRIBUTE_NAME_REGEX = new RegExp('^[' + DOMProperty.ATTRIBUTE_NAME_START_CHAR + '][' + DOMProperty.ATTRIBUTE_NAME_CHAR + ']*$');
-	var illegalAttributeNameCache = {};
-	var validatedAttributeNameCache = {};
-
-	function isAttributeNameSafe(attributeName) {
-	  if (validatedAttributeNameCache.hasOwnProperty(attributeName)) {
-	    return true;
-	  }
-	  if (illegalAttributeNameCache.hasOwnProperty(attributeName)) {
-	    return false;
-	  }
-	  if (VALID_ATTRIBUTE_NAME_REGEX.test(attributeName)) {
-	    validatedAttributeNameCache[attributeName] = true;
-	    return true;
-	  }
-	  illegalAttributeNameCache[attributeName] = true;
-	  true ? warning(false, 'Invalid attribute name: `%s`', attributeName) : void 0;
-	  return false;
-	}
-
-	function shouldIgnoreValue(propertyInfo, value) {
-	  return value == null || propertyInfo.hasBooleanValue && !value || propertyInfo.hasNumericValue && isNaN(value) || propertyInfo.hasPositiveNumericValue && value < 1 || propertyInfo.hasOverloadedBooleanValue && value === false;
-	}
-
-	/**
-	 * Operations for dealing with DOM properties.
-	 */
-	var DOMPropertyOperations = {
-
-	  /**
-	   * Creates markup for the ID property.
-	   *
-	   * @param {string} id Unescaped ID.
-	   * @return {string} Markup string.
-	   */
-	  createMarkupForID: function createMarkupForID(id) {
-	    return DOMProperty.ID_ATTRIBUTE_NAME + '=' + quoteAttributeValueForBrowser(id);
-	  },
-
-	  setAttributeForID: function setAttributeForID(node, id) {
-	    node.setAttribute(DOMProperty.ID_ATTRIBUTE_NAME, id);
-	  },
-
-	  createMarkupForRoot: function createMarkupForRoot() {
-	    return DOMProperty.ROOT_ATTRIBUTE_NAME + '=""';
-	  },
-
-	  setAttributeForRoot: function setAttributeForRoot(node) {
-	    node.setAttribute(DOMProperty.ROOT_ATTRIBUTE_NAME, '');
-	  },
-
-	  /**
-	   * Creates markup for a property.
-	   *
-	   * @param {string} name
-	   * @param {*} value
-	   * @return {?string} Markup string, or null if the property was invalid.
-	   */
-	  createMarkupForProperty: function createMarkupForProperty(name, value) {
-	    var propertyInfo = DOMProperty.properties.hasOwnProperty(name) ? DOMProperty.properties[name] : null;
-	    if (propertyInfo) {
-	      if (shouldIgnoreValue(propertyInfo, value)) {
-	        return '';
-	      }
-	      var attributeName = propertyInfo.attributeName;
-	      if (propertyInfo.hasBooleanValue || propertyInfo.hasOverloadedBooleanValue && value === true) {
-	        return attributeName + '=""';
-	      }
-	      return attributeName + '=' + quoteAttributeValueForBrowser(value);
-	    } else if (DOMProperty.isCustomAttribute(name)) {
-	      if (value == null) {
-	        return '';
-	      }
-	      return name + '=' + quoteAttributeValueForBrowser(value);
-	    }
-	    return null;
-	  },
-
-	  /**
-	   * Creates markup for a custom property.
-	   *
-	   * @param {string} name
-	   * @param {*} value
-	   * @return {string} Markup string, or empty string if the property was invalid.
-	   */
-	  createMarkupForCustomAttribute: function createMarkupForCustomAttribute(name, value) {
-	    if (!isAttributeNameSafe(name) || value == null) {
-	      return '';
-	    }
-	    return name + '=' + quoteAttributeValueForBrowser(value);
-	  },
-
-	  /**
-	   * Sets the value for a property on a node.
-	   *
-	   * @param {DOMElement} node
-	   * @param {string} name
-	   * @param {*} value
-	   */
-	  setValueForProperty: function setValueForProperty(node, name, value) {
-	    var propertyInfo = DOMProperty.properties.hasOwnProperty(name) ? DOMProperty.properties[name] : null;
-	    if (propertyInfo) {
-	      var mutationMethod = propertyInfo.mutationMethod;
-	      if (mutationMethod) {
-	        mutationMethod(node, value);
-	      } else if (shouldIgnoreValue(propertyInfo, value)) {
-	        this.deleteValueForProperty(node, name);
-	        return;
-	      } else if (propertyInfo.mustUseProperty) {
-	        // Contrary to `setAttribute`, object properties are properly
-	        // `toString`ed by IE8/9.
-	        node[propertyInfo.propertyName] = value;
-	      } else {
-	        var attributeName = propertyInfo.attributeName;
-	        var namespace = propertyInfo.attributeNamespace;
-	        // `setAttribute` with objects becomes only `[object]` in IE8/9,
-	        // ('' + value) makes it output the correct toString()-value.
-	        if (namespace) {
-	          node.setAttributeNS(namespace, attributeName, '' + value);
-	        } else if (propertyInfo.hasBooleanValue || propertyInfo.hasOverloadedBooleanValue && value === true) {
-	          node.setAttribute(attributeName, '');
-	        } else {
-	          node.setAttribute(attributeName, '' + value);
-	        }
-	      }
-	    } else if (DOMProperty.isCustomAttribute(name)) {
-	      DOMPropertyOperations.setValueForAttribute(node, name, value);
-	      return;
-	    }
-
-	    if (true) {
-	      var payload = {};
-	      payload[name] = value;
-	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'update attribute', payload);
-	    }
-	  },
-
-	  setValueForAttribute: function setValueForAttribute(node, name, value) {
-	    if (!isAttributeNameSafe(name)) {
-	      return;
-	    }
-	    if (value == null) {
-	      node.removeAttribute(name);
-	    } else {
-	      node.setAttribute(name, '' + value);
-	    }
-
-	    if (true) {
-	      var payload = {};
-	      payload[name] = value;
-	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'update attribute', payload);
-	    }
-	  },
-
-	  /**
-	   * Deletes an attributes from a node.
-	   *
-	   * @param {DOMElement} node
-	   * @param {string} name
-	   */
-	  deleteValueForAttribute: function deleteValueForAttribute(node, name) {
-	    node.removeAttribute(name);
-	    if (true) {
-	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'remove attribute', name);
-	    }
-	  },
-
-	  /**
-	   * Deletes the value for a property on a node.
-	   *
-	   * @param {DOMElement} node
-	   * @param {string} name
-	   */
-	  deleteValueForProperty: function deleteValueForProperty(node, name) {
-	    var propertyInfo = DOMProperty.properties.hasOwnProperty(name) ? DOMProperty.properties[name] : null;
-	    if (propertyInfo) {
-	      var mutationMethod = propertyInfo.mutationMethod;
-	      if (mutationMethod) {
-	        mutationMethod(node, undefined);
-	      } else if (propertyInfo.mustUseProperty) {
-	        var propName = propertyInfo.propertyName;
-	        if (propertyInfo.hasBooleanValue) {
-	          node[propName] = false;
-	        } else {
-	          node[propName] = '';
-	        }
-	      } else {
-	        node.removeAttribute(propertyInfo.attributeName);
-	      }
-	    } else if (DOMProperty.isCustomAttribute(name)) {
-	      node.removeAttribute(name);
-	    }
-
-	    if (true) {
-	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'remove attribute', name);
-	    }
-	  }
-
-	};
-
-	module.exports = DOMPropertyOperations;
-
-/***/ },
-/* 104 */
+/* 97 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -28862,13 +28063,13 @@
 
 	var _prodInvariant = require(35);
 
-	var EventPluginRegistry = require(72);
-	var EventPluginUtils = require(119);
-	var ReactErrorUtils = require(168);
+	var EventPluginRegistry = require(73);
+	var EventPluginUtils = require(122);
+	var ReactErrorUtils = require(156);
 
-	var accumulateInto = require(155);
-	var forEachAccumulated = require(156);
-	var invariant = require(81);
+	var accumulateInto = require(153);
+	var forEachAccumulated = require(154);
+	var invariant = require(85);
 
 	/**
 	 * Internal store for event listeners
@@ -29100,7 +28301,1246 @@
 	module.exports = EventPluginHub;
 
 /***/ },
+/* 98 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule SyntheticEvent
+	 */
+
+	'use strict';
+
+	var _assign = require(34);
+
+	var PooledClass = require(57);
+
+	var emptyFunction = require(87);
+	var warning = require(83);
+
+	var didWarnForAddedNewProperty = false;
+	var isProxySupported = typeof Proxy === 'function';
+
+	var shouldBeReleasedProperties = ['dispatchConfig', '_targetInst', 'nativeEvent', 'isDefaultPrevented', 'isPropagationStopped', '_dispatchListeners', '_dispatchInstances'];
+
+	/**
+	 * @interface Event
+	 * @see http://www.w3.org/TR/DOM-Level-3-Events/
+	 */
+	var EventInterface = {
+	  type: null,
+	  target: null,
+	  // currentTarget is set when dispatching; no use in copying it here
+	  currentTarget: emptyFunction.thatReturnsNull,
+	  eventPhase: null,
+	  bubbles: null,
+	  cancelable: null,
+	  timeStamp: function timeStamp(event) {
+	    return event.timeStamp || Date.now();
+	  },
+	  defaultPrevented: null,
+	  isTrusted: null
+	};
+
+	/**
+	 * Synthetic events are dispatched by event plugins, typically in response to a
+	 * top-level event delegation handler.
+	 *
+	 * These systems should generally use pooling to reduce the frequency of garbage
+	 * collection. The system should check `isPersistent` to determine whether the
+	 * event should be released into the pool after being dispatched. Users that
+	 * need a persisted event should invoke `persist`.
+	 *
+	 * Synthetic events (and subclasses) implement the DOM Level 3 Events API by
+	 * normalizing browser quirks. Subclasses do not necessarily have to implement a
+	 * DOM interface; custom application-specific events can also subclass this.
+	 *
+	 * @param {object} dispatchConfig Configuration used to dispatch this event.
+	 * @param {*} targetInst Marker identifying the event target.
+	 * @param {object} nativeEvent Native browser event.
+	 * @param {DOMEventTarget} nativeEventTarget Target node.
+	 */
+	function SyntheticEvent(dispatchConfig, targetInst, nativeEvent, nativeEventTarget) {
+	  if (true) {
+	    // these have a getter/setter for warnings
+	    delete this.nativeEvent;
+	    delete this.preventDefault;
+	    delete this.stopPropagation;
+	  }
+
+	  this.dispatchConfig = dispatchConfig;
+	  this._targetInst = targetInst;
+	  this.nativeEvent = nativeEvent;
+
+	  var Interface = this.constructor.Interface;
+	  for (var propName in Interface) {
+	    if (!Interface.hasOwnProperty(propName)) {
+	      continue;
+	    }
+	    if (true) {
+	      delete this[propName]; // this has a getter/setter for warnings
+	    }
+	    var normalize = Interface[propName];
+	    if (normalize) {
+	      this[propName] = normalize(nativeEvent);
+	    } else {
+	      if (propName === 'target') {
+	        this.target = nativeEventTarget;
+	      } else {
+	        this[propName] = nativeEvent[propName];
+	      }
+	    }
+	  }
+
+	  var defaultPrevented = nativeEvent.defaultPrevented != null ? nativeEvent.defaultPrevented : nativeEvent.returnValue === false;
+	  if (defaultPrevented) {
+	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
+	  } else {
+	    this.isDefaultPrevented = emptyFunction.thatReturnsFalse;
+	  }
+	  this.isPropagationStopped = emptyFunction.thatReturnsFalse;
+	  return this;
+	}
+
+	_assign(SyntheticEvent.prototype, {
+
+	  preventDefault: function preventDefault() {
+	    this.defaultPrevented = true;
+	    var event = this.nativeEvent;
+	    if (!event) {
+	      return;
+	    }
+
+	    if (event.preventDefault) {
+	      event.preventDefault();
+	    } else if (typeof event.returnValue !== 'unknown') {
+	      // eslint-disable-line valid-typeof
+	      event.returnValue = false;
+	    }
+	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
+	  },
+
+	  stopPropagation: function stopPropagation() {
+	    var event = this.nativeEvent;
+	    if (!event) {
+	      return;
+	    }
+
+	    if (event.stopPropagation) {
+	      event.stopPropagation();
+	    } else if (typeof event.cancelBubble !== 'unknown') {
+	      // eslint-disable-line valid-typeof
+	      // The ChangeEventPlugin registers a "propertychange" event for
+	      // IE. This event does not support bubbling or cancelling, and
+	      // any references to cancelBubble throw "Member not found".  A
+	      // typeof check of "unknown" circumvents this issue (and is also
+	      // IE specific).
+	      event.cancelBubble = true;
+	    }
+
+	    this.isPropagationStopped = emptyFunction.thatReturnsTrue;
+	  },
+
+	  /**
+	   * We release all dispatched `SyntheticEvent`s after each event loop, adding
+	   * them back into the pool. This allows a way to hold onto a reference that
+	   * won't be added back into the pool.
+	   */
+	  persist: function persist() {
+	    this.isPersistent = emptyFunction.thatReturnsTrue;
+	  },
+
+	  /**
+	   * Checks if this event should be released back into the pool.
+	   *
+	   * @return {boolean} True if this should not be released, false otherwise.
+	   */
+	  isPersistent: emptyFunction.thatReturnsFalse,
+
+	  /**
+	   * `PooledClass` looks for `destructor` on each instance it releases.
+	   */
+	  destructor: function destructor() {
+	    var Interface = this.constructor.Interface;
+	    for (var propName in Interface) {
+	      if (true) {
+	        Object.defineProperty(this, propName, getPooledWarningPropertyDefinition(propName, Interface[propName]));
+	      } else {
+	        this[propName] = null;
+	      }
+	    }
+	    for (var i = 0; i < shouldBeReleasedProperties.length; i++) {
+	      this[shouldBeReleasedProperties[i]] = null;
+	    }
+	    if (true) {
+	      Object.defineProperty(this, 'nativeEvent', getPooledWarningPropertyDefinition('nativeEvent', null));
+	      Object.defineProperty(this, 'preventDefault', getPooledWarningPropertyDefinition('preventDefault', emptyFunction));
+	      Object.defineProperty(this, 'stopPropagation', getPooledWarningPropertyDefinition('stopPropagation', emptyFunction));
+	    }
+	  }
+
+	});
+
+	SyntheticEvent.Interface = EventInterface;
+
+	if (true) {
+	  if (isProxySupported) {
+	    /*eslint-disable no-func-assign */
+	    SyntheticEvent = new Proxy(SyntheticEvent, {
+	      construct: function construct(target, args) {
+	        return this.apply(target, Object.create(target.prototype), args);
+	      },
+	      apply: function apply(constructor, that, args) {
+	        return new Proxy(constructor.apply(that, args), {
+	          set: function set(target, prop, value) {
+	            if (prop !== 'isPersistent' && !target.constructor.Interface.hasOwnProperty(prop) && shouldBeReleasedProperties.indexOf(prop) === -1) {
+	              true ? warning(didWarnForAddedNewProperty || target.isPersistent(), 'This synthetic event is reused for performance reasons. If you\'re ' + 'seeing this, you\'re adding a new property in the synthetic event object. ' + 'The property is never released. See ' + 'https://fb.me/react-event-pooling for more information.') : void 0;
+	              didWarnForAddedNewProperty = true;
+	            }
+	            target[prop] = value;
+	            return true;
+	          }
+	        });
+	      }
+	    });
+	    /*eslint-enable no-func-assign */
+	  }
+	}
+	/**
+	 * Helper to reduce boilerplate when creating subclasses.
+	 *
+	 * @param {function} Class
+	 * @param {?object} Interface
+	 */
+	SyntheticEvent.augmentClass = function (Class, Interface) {
+	  var Super = this;
+
+	  var E = function E() {};
+	  E.prototype = Super.prototype;
+	  var prototype = new E();
+
+	  _assign(prototype, Class.prototype);
+	  Class.prototype = prototype;
+	  Class.prototype.constructor = Class;
+
+	  Class.Interface = _assign({}, Super.Interface, Interface);
+	  Class.augmentClass = Super.augmentClass;
+
+	  PooledClass.addPoolingTo(Class, PooledClass.fourArgumentPooler);
+	};
+
+	PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
+
+	module.exports = SyntheticEvent;
+
+	/**
+	  * Helper to nullify syntheticEvent instance properties when destructing
+	  *
+	  * @param {object} SyntheticEvent
+	  * @param {String} propName
+	  * @return {object} defineProperty object
+	  */
+	function getPooledWarningPropertyDefinition(propName, getVal) {
+	  var isFunction = typeof getVal === 'function';
+	  return {
+	    configurable: true,
+	    set: set,
+	    get: get
+	  };
+
+	  function set(val) {
+	    var action = isFunction ? 'setting the method' : 'setting the property';
+	    warn(action, 'This is effectively a no-op');
+	    return val;
+	  }
+
+	  function get() {
+	    var action = isFunction ? 'accessing the method' : 'accessing the property';
+	    var result = isFunction ? 'This is a no-op function' : 'This is set to null';
+	    warn(action, result);
+	    return getVal;
+	  }
+
+	  function warn(action, result) {
+	    var warningCondition = false;
+	    true ? warning(warningCondition, 'This synthetic event is reused for performance reasons. If you\'re seeing this, ' + 'you\'re %s `%s` on a released/nullified synthetic event. %s. ' + 'If you must keep the original synthetic event around, use event.persist(). ' + 'See https://fb.me/react-event-pooling for more information.', action, propName, result) : void 0;
+	  }
+	}
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule getEventTarget
+	 */
+
+	'use strict';
+
+	/**
+	 * Gets the target node from a native browser event by accounting for
+	 * inconsistencies in browser DOM APIs.
+	 *
+	 * @param {object} nativeEvent Native browser event.
+	 * @return {DOMEventTarget} Target node.
+	 */
+
+	function getEventTarget(nativeEvent) {
+	  var target = nativeEvent.target || nativeEvent.srcElement || window;
+
+	  // Normalize SVG <use> element events #4963
+	  if (target.correspondingUseElement) {
+	    target = target.correspondingUseElement;
+	  }
+
+	  // Safari may fire events on text nodes (Node.TEXT_NODE is 3).
+	  // @see http://www.quirksmode.org/js/events_properties.html
+	  return target.nodeType === 3 ? target.parentNode : target;
+	}
+
+	module.exports = getEventTarget;
+
+/***/ },
+/* 100 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule isEventSupported
+	 */
+
+	'use strict';
+
+	var ExecutionEnvironment = require(84);
+
+	var useHasFeature;
+	if (ExecutionEnvironment.canUseDOM) {
+	  useHasFeature = document.implementation && document.implementation.hasFeature &&
+	  // always returns true in newer browsers as per the standard.
+	  // @see http://dom.spec.whatwg.org/#dom-domimplementation-hasfeature
+	  document.implementation.hasFeature('', '') !== true;
+	}
+
+	/**
+	 * Checks if an event is supported in the current execution environment.
+	 *
+	 * NOTE: This will not work correctly for non-generic events such as `change`,
+	 * `reset`, `load`, `error`, and `select`.
+	 *
+	 * Borrows from Modernizr.
+	 *
+	 * @param {string} eventNameSuffix Event name, e.g. "click".
+	 * @param {?boolean} capture Check if the capture phase is supported.
+	 * @return {boolean} True if the event is supported.
+	 * @internal
+	 * @license Modernizr 3.0.0pre (Custom Build) | MIT
+	 */
+	function isEventSupported(eventNameSuffix, capture) {
+	  if (!ExecutionEnvironment.canUseDOM || capture && !('addEventListener' in document)) {
+	    return false;
+	  }
+
+	  var eventName = 'on' + eventNameSuffix;
+	  var isSupported = eventName in document;
+
+	  if (!isSupported) {
+	    var element = document.createElement('div');
+	    element.setAttribute(eventName, 'return;');
+	    isSupported = typeof element[eventName] === 'function';
+	  }
+
+	  if (!isSupported && useHasFeature && eventNameSuffix === 'wheel') {
+	    // This is the only way to test support for the `wheel` event in IE9+.
+	    isSupported = document.implementation.hasFeature('Events.wheel', '3.0');
+	  }
+
+	  return isSupported;
+	}
+
+	module.exports = isEventSupported;
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule isTextInputElement
+	 * 
+	 */
+
+	'use strict';
+
+	/**
+	 * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
+	 */
+
+	var supportedInputTypes = {
+	  'color': true,
+	  'date': true,
+	  'datetime': true,
+	  'datetime-local': true,
+	  'email': true,
+	  'month': true,
+	  'number': true,
+	  'password': true,
+	  'range': true,
+	  'search': true,
+	  'tel': true,
+	  'text': true,
+	  'time': true,
+	  'url': true,
+	  'week': true
+	};
+
+	function isTextInputElement(elem) {
+	  var nodeName = elem && elem.nodeName && elem.nodeName.toLowerCase();
+
+	  if (nodeName === 'input') {
+	    return !!supportedInputTypes[elem.type];
+	  }
+
+	  if (nodeName === 'textarea') {
+	    return true;
+	  }
+
+	  return false;
+	}
+
+	module.exports = isTextInputElement;
+
+/***/ },
+/* 102 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule SyntheticMouseEvent
+	 */
+
+	'use strict';
+
+	var SyntheticUIEvent = require(133);
+	var ViewportMetrics = require(141);
+
+	var getEventModifierState = require(157);
+
+	/**
+	 * @interface MouseEvent
+	 * @see http://www.w3.org/TR/DOM-Level-3-Events/
+	 */
+	var MouseEventInterface = {
+	  screenX: null,
+	  screenY: null,
+	  clientX: null,
+	  clientY: null,
+	  ctrlKey: null,
+	  shiftKey: null,
+	  altKey: null,
+	  metaKey: null,
+	  getModifierState: getEventModifierState,
+	  button: function button(event) {
+	    // Webkit, Firefox, IE9+
+	    // which:  1 2 3
+	    // button: 0 1 2 (standard)
+	    var button = event.button;
+	    if ('which' in event) {
+	      return button;
+	    }
+	    // IE<9
+	    // which:  undefined
+	    // button: 0 0 0
+	    // button: 1 4 2 (onmouseup)
+	    return button === 2 ? 2 : button === 4 ? 1 : 0;
+	  },
+	  buttons: null,
+	  relatedTarget: function relatedTarget(event) {
+	    return event.relatedTarget || (event.fromElement === event.srcElement ? event.toElement : event.fromElement);
+	  },
+	  // "Proprietary" Interface.
+	  pageX: function pageX(event) {
+	    return 'pageX' in event ? event.pageX : event.clientX + ViewportMetrics.currentScrollLeft;
+	  },
+	  pageY: function pageY(event) {
+	    return 'pageY' in event ? event.pageY : event.clientY + ViewportMetrics.currentScrollTop;
+	  }
+	};
+
+	/**
+	 * @param {object} dispatchConfig Configuration used to dispatch this event.
+	 * @param {string} dispatchMarker Marker identifying the event target.
+	 * @param {object} nativeEvent Native browser event.
+	 * @extends {SyntheticUIEvent}
+	 */
+	function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEventTarget) {
+	  return SyntheticUIEvent.call(this, dispatchConfig, dispatchMarker, nativeEvent, nativeEventTarget);
+	}
+
+	SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
+
+	module.exports = SyntheticMouseEvent;
+
+/***/ },
+/* 103 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule DOMChildrenOperations
+	 */
+
+	'use strict';
+
+	var DOMLazyTree = require(60);
+	var Danger = require(160);
+	var ReactMultiChildUpdateTypes = require(161);
+	var ReactDOMComponentTree = require(13);
+	var ReactInstrumentation = require(22);
+
+	var createMicrosoftUnsafeLocalFunction = require(138);
+	var setInnerHTML = require(69);
+	var setTextContent = require(139);
+
+	function getNodeAfter(parentNode, node) {
+	  // Special case for text components, which return [open, close] comments
+	  // from getHostNode.
+	  if (Array.isArray(node)) {
+	    node = node[1];
+	  }
+	  return node ? node.nextSibling : parentNode.firstChild;
+	}
+
+	/**
+	 * Inserts `childNode` as a child of `parentNode` at the `index`.
+	 *
+	 * @param {DOMElement} parentNode Parent node in which to insert.
+	 * @param {DOMElement} childNode Child node to insert.
+	 * @param {number} index Index at which to insert the child.
+	 * @internal
+	 */
+	var insertChildAt = createMicrosoftUnsafeLocalFunction(function (parentNode, childNode, referenceNode) {
+	  // We rely exclusively on `insertBefore(node, null)` instead of also using
+	  // `appendChild(node)`. (Using `undefined` is not allowed by all browsers so
+	  // we are careful to use `null`.)
+	  parentNode.insertBefore(childNode, referenceNode);
+	});
+
+	function insertLazyTreeChildAt(parentNode, childTree, referenceNode) {
+	  DOMLazyTree.insertTreeBefore(parentNode, childTree, referenceNode);
+	}
+
+	function moveChild(parentNode, childNode, referenceNode) {
+	  if (Array.isArray(childNode)) {
+	    moveDelimitedText(parentNode, childNode[0], childNode[1], referenceNode);
+	  } else {
+	    insertChildAt(parentNode, childNode, referenceNode);
+	  }
+	}
+
+	function removeChild(parentNode, childNode) {
+	  if (Array.isArray(childNode)) {
+	    var closingComment = childNode[1];
+	    childNode = childNode[0];
+	    removeDelimitedText(parentNode, childNode, closingComment);
+	    parentNode.removeChild(closingComment);
+	  }
+	  parentNode.removeChild(childNode);
+	}
+
+	function moveDelimitedText(parentNode, openingComment, closingComment, referenceNode) {
+	  var node = openingComment;
+	  while (true) {
+	    var nextNode = node.nextSibling;
+	    insertChildAt(parentNode, node, referenceNode);
+	    if (node === closingComment) {
+	      break;
+	    }
+	    node = nextNode;
+	  }
+	}
+
+	function removeDelimitedText(parentNode, startNode, closingComment) {
+	  while (true) {
+	    var node = startNode.nextSibling;
+	    if (node === closingComment) {
+	      // The closing comment is removed by ReactMultiChild.
+	      break;
+	    } else {
+	      parentNode.removeChild(node);
+	    }
+	  }
+	}
+
+	function replaceDelimitedText(openingComment, closingComment, stringText) {
+	  var parentNode = openingComment.parentNode;
+	  var nodeAfterComment = openingComment.nextSibling;
+	  if (nodeAfterComment === closingComment) {
+	    // There are no text nodes between the opening and closing comments; insert
+	    // a new one if stringText isn't empty.
+	    if (stringText) {
+	      insertChildAt(parentNode, document.createTextNode(stringText), nodeAfterComment);
+	    }
+	  } else {
+	    if (stringText) {
+	      // Set the text content of the first node after the opening comment, and
+	      // remove all following nodes up until the closing comment.
+	      setTextContent(nodeAfterComment, stringText);
+	      removeDelimitedText(parentNode, nodeAfterComment, closingComment);
+	    } else {
+	      removeDelimitedText(parentNode, openingComment, closingComment);
+	    }
+	  }
+
+	  if (true) {
+	    ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(openingComment)._debugID, 'replace text', stringText);
+	  }
+	}
+
+	var dangerouslyReplaceNodeWithMarkup = Danger.dangerouslyReplaceNodeWithMarkup;
+	if (true) {
+	  dangerouslyReplaceNodeWithMarkup = function dangerouslyReplaceNodeWithMarkup(oldChild, markup, prevInstance) {
+	    Danger.dangerouslyReplaceNodeWithMarkup(oldChild, markup);
+	    if (prevInstance._debugID !== 0) {
+	      ReactInstrumentation.debugTool.onHostOperation(prevInstance._debugID, 'replace with', markup.toString());
+	    } else {
+	      var nextInstance = ReactDOMComponentTree.getInstanceFromNode(markup.node);
+	      if (nextInstance._debugID !== 0) {
+	        ReactInstrumentation.debugTool.onHostOperation(nextInstance._debugID, 'mount', markup.toString());
+	      }
+	    }
+	  };
+	}
+
+	/**
+	 * Operations for updating with DOM children.
+	 */
+	var DOMChildrenOperations = {
+
+	  dangerouslyReplaceNodeWithMarkup: dangerouslyReplaceNodeWithMarkup,
+
+	  replaceDelimitedText: replaceDelimitedText,
+
+	  /**
+	   * Updates a component's children by processing a series of updates. The
+	   * update configurations are each expected to have a `parentNode` property.
+	   *
+	   * @param {array<object>} updates List of update configurations.
+	   * @internal
+	   */
+	  processUpdates: function processUpdates(parentNode, updates) {
+	    if (true) {
+	      var parentNodeDebugID = ReactDOMComponentTree.getInstanceFromNode(parentNode)._debugID;
+	    }
+
+	    for (var k = 0; k < updates.length; k++) {
+	      var update = updates[k];
+	      switch (update.type) {
+	        case ReactMultiChildUpdateTypes.INSERT_MARKUP:
+	          insertLazyTreeChildAt(parentNode, update.content, getNodeAfter(parentNode, update.afterNode));
+	          if (true) {
+	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'insert child', { toIndex: update.toIndex, content: update.content.toString() });
+	          }
+	          break;
+	        case ReactMultiChildUpdateTypes.MOVE_EXISTING:
+	          moveChild(parentNode, update.fromNode, getNodeAfter(parentNode, update.afterNode));
+	          if (true) {
+	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'move child', { fromIndex: update.fromIndex, toIndex: update.toIndex });
+	          }
+	          break;
+	        case ReactMultiChildUpdateTypes.SET_MARKUP:
+	          setInnerHTML(parentNode, update.content);
+	          if (true) {
+	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'replace children', update.content.toString());
+	          }
+	          break;
+	        case ReactMultiChildUpdateTypes.TEXT_CONTENT:
+	          setTextContent(parentNode, update.content);
+	          if (true) {
+	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'replace text', update.content.toString());
+	          }
+	          break;
+	        case ReactMultiChildUpdateTypes.REMOVE_NODE:
+	          removeChild(parentNode, update.fromNode);
+	          if (true) {
+	            ReactInstrumentation.debugTool.onHostOperation(parentNodeDebugID, 'remove child', { fromIndex: update.fromIndex });
+	          }
+	          break;
+	      }
+	    }
+	  }
+
+	};
+
+	module.exports = DOMChildrenOperations;
+
+/***/ },
+/* 104 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactDOMIDOperations
+	 */
+
+	'use strict';
+
+	var DOMChildrenOperations = require(103);
+	var ReactDOMComponentTree = require(13);
+
+	/**
+	 * Operations used to process updates to DOM nodes.
+	 */
+	var ReactDOMIDOperations = {
+
+	  /**
+	   * Updates a component's children by processing a series of updates.
+	   *
+	   * @param {array<object>} updates List of update configurations.
+	   * @internal
+	   */
+	  dangerouslyProcessChildrenUpdates: function dangerouslyProcessChildrenUpdates(parentInst, updates) {
+	    var node = ReactDOMComponentTree.getNodeFromInstance(parentInst);
+	    DOMChildrenOperations.processUpdates(node, updates);
+	  }
+	};
+
+	module.exports = ReactDOMIDOperations;
+
+/***/ },
 /* 105 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule AutoFocusUtils
+	 */
+
+	'use strict';
+
+	var ReactDOMComponentTree = require(13);
+
+	var focusNode = require(158);
+
+	var AutoFocusUtils = {
+	  focusDOMComponent: function focusDOMComponent() {
+	    focusNode(ReactDOMComponentTree.getNodeFromInstance(this));
+	  }
+	};
+
+	module.exports = AutoFocusUtils;
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule CSSPropertyOperations
+	 */
+
+	'use strict';
+
+	var CSSProperty = require(162);
+	var ExecutionEnvironment = require(84);
+	var ReactInstrumentation = require(22);
+
+	var camelizeStyleName = require(163);
+	var dangerousStyleValue = require(164);
+	var hyphenateStyleName = require(165);
+	var memoizeStringOnly = require(166);
+	var warning = require(83);
+
+	var processStyleName = memoizeStringOnly(function (styleName) {
+	  return hyphenateStyleName(styleName);
+	});
+
+	var hasShorthandPropertyBug = false;
+	var styleFloatAccessor = 'cssFloat';
+	if (ExecutionEnvironment.canUseDOM) {
+	  var tempStyle = document.createElement('div').style;
+	  try {
+	    // IE8 throws "Invalid argument." if resetting shorthand style properties.
+	    tempStyle.font = '';
+	  } catch (e) {
+	    hasShorthandPropertyBug = true;
+	  }
+	  // IE8 only supports accessing cssFloat (standard) as styleFloat
+	  if (document.documentElement.style.cssFloat === undefined) {
+	    styleFloatAccessor = 'styleFloat';
+	  }
+	}
+
+	if (true) {
+	  // 'msTransform' is correct, but the other prefixes should be capitalized
+	  var badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/;
+
+	  // style values shouldn't contain a semicolon
+	  var badStyleValueWithSemicolonPattern = /;\s*$/;
+
+	  var warnedStyleNames = {};
+	  var warnedStyleValues = {};
+	  var warnedForNaNValue = false;
+
+	  var warnHyphenatedStyleName = function warnHyphenatedStyleName(name, owner) {
+	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
+	      return;
+	    }
+
+	    warnedStyleNames[name] = true;
+	    true ? warning(false, 'Unsupported style property %s. Did you mean %s?%s', name, camelizeStyleName(name), checkRenderMessage(owner)) : void 0;
+	  };
+
+	  var warnBadVendoredStyleName = function warnBadVendoredStyleName(name, owner) {
+	    if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
+	      return;
+	    }
+
+	    warnedStyleNames[name] = true;
+	    true ? warning(false, 'Unsupported vendor-prefixed style property %s. Did you mean %s?%s', name, name.charAt(0).toUpperCase() + name.slice(1), checkRenderMessage(owner)) : void 0;
+	  };
+
+	  var warnStyleValueWithSemicolon = function warnStyleValueWithSemicolon(name, value, owner) {
+	    if (warnedStyleValues.hasOwnProperty(value) && warnedStyleValues[value]) {
+	      return;
+	    }
+
+	    warnedStyleValues[value] = true;
+	    true ? warning(false, 'Style property values shouldn\'t contain a semicolon.%s ' + 'Try "%s: %s" instead.', checkRenderMessage(owner), name, value.replace(badStyleValueWithSemicolonPattern, '')) : void 0;
+	  };
+
+	  var warnStyleValueIsNaN = function warnStyleValueIsNaN(name, value, owner) {
+	    if (warnedForNaNValue) {
+	      return;
+	    }
+
+	    warnedForNaNValue = true;
+	    true ? warning(false, '`NaN` is an invalid value for the `%s` css style property.%s', name, checkRenderMessage(owner)) : void 0;
+	  };
+
+	  var checkRenderMessage = function checkRenderMessage(owner) {
+	    if (owner) {
+	      var name = owner.getName();
+	      if (name) {
+	        return ' Check the render method of `' + name + '`.';
+	      }
+	    }
+	    return '';
+	  };
+
+	  /**
+	   * @param {string} name
+	   * @param {*} value
+	   * @param {ReactDOMComponent} component
+	   */
+	  var warnValidStyle = function warnValidStyle(name, value, component) {
+	    var owner;
+	    if (component) {
+	      owner = component._currentElement._owner;
+	    }
+	    if (name.indexOf('-') > -1) {
+	      warnHyphenatedStyleName(name, owner);
+	    } else if (badVendoredStyleNamePattern.test(name)) {
+	      warnBadVendoredStyleName(name, owner);
+	    } else if (badStyleValueWithSemicolonPattern.test(value)) {
+	      warnStyleValueWithSemicolon(name, value, owner);
+	    }
+
+	    if (typeof value === 'number' && isNaN(value)) {
+	      warnStyleValueIsNaN(name, value, owner);
+	    }
+	  };
+	}
+
+	/**
+	 * Operations for dealing with CSS properties.
+	 */
+	var CSSPropertyOperations = {
+
+	  /**
+	   * Serializes a mapping of style properties for use as inline styles:
+	   *
+	   *   > createMarkupForStyles({width: '200px', height: 0})
+	   *   "width:200px;height:0;"
+	   *
+	   * Undefined values are ignored so that declarative programming is easier.
+	   * The result should be HTML-escaped before insertion into the DOM.
+	   *
+	   * @param {object} styles
+	   * @param {ReactDOMComponent} component
+	   * @return {?string}
+	   */
+	  createMarkupForStyles: function createMarkupForStyles(styles, component) {
+	    var serialized = '';
+	    for (var styleName in styles) {
+	      if (!styles.hasOwnProperty(styleName)) {
+	        continue;
+	      }
+	      var styleValue = styles[styleName];
+	      if (true) {
+	        warnValidStyle(styleName, styleValue, component);
+	      }
+	      if (styleValue != null) {
+	        serialized += processStyleName(styleName) + ':';
+	        serialized += dangerousStyleValue(styleName, styleValue, component) + ';';
+	      }
+	    }
+	    return serialized || null;
+	  },
+
+	  /**
+	   * Sets the value for multiple styles on a node.  If a value is specified as
+	   * '' (empty string), the corresponding style property will be unset.
+	   *
+	   * @param {DOMElement} node
+	   * @param {object} styles
+	   * @param {ReactDOMComponent} component
+	   */
+	  setValueForStyles: function setValueForStyles(node, styles, component) {
+	    if (true) {
+	      ReactInstrumentation.debugTool.onHostOperation(component._debugID, 'update styles', styles);
+	    }
+
+	    var style = node.style;
+	    for (var styleName in styles) {
+	      if (!styles.hasOwnProperty(styleName)) {
+	        continue;
+	      }
+	      if (true) {
+	        warnValidStyle(styleName, styles[styleName], component);
+	      }
+	      var styleValue = dangerousStyleValue(styleName, styles[styleName], component);
+	      if (styleName === 'float' || styleName === 'cssFloat') {
+	        styleName = styleFloatAccessor;
+	      }
+	      if (styleValue) {
+	        style[styleName] = styleValue;
+	      } else {
+	        var expansion = hasShorthandPropertyBug && CSSProperty.shorthandPropertyExpansions[styleName];
+	        if (expansion) {
+	          // Shorthand property that IE8 won't like unsetting, so unset each
+	          // component to placate it
+	          for (var individualStyleName in expansion) {
+	            style[individualStyleName] = '';
+	          }
+	        } else {
+	          style[styleName] = '';
+	        }
+	      }
+	    }
+	  }
+
+	};
+
+	module.exports = CSSPropertyOperations;
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule DOMNamespaces
+	 */
+
+	'use strict';
+
+	var DOMNamespaces = {
+	  html: 'http://www.w3.org/1999/xhtml',
+	  mathml: 'http://www.w3.org/1998/Math/MathML',
+	  svg: 'http://www.w3.org/2000/svg'
+	};
+
+	module.exports = DOMNamespaces;
+
+/***/ },
+/* 108 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule DOMPropertyOperations
+	 */
+
+	'use strict';
+
+	var DOMProperty = require(36);
+	var ReactDOMComponentTree = require(13);
+	var ReactInstrumentation = require(22);
+
+	var quoteAttributeValueForBrowser = require(159);
+	var warning = require(83);
+
+	var VALID_ATTRIBUTE_NAME_REGEX = new RegExp('^[' + DOMProperty.ATTRIBUTE_NAME_START_CHAR + '][' + DOMProperty.ATTRIBUTE_NAME_CHAR + ']*$');
+	var illegalAttributeNameCache = {};
+	var validatedAttributeNameCache = {};
+
+	function isAttributeNameSafe(attributeName) {
+	  if (validatedAttributeNameCache.hasOwnProperty(attributeName)) {
+	    return true;
+	  }
+	  if (illegalAttributeNameCache.hasOwnProperty(attributeName)) {
+	    return false;
+	  }
+	  if (VALID_ATTRIBUTE_NAME_REGEX.test(attributeName)) {
+	    validatedAttributeNameCache[attributeName] = true;
+	    return true;
+	  }
+	  illegalAttributeNameCache[attributeName] = true;
+	  true ? warning(false, 'Invalid attribute name: `%s`', attributeName) : void 0;
+	  return false;
+	}
+
+	function shouldIgnoreValue(propertyInfo, value) {
+	  return value == null || propertyInfo.hasBooleanValue && !value || propertyInfo.hasNumericValue && isNaN(value) || propertyInfo.hasPositiveNumericValue && value < 1 || propertyInfo.hasOverloadedBooleanValue && value === false;
+	}
+
+	/**
+	 * Operations for dealing with DOM properties.
+	 */
+	var DOMPropertyOperations = {
+
+	  /**
+	   * Creates markup for the ID property.
+	   *
+	   * @param {string} id Unescaped ID.
+	   * @return {string} Markup string.
+	   */
+	  createMarkupForID: function createMarkupForID(id) {
+	    return DOMProperty.ID_ATTRIBUTE_NAME + '=' + quoteAttributeValueForBrowser(id);
+	  },
+
+	  setAttributeForID: function setAttributeForID(node, id) {
+	    node.setAttribute(DOMProperty.ID_ATTRIBUTE_NAME, id);
+	  },
+
+	  createMarkupForRoot: function createMarkupForRoot() {
+	    return DOMProperty.ROOT_ATTRIBUTE_NAME + '=""';
+	  },
+
+	  setAttributeForRoot: function setAttributeForRoot(node) {
+	    node.setAttribute(DOMProperty.ROOT_ATTRIBUTE_NAME, '');
+	  },
+
+	  /**
+	   * Creates markup for a property.
+	   *
+	   * @param {string} name
+	   * @param {*} value
+	   * @return {?string} Markup string, or null if the property was invalid.
+	   */
+	  createMarkupForProperty: function createMarkupForProperty(name, value) {
+	    var propertyInfo = DOMProperty.properties.hasOwnProperty(name) ? DOMProperty.properties[name] : null;
+	    if (propertyInfo) {
+	      if (shouldIgnoreValue(propertyInfo, value)) {
+	        return '';
+	      }
+	      var attributeName = propertyInfo.attributeName;
+	      if (propertyInfo.hasBooleanValue || propertyInfo.hasOverloadedBooleanValue && value === true) {
+	        return attributeName + '=""';
+	      }
+	      return attributeName + '=' + quoteAttributeValueForBrowser(value);
+	    } else if (DOMProperty.isCustomAttribute(name)) {
+	      if (value == null) {
+	        return '';
+	      }
+	      return name + '=' + quoteAttributeValueForBrowser(value);
+	    }
+	    return null;
+	  },
+
+	  /**
+	   * Creates markup for a custom property.
+	   *
+	   * @param {string} name
+	   * @param {*} value
+	   * @return {string} Markup string, or empty string if the property was invalid.
+	   */
+	  createMarkupForCustomAttribute: function createMarkupForCustomAttribute(name, value) {
+	    if (!isAttributeNameSafe(name) || value == null) {
+	      return '';
+	    }
+	    return name + '=' + quoteAttributeValueForBrowser(value);
+	  },
+
+	  /**
+	   * Sets the value for a property on a node.
+	   *
+	   * @param {DOMElement} node
+	   * @param {string} name
+	   * @param {*} value
+	   */
+	  setValueForProperty: function setValueForProperty(node, name, value) {
+	    var propertyInfo = DOMProperty.properties.hasOwnProperty(name) ? DOMProperty.properties[name] : null;
+	    if (propertyInfo) {
+	      var mutationMethod = propertyInfo.mutationMethod;
+	      if (mutationMethod) {
+	        mutationMethod(node, value);
+	      } else if (shouldIgnoreValue(propertyInfo, value)) {
+	        this.deleteValueForProperty(node, name);
+	        return;
+	      } else if (propertyInfo.mustUseProperty) {
+	        // Contrary to `setAttribute`, object properties are properly
+	        // `toString`ed by IE8/9.
+	        node[propertyInfo.propertyName] = value;
+	      } else {
+	        var attributeName = propertyInfo.attributeName;
+	        var namespace = propertyInfo.attributeNamespace;
+	        // `setAttribute` with objects becomes only `[object]` in IE8/9,
+	        // ('' + value) makes it output the correct toString()-value.
+	        if (namespace) {
+	          node.setAttributeNS(namespace, attributeName, '' + value);
+	        } else if (propertyInfo.hasBooleanValue || propertyInfo.hasOverloadedBooleanValue && value === true) {
+	          node.setAttribute(attributeName, '');
+	        } else {
+	          node.setAttribute(attributeName, '' + value);
+	        }
+	      }
+	    } else if (DOMProperty.isCustomAttribute(name)) {
+	      DOMPropertyOperations.setValueForAttribute(node, name, value);
+	      return;
+	    }
+
+	    if (true) {
+	      var payload = {};
+	      payload[name] = value;
+	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'update attribute', payload);
+	    }
+	  },
+
+	  setValueForAttribute: function setValueForAttribute(node, name, value) {
+	    if (!isAttributeNameSafe(name)) {
+	      return;
+	    }
+	    if (value == null) {
+	      node.removeAttribute(name);
+	    } else {
+	      node.setAttribute(name, '' + value);
+	    }
+
+	    if (true) {
+	      var payload = {};
+	      payload[name] = value;
+	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'update attribute', payload);
+	    }
+	  },
+
+	  /**
+	   * Deletes an attributes from a node.
+	   *
+	   * @param {DOMElement} node
+	   * @param {string} name
+	   */
+	  deleteValueForAttribute: function deleteValueForAttribute(node, name) {
+	    node.removeAttribute(name);
+	    if (true) {
+	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'remove attribute', name);
+	    }
+	  },
+
+	  /**
+	   * Deletes the value for a property on a node.
+	   *
+	   * @param {DOMElement} node
+	   * @param {string} name
+	   */
+	  deleteValueForProperty: function deleteValueForProperty(node, name) {
+	    var propertyInfo = DOMProperty.properties.hasOwnProperty(name) ? DOMProperty.properties[name] : null;
+	    if (propertyInfo) {
+	      var mutationMethod = propertyInfo.mutationMethod;
+	      if (mutationMethod) {
+	        mutationMethod(node, undefined);
+	      } else if (propertyInfo.mustUseProperty) {
+	        var propName = propertyInfo.propertyName;
+	        if (propertyInfo.hasBooleanValue) {
+	          node[propName] = false;
+	        } else {
+	          node[propName] = '';
+	        }
+	      } else {
+	        node.removeAttribute(propertyInfo.attributeName);
+	      }
+	    } else if (DOMProperty.isCustomAttribute(name)) {
+	      node.removeAttribute(name);
+	    }
+
+	    if (true) {
+	      ReactInstrumentation.debugTool.onHostOperation(ReactDOMComponentTree.getInstanceFromNode(node)._debugID, 'remove attribute', name);
+	    }
+	  }
+
+	};
+
+	module.exports = DOMPropertyOperations;
+
+/***/ },
+/* 109 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29116,7 +29556,7 @@
 
 	'use strict';
 
-	var DisabledInputUtils = require(160);
+	var DisabledInputUtils = require(167);
 
 	/**
 	 * Implements a <button> host component that does not receive mouse events
@@ -29129,7 +29569,7 @@
 	module.exports = ReactDOMButton;
 
 /***/ },
-/* 106 */
+/* 110 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29148,14 +29588,14 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var DisabledInputUtils = require(160);
-	var DOMPropertyOperations = require(103);
-	var LinkedValueUtils = require(167);
+	var DisabledInputUtils = require(167);
+	var DOMPropertyOperations = require(108);
+	var LinkedValueUtils = require(168);
 	var ReactDOMComponentTree = require(13);
 	var ReactUpdates = require(17);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	var didWarnValueLink = false;
 	var didWarnCheckedLink = false;
@@ -29403,7 +29843,7 @@
 	module.exports = ReactDOMInput;
 
 /***/ },
-/* 107 */
+/* 111 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29423,9 +29863,9 @@
 
 	var ReactChildren = require(25);
 	var ReactDOMComponentTree = require(13);
-	var ReactDOMSelect = require(108);
+	var ReactDOMSelect = require(112);
 
-	var warning = require(79);
+	var warning = require(83);
 	var didWarnInvalidOptionChildren = false;
 
 	function flattenChildren(children) {
@@ -29531,7 +29971,7 @@
 	module.exports = ReactDOMOption;
 
 /***/ },
-/* 108 */
+/* 112 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29549,12 +29989,12 @@
 
 	var _assign = require(34);
 
-	var DisabledInputUtils = require(160);
-	var LinkedValueUtils = require(167);
+	var DisabledInputUtils = require(167);
+	var LinkedValueUtils = require(168);
 	var ReactDOMComponentTree = require(13);
 	var ReactUpdates = require(17);
 
-	var warning = require(79);
+	var warning = require(83);
 
 	var didWarnValueLink = false;
 	var didWarnValueDefaultValue = false;
@@ -29737,7 +30177,7 @@
 	module.exports = ReactDOMSelect;
 
 /***/ },
-/* 109 */
+/* 113 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29756,13 +30196,13 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var DisabledInputUtils = require(160);
-	var LinkedValueUtils = require(167);
+	var DisabledInputUtils = require(167);
+	var LinkedValueUtils = require(168);
 	var ReactDOMComponentTree = require(13);
 	var ReactUpdates = require(17);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	var didWarnValueLink = false;
 	var didWarnValDefaultVal = false;
@@ -29897,7 +30337,7 @@
 	module.exports = ReactDOMTextarea;
 
 /***/ },
-/* 110 */
+/* 114 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -29915,18 +30355,18 @@
 
 	var _prodInvariant = require(35);
 
-	var ReactComponentEnvironment = require(120);
+	var ReactComponentEnvironment = require(123);
 	var ReactInstanceMap = require(65);
 	var ReactInstrumentation = require(22);
-	var ReactMultiChildUpdateTypes = require(159);
+	var ReactMultiChildUpdateTypes = require(161);
 
 	var ReactCurrentOwner = require(62);
 	var ReactReconciler = require(16);
 	var ReactChildReconciler = require(170);
 
-	var emptyFunction = require(83);
+	var emptyFunction = require(87);
 	var flattenChildren = require(171);
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Make an update for markup to be rendered and inserted at a supplied index.
@@ -30353,7 +30793,7 @@
 	module.exports = ReactMultiChild;
 
 /***/ },
-/* 111 */
+/* 115 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -30448,7 +30888,7 @@
 	module.exports = ReactServerRenderingTransaction;
 
 /***/ },
-/* 112 */
+/* 116 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -30576,72 +31016,7 @@
 	module.exports = escapeTextContentForBrowser;
 
 /***/ },
-/* 113 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule isEventSupported
-	 */
-
-	'use strict';
-
-	var ExecutionEnvironment = require(80);
-
-	var useHasFeature;
-	if (ExecutionEnvironment.canUseDOM) {
-	  useHasFeature = document.implementation && document.implementation.hasFeature &&
-	  // always returns true in newer browsers as per the standard.
-	  // @see http://dom.spec.whatwg.org/#dom-domimplementation-hasfeature
-	  document.implementation.hasFeature('', '') !== true;
-	}
-
-	/**
-	 * Checks if an event is supported in the current execution environment.
-	 *
-	 * NOTE: This will not work correctly for non-generic events such as `change`,
-	 * `reset`, `load`, `error`, and `select`.
-	 *
-	 * Borrows from Modernizr.
-	 *
-	 * @param {string} eventNameSuffix Event name, e.g. "click".
-	 * @param {?boolean} capture Check if the capture phase is supported.
-	 * @return {boolean} True if the event is supported.
-	 * @internal
-	 * @license Modernizr 3.0.0pre (Custom Build) | MIT
-	 */
-	function isEventSupported(eventNameSuffix, capture) {
-	  if (!ExecutionEnvironment.canUseDOM || capture && !('addEventListener' in document)) {
-	    return false;
-	  }
-
-	  var eventName = 'on' + eventNameSuffix;
-	  var isSupported = eventName in document;
-
-	  if (!isSupported) {
-	    var element = document.createElement('div');
-	    element.setAttribute(eventName, 'return;');
-	    isSupported = typeof element[eventName] === 'function';
-	  }
-
-	  if (!isSupported && useHasFeature && eventNameSuffix === 'wheel') {
-	    // This is the only way to test support for the `wheel` event in IE9+.
-	    isSupported = document.implementation.hasFeature('Events.wheel', '3.0');
-	  }
-
-	  return isSupported;
-	}
-
-	module.exports = isEventSupported;
-
-/***/ },
-/* 114 */
+/* 117 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -30713,7 +31088,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 115 */
+/* 118 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -30731,8 +31106,8 @@
 
 	var _assign = require(34);
 
-	var emptyFunction = require(83);
-	var warning = require(79);
+	var emptyFunction = require(87);
+	var warning = require(83);
 
 	var validateDOMNesting = emptyFunction;
 
@@ -31100,376 +31475,256 @@
 	module.exports = validateDOMNesting;
 
 /***/ },
-/* 116 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule SyntheticEvent
-	 */
-
-	'use strict';
-
-	var _assign = require(34);
-
-	var PooledClass = require(57);
-
-	var emptyFunction = require(83);
-	var warning = require(79);
-
-	var didWarnForAddedNewProperty = false;
-	var isProxySupported = typeof Proxy === 'function';
-
-	var shouldBeReleasedProperties = ['dispatchConfig', '_targetInst', 'nativeEvent', 'isDefaultPrevented', 'isPropagationStopped', '_dispatchListeners', '_dispatchInstances'];
-
-	/**
-	 * @interface Event
-	 * @see http://www.w3.org/TR/DOM-Level-3-Events/
-	 */
-	var EventInterface = {
-	  type: null,
-	  target: null,
-	  // currentTarget is set when dispatching; no use in copying it here
-	  currentTarget: emptyFunction.thatReturnsNull,
-	  eventPhase: null,
-	  bubbles: null,
-	  cancelable: null,
-	  timeStamp: function timeStamp(event) {
-	    return event.timeStamp || Date.now();
-	  },
-	  defaultPrevented: null,
-	  isTrusted: null
-	};
-
-	/**
-	 * Synthetic events are dispatched by event plugins, typically in response to a
-	 * top-level event delegation handler.
-	 *
-	 * These systems should generally use pooling to reduce the frequency of garbage
-	 * collection. The system should check `isPersistent` to determine whether the
-	 * event should be released into the pool after being dispatched. Users that
-	 * need a persisted event should invoke `persist`.
-	 *
-	 * Synthetic events (and subclasses) implement the DOM Level 3 Events API by
-	 * normalizing browser quirks. Subclasses do not necessarily have to implement a
-	 * DOM interface; custom application-specific events can also subclass this.
-	 *
-	 * @param {object} dispatchConfig Configuration used to dispatch this event.
-	 * @param {*} targetInst Marker identifying the event target.
-	 * @param {object} nativeEvent Native browser event.
-	 * @param {DOMEventTarget} nativeEventTarget Target node.
-	 */
-	function SyntheticEvent(dispatchConfig, targetInst, nativeEvent, nativeEventTarget) {
-	  if (true) {
-	    // these have a getter/setter for warnings
-	    delete this.nativeEvent;
-	    delete this.preventDefault;
-	    delete this.stopPropagation;
-	  }
-
-	  this.dispatchConfig = dispatchConfig;
-	  this._targetInst = targetInst;
-	  this.nativeEvent = nativeEvent;
-
-	  var Interface = this.constructor.Interface;
-	  for (var propName in Interface) {
-	    if (!Interface.hasOwnProperty(propName)) {
-	      continue;
-	    }
-	    if (true) {
-	      delete this[propName]; // this has a getter/setter for warnings
-	    }
-	    var normalize = Interface[propName];
-	    if (normalize) {
-	      this[propName] = normalize(nativeEvent);
-	    } else {
-	      if (propName === 'target') {
-	        this.target = nativeEventTarget;
-	      } else {
-	        this[propName] = nativeEvent[propName];
-	      }
-	    }
-	  }
-
-	  var defaultPrevented = nativeEvent.defaultPrevented != null ? nativeEvent.defaultPrevented : nativeEvent.returnValue === false;
-	  if (defaultPrevented) {
-	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
-	  } else {
-	    this.isDefaultPrevented = emptyFunction.thatReturnsFalse;
-	  }
-	  this.isPropagationStopped = emptyFunction.thatReturnsFalse;
-	  return this;
-	}
-
-	_assign(SyntheticEvent.prototype, {
-
-	  preventDefault: function preventDefault() {
-	    this.defaultPrevented = true;
-	    var event = this.nativeEvent;
-	    if (!event) {
-	      return;
-	    }
-
-	    if (event.preventDefault) {
-	      event.preventDefault();
-	    } else if (typeof event.returnValue !== 'unknown') {
-	      // eslint-disable-line valid-typeof
-	      event.returnValue = false;
-	    }
-	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
-	  },
-
-	  stopPropagation: function stopPropagation() {
-	    var event = this.nativeEvent;
-	    if (!event) {
-	      return;
-	    }
-
-	    if (event.stopPropagation) {
-	      event.stopPropagation();
-	    } else if (typeof event.cancelBubble !== 'unknown') {
-	      // eslint-disable-line valid-typeof
-	      // The ChangeEventPlugin registers a "propertychange" event for
-	      // IE. This event does not support bubbling or cancelling, and
-	      // any references to cancelBubble throw "Member not found".  A
-	      // typeof check of "unknown" circumvents this issue (and is also
-	      // IE specific).
-	      event.cancelBubble = true;
-	    }
-
-	    this.isPropagationStopped = emptyFunction.thatReturnsTrue;
-	  },
-
-	  /**
-	   * We release all dispatched `SyntheticEvent`s after each event loop, adding
-	   * them back into the pool. This allows a way to hold onto a reference that
-	   * won't be added back into the pool.
-	   */
-	  persist: function persist() {
-	    this.isPersistent = emptyFunction.thatReturnsTrue;
-	  },
-
-	  /**
-	   * Checks if this event should be released back into the pool.
-	   *
-	   * @return {boolean} True if this should not be released, false otherwise.
-	   */
-	  isPersistent: emptyFunction.thatReturnsFalse,
-
-	  /**
-	   * `PooledClass` looks for `destructor` on each instance it releases.
-	   */
-	  destructor: function destructor() {
-	    var Interface = this.constructor.Interface;
-	    for (var propName in Interface) {
-	      if (true) {
-	        Object.defineProperty(this, propName, getPooledWarningPropertyDefinition(propName, Interface[propName]));
-	      } else {
-	        this[propName] = null;
-	      }
-	    }
-	    for (var i = 0; i < shouldBeReleasedProperties.length; i++) {
-	      this[shouldBeReleasedProperties[i]] = null;
-	    }
-	    if (true) {
-	      Object.defineProperty(this, 'nativeEvent', getPooledWarningPropertyDefinition('nativeEvent', null));
-	      Object.defineProperty(this, 'preventDefault', getPooledWarningPropertyDefinition('preventDefault', emptyFunction));
-	      Object.defineProperty(this, 'stopPropagation', getPooledWarningPropertyDefinition('stopPropagation', emptyFunction));
-	    }
-	  }
-
-	});
-
-	SyntheticEvent.Interface = EventInterface;
-
-	if (true) {
-	  if (isProxySupported) {
-	    /*eslint-disable no-func-assign */
-	    SyntheticEvent = new Proxy(SyntheticEvent, {
-	      construct: function construct(target, args) {
-	        return this.apply(target, Object.create(target.prototype), args);
-	      },
-	      apply: function apply(constructor, that, args) {
-	        return new Proxy(constructor.apply(that, args), {
-	          set: function set(target, prop, value) {
-	            if (prop !== 'isPersistent' && !target.constructor.Interface.hasOwnProperty(prop) && shouldBeReleasedProperties.indexOf(prop) === -1) {
-	              true ? warning(didWarnForAddedNewProperty || target.isPersistent(), 'This synthetic event is reused for performance reasons. If you\'re ' + 'seeing this, you\'re adding a new property in the synthetic event object. ' + 'The property is never released. See ' + 'https://fb.me/react-event-pooling for more information.') : void 0;
-	              didWarnForAddedNewProperty = true;
-	            }
-	            target[prop] = value;
-	            return true;
-	          }
-	        });
-	      }
-	    });
-	    /*eslint-enable no-func-assign */
-	  }
-	}
-	/**
-	 * Helper to reduce boilerplate when creating subclasses.
-	 *
-	 * @param {function} Class
-	 * @param {?object} Interface
-	 */
-	SyntheticEvent.augmentClass = function (Class, Interface) {
-	  var Super = this;
-
-	  var E = function E() {};
-	  E.prototype = Super.prototype;
-	  var prototype = new E();
-
-	  _assign(prototype, Class.prototype);
-	  Class.prototype = prototype;
-	  Class.prototype.constructor = Class;
-
-	  Class.Interface = _assign({}, Super.Interface, Interface);
-	  Class.augmentClass = Super.augmentClass;
-
-	  PooledClass.addPoolingTo(Class, PooledClass.fourArgumentPooler);
-	};
-
-	PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
-
-	module.exports = SyntheticEvent;
-
-	/**
-	  * Helper to nullify syntheticEvent instance properties when destructing
-	  *
-	  * @param {object} SyntheticEvent
-	  * @param {String} propName
-	  * @return {object} defineProperty object
-	  */
-	function getPooledWarningPropertyDefinition(propName, getVal) {
-	  var isFunction = typeof getVal === 'function';
-	  return {
-	    configurable: true,
-	    set: set,
-	    get: get
-	  };
-
-	  function set(val) {
-	    var action = isFunction ? 'setting the method' : 'setting the property';
-	    warn(action, 'This is effectively a no-op');
-	    return val;
-	  }
-
-	  function get() {
-	    var action = isFunction ? 'accessing the method' : 'accessing the property';
-	    var result = isFunction ? 'This is a no-op function' : 'This is set to null';
-	    warn(action, result);
-	    return getVal;
-	  }
-
-	  function warn(action, result) {
-	    var warningCondition = false;
-	    true ? warning(warningCondition, 'This synthetic event is reused for performance reasons. If you\'re seeing this, ' + 'you\'re %s `%s` on a released/nullified synthetic event. %s. ' + 'If you must keep the original synthetic event around, use event.persist(). ' + 'See https://fb.me/react-event-pooling for more information.', action, propName, result) : void 0;
-	  }
-	}
-
-/***/ },
-/* 117 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule getEventTarget
-	 */
-
-	'use strict';
-
-	/**
-	 * Gets the target node from a native browser event by accounting for
-	 * inconsistencies in browser DOM APIs.
-	 *
-	 * @param {object} nativeEvent Native browser event.
-	 * @return {DOMEventTarget} Target node.
-	 */
-
-	function getEventTarget(nativeEvent) {
-	  var target = nativeEvent.target || nativeEvent.srcElement || window;
-
-	  // Normalize SVG <use> element events #4963
-	  if (target.correspondingUseElement) {
-	    target = target.correspondingUseElement;
-	  }
-
-	  // Safari may fire events on text nodes (Node.TEXT_NODE is 3).
-	  // @see http://www.quirksmode.org/js/events_properties.html
-	  return target.nodeType === 3 ? target.parentNode : target;
-	}
-
-	module.exports = getEventTarget;
-
-/***/ },
-/* 118 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule isTextInputElement
-	 * 
-	 */
-
-	'use strict';
-
-	/**
-	 * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
-	 */
-
-	var supportedInputTypes = {
-	  'color': true,
-	  'date': true,
-	  'datetime': true,
-	  'datetime-local': true,
-	  'email': true,
-	  'month': true,
-	  'number': true,
-	  'password': true,
-	  'range': true,
-	  'search': true,
-	  'tel': true,
-	  'text': true,
-	  'time': true,
-	  'url': true,
-	  'week': true
-	};
-
-	function isTextInputElement(elem) {
-	  var nodeName = elem && elem.nodeName && elem.nodeName.toLowerCase();
-
-	  if (nodeName === 'input') {
-	    return !!supportedInputTypes[elem.type];
-	  }
-
-	  if (nodeName === 'textarea') {
-	    return true;
-	  }
-
-	  return false;
-	}
-
-	module.exports = isTextInputElement;
-
-/***/ },
 /* 119 */
+/***/ function(module, exports, require) {
+
+	'use strict';
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 * @typechecks
+	 */
+
+	var emptyFunction = require(87);
+
+	/**
+	 * Upstream version of event listener. Does not take into account specific
+	 * nature of platform.
+	 */
+	var EventListener = {
+	  /**
+	   * Listen to DOM events during the bubble phase.
+	   *
+	   * @param {DOMEventTarget} target DOM element to register listener on.
+	   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
+	   * @param {function} callback Callback function.
+	   * @return {object} Object with a `remove` method.
+	   */
+	  listen: function listen(target, eventType, callback) {
+	    if (target.addEventListener) {
+	      target.addEventListener(eventType, callback, false);
+	      return {
+	        remove: function remove() {
+	          target.removeEventListener(eventType, callback, false);
+	        }
+	      };
+	    } else if (target.attachEvent) {
+	      target.attachEvent('on' + eventType, callback);
+	      return {
+	        remove: function remove() {
+	          target.detachEvent('on' + eventType, callback);
+	        }
+	      };
+	    }
+	  },
+
+	  /**
+	   * Listen to DOM events during the capture phase.
+	   *
+	   * @param {DOMEventTarget} target DOM element to register listener on.
+	   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
+	   * @param {function} callback Callback function.
+	   * @return {object} Object with a `remove` method.
+	   */
+	  capture: function capture(target, eventType, callback) {
+	    if (target.addEventListener) {
+	      target.addEventListener(eventType, callback, true);
+	      return {
+	        remove: function remove() {
+	          target.removeEventListener(eventType, callback, true);
+	        }
+	      };
+	    } else {
+	      if (true) {
+	        console.error('Attempted to listen to events during the capture phase on a ' + 'browser that does not support the capture phase. Your application ' + 'will not receive some events.');
+	      }
+	      return {
+	        remove: emptyFunction
+	      };
+	    }
+	  },
+
+	  registerDefault: function registerDefault() {}
+	};
+
+	module.exports = EventListener;
+
+/***/ },
+/* 120 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 * @typechecks
+	 */
+
+	'use strict';
+
+	/**
+	 * Gets the scroll position of the supplied element or window.
+	 *
+	 * The return values are unbounded, unlike `getScrollPosition`. This means they
+	 * may be negative or exceed the element boundaries (which is possible using
+	 * inertial scrolling).
+	 *
+	 * @param {DOMWindow|DOMElement} scrollable
+	 * @return {object} Map with `x` and `y` keys.
+	 */
+
+	function getUnboundedScrollPosition(scrollable) {
+	  if (scrollable.Window && scrollable instanceof scrollable.Window) {
+	    return {
+	      x: scrollable.pageXOffset || scrollable.document.documentElement.scrollLeft,
+	      y: scrollable.pageYOffset || scrollable.document.documentElement.scrollTop
+	    };
+	  }
+	  return {
+	    x: scrollable.scrollLeft,
+	    y: scrollable.scrollTop
+	  };
+	}
+
+	module.exports = getUnboundedScrollPosition;
+
+/***/ },
+/* 121 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactInputSelection
+	 */
+
+	'use strict';
+
+	var ReactDOMSelection = require(172);
+
+	var containsNode = require(173);
+	var focusNode = require(158);
+	var getActiveElement = require(136);
+
+	function isInDocument(node) {
+	  return containsNode(document.documentElement, node);
+	}
+
+	/**
+	 * @ReactInputSelection: React input selection module. Based on Selection.js,
+	 * but modified to be suitable for react and has a couple of bug fixes (doesn't
+	 * assume buttons have range selections allowed).
+	 * Input selection module for React.
+	 */
+	var ReactInputSelection = {
+
+	  hasSelectionCapabilities: function hasSelectionCapabilities(elem) {
+	    var nodeName = elem && elem.nodeName && elem.nodeName.toLowerCase();
+	    return nodeName && (nodeName === 'input' && elem.type === 'text' || nodeName === 'textarea' || elem.contentEditable === 'true');
+	  },
+
+	  getSelectionInformation: function getSelectionInformation() {
+	    var focusedElem = getActiveElement();
+	    return {
+	      focusedElem: focusedElem,
+	      selectionRange: ReactInputSelection.hasSelectionCapabilities(focusedElem) ? ReactInputSelection.getSelection(focusedElem) : null
+	    };
+	  },
+
+	  /**
+	   * @restoreSelection: If any selection information was potentially lost,
+	   * restore it. This is useful when performing operations that could remove dom
+	   * nodes and place them back in, resulting in focus being lost.
+	   */
+	  restoreSelection: function restoreSelection(priorSelectionInformation) {
+	    var curFocusedElem = getActiveElement();
+	    var priorFocusedElem = priorSelectionInformation.focusedElem;
+	    var priorSelectionRange = priorSelectionInformation.selectionRange;
+	    if (curFocusedElem !== priorFocusedElem && isInDocument(priorFocusedElem)) {
+	      if (ReactInputSelection.hasSelectionCapabilities(priorFocusedElem)) {
+	        ReactInputSelection.setSelection(priorFocusedElem, priorSelectionRange);
+	      }
+	      focusNode(priorFocusedElem);
+	    }
+	  },
+
+	  /**
+	   * @getSelection: Gets the selection bounds of a focused textarea, input or
+	   * contentEditable node.
+	   * -@input: Look up selection bounds of this input
+	   * -@return {start: selectionStart, end: selectionEnd}
+	   */
+	  getSelection: function getSelection(input) {
+	    var selection;
+
+	    if ('selectionStart' in input) {
+	      // Modern browser with input or textarea.
+	      selection = {
+	        start: input.selectionStart,
+	        end: input.selectionEnd
+	      };
+	    } else if (document.selection && input.nodeName && input.nodeName.toLowerCase() === 'input') {
+	      // IE8 input.
+	      var range = document.selection.createRange();
+	      // There can only be one selection per document in IE, so it must
+	      // be in our element.
+	      if (range.parentElement() === input) {
+	        selection = {
+	          start: -range.moveStart('character', -input.value.length),
+	          end: -range.moveEnd('character', -input.value.length)
+	        };
+	      }
+	    } else {
+	      // Content editable or old IE textarea.
+	      selection = ReactDOMSelection.getOffsets(input);
+	    }
+
+	    return selection || { start: 0, end: 0 };
+	  },
+
+	  /**
+	   * @setSelection: Sets the selection bounds of a textarea or input and focuses
+	   * the input.
+	   * -@input     Set selection bounds of this input or textarea
+	   * -@offsets   Object of same form that is returned from get*
+	   */
+	  setSelection: function setSelection(input, offsets) {
+	    var start = offsets.start;
+	    var end = offsets.end;
+	    if (end === undefined) {
+	      end = start;
+	    }
+
+	    if ('selectionStart' in input) {
+	      input.selectionStart = start;
+	      input.selectionEnd = Math.min(end, input.value.length);
+	    } else if (document.selection && input.nodeName && input.nodeName.toLowerCase() === 'input') {
+	      var range = input.createTextRange();
+	      range.collapse(true);
+	      range.moveStart('character', start);
+	      range.moveEnd('character', end - start);
+	      range.select();
+	    } else {
+	      ReactDOMSelection.setOffsets(input, offsets);
+	    }
+	  }
+	};
+
+	module.exports = ReactInputSelection;
+
+/***/ },
+/* 122 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -31488,10 +31743,10 @@
 	var _prodInvariant = require(35);
 
 	var EventConstants = require(92);
-	var ReactErrorUtils = require(168);
+	var ReactErrorUtils = require(156);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	/**
 	 * Injected dependencies:
@@ -31703,7 +31958,7 @@
 	module.exports = EventPluginUtils;
 
 /***/ },
-/* 120 */
+/* 123 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -31721,7 +31976,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	var injected = false;
 
@@ -31753,7 +32008,7 @@
 	module.exports = ReactComponentEnvironment;
 
 /***/ },
-/* 121 */
+/* 124 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -31788,7 +32043,7 @@
 	module.exports = ReactEmptyComponent;
 
 /***/ },
-/* 122 */
+/* 125 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -31807,7 +32062,7 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	var genericComponentClass = null;
 	// This registry keeps track of wrapper classes around host tags.
@@ -31869,308 +32124,7 @@
 	module.exports = ReactHostComponent;
 
 /***/ },
-/* 123 */
-/***/ function(module, exports, require) {
-
-	"use strict";
-
-	exports.createServer = exports.connect = exports.createConnection = exports.connect = exports.Server = exports.Socket = exports.isIP = exports.isIPv4 = exports.isIPv4 = function () {
-		throw new Error("net is not availible in browser.");
-	};
-
-/***/ },
-/* 124 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactInputSelection
-	 */
-
-	'use strict';
-
-	var ReactDOMSelection = require(172);
-
-	var containsNode = require(173);
-	var focusNode = require(157);
-	var getActiveElement = require(127);
-
-	function isInDocument(node) {
-	  return containsNode(document.documentElement, node);
-	}
-
-	/**
-	 * @ReactInputSelection: React input selection module. Based on Selection.js,
-	 * but modified to be suitable for react and has a couple of bug fixes (doesn't
-	 * assume buttons have range selections allowed).
-	 * Input selection module for React.
-	 */
-	var ReactInputSelection = {
-
-	  hasSelectionCapabilities: function hasSelectionCapabilities(elem) {
-	    var nodeName = elem && elem.nodeName && elem.nodeName.toLowerCase();
-	    return nodeName && (nodeName === 'input' && elem.type === 'text' || nodeName === 'textarea' || elem.contentEditable === 'true');
-	  },
-
-	  getSelectionInformation: function getSelectionInformation() {
-	    var focusedElem = getActiveElement();
-	    return {
-	      focusedElem: focusedElem,
-	      selectionRange: ReactInputSelection.hasSelectionCapabilities(focusedElem) ? ReactInputSelection.getSelection(focusedElem) : null
-	    };
-	  },
-
-	  /**
-	   * @restoreSelection: If any selection information was potentially lost,
-	   * restore it. This is useful when performing operations that could remove dom
-	   * nodes and place them back in, resulting in focus being lost.
-	   */
-	  restoreSelection: function restoreSelection(priorSelectionInformation) {
-	    var curFocusedElem = getActiveElement();
-	    var priorFocusedElem = priorSelectionInformation.focusedElem;
-	    var priorSelectionRange = priorSelectionInformation.selectionRange;
-	    if (curFocusedElem !== priorFocusedElem && isInDocument(priorFocusedElem)) {
-	      if (ReactInputSelection.hasSelectionCapabilities(priorFocusedElem)) {
-	        ReactInputSelection.setSelection(priorFocusedElem, priorSelectionRange);
-	      }
-	      focusNode(priorFocusedElem);
-	    }
-	  },
-
-	  /**
-	   * @getSelection: Gets the selection bounds of a focused textarea, input or
-	   * contentEditable node.
-	   * -@input: Look up selection bounds of this input
-	   * -@return {start: selectionStart, end: selectionEnd}
-	   */
-	  getSelection: function getSelection(input) {
-	    var selection;
-
-	    if ('selectionStart' in input) {
-	      // Modern browser with input or textarea.
-	      selection = {
-	        start: input.selectionStart,
-	        end: input.selectionEnd
-	      };
-	    } else if (document.selection && input.nodeName && input.nodeName.toLowerCase() === 'input') {
-	      // IE8 input.
-	      var range = document.selection.createRange();
-	      // There can only be one selection per document in IE, so it must
-	      // be in our element.
-	      if (range.parentElement() === input) {
-	        selection = {
-	          start: -range.moveStart('character', -input.value.length),
-	          end: -range.moveEnd('character', -input.value.length)
-	        };
-	      }
-	    } else {
-	      // Content editable or old IE textarea.
-	      selection = ReactDOMSelection.getOffsets(input);
-	    }
-
-	    return selection || { start: 0, end: 0 };
-	  },
-
-	  /**
-	   * @setSelection: Sets the selection bounds of a textarea or input and focuses
-	   * the input.
-	   * -@input     Set selection bounds of this input or textarea
-	   * -@offsets   Object of same form that is returned from get*
-	   */
-	  setSelection: function setSelection(input, offsets) {
-	    var start = offsets.start;
-	    var end = offsets.end;
-	    if (end === undefined) {
-	      end = start;
-	    }
-
-	    if ('selectionStart' in input) {
-	      input.selectionStart = start;
-	      input.selectionEnd = Math.min(end, input.value.length);
-	    } else if (document.selection && input.nodeName && input.nodeName.toLowerCase() === 'input') {
-	      var range = input.createTextRange();
-	      range.collapse(true);
-	      range.moveStart('character', start);
-	      range.moveEnd('character', end - start);
-	      range.select();
-	    } else {
-	      ReactDOMSelection.setOffsets(input, offsets);
-	    }
-	  }
-	};
-
-	module.exports = ReactInputSelection;
-
-/***/ },
-/* 125 */
-/***/ function(module, exports, require) {
-
-	'use strict';
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 *
-	 * @typechecks
-	 */
-
-	var emptyFunction = require(83);
-
-	/**
-	 * Upstream version of event listener. Does not take into account specific
-	 * nature of platform.
-	 */
-	var EventListener = {
-	  /**
-	   * Listen to DOM events during the bubble phase.
-	   *
-	   * @param {DOMEventTarget} target DOM element to register listener on.
-	   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
-	   * @param {function} callback Callback function.
-	   * @return {object} Object with a `remove` method.
-	   */
-	  listen: function listen(target, eventType, callback) {
-	    if (target.addEventListener) {
-	      target.addEventListener(eventType, callback, false);
-	      return {
-	        remove: function remove() {
-	          target.removeEventListener(eventType, callback, false);
-	        }
-	      };
-	    } else if (target.attachEvent) {
-	      target.attachEvent('on' + eventType, callback);
-	      return {
-	        remove: function remove() {
-	          target.detachEvent('on' + eventType, callback);
-	        }
-	      };
-	    }
-	  },
-
-	  /**
-	   * Listen to DOM events during the capture phase.
-	   *
-	   * @param {DOMEventTarget} target DOM element to register listener on.
-	   * @param {string} eventType Event type, e.g. 'click' or 'mouseover'.
-	   * @param {function} callback Callback function.
-	   * @return {object} Object with a `remove` method.
-	   */
-	  capture: function capture(target, eventType, callback) {
-	    if (target.addEventListener) {
-	      target.addEventListener(eventType, callback, true);
-	      return {
-	        remove: function remove() {
-	          target.removeEventListener(eventType, callback, true);
-	        }
-	      };
-	    } else {
-	      if (true) {
-	        console.error('Attempted to listen to events during the capture phase on a ' + 'browser that does not support the capture phase. Your application ' + 'will not receive some events.');
-	      }
-	      return {
-	        remove: emptyFunction
-	      };
-	    }
-	  },
-
-	  registerDefault: function registerDefault() {}
-	};
-
-	module.exports = EventListener;
-
-/***/ },
 /* 126 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 *
-	 * @typechecks
-	 */
-
-	'use strict';
-
-	/**
-	 * Gets the scroll position of the supplied element or window.
-	 *
-	 * The return values are unbounded, unlike `getScrollPosition`. This means they
-	 * may be negative or exceed the element boundaries (which is possible using
-	 * inertial scrolling).
-	 *
-	 * @param {DOMWindow|DOMElement} scrollable
-	 * @return {object} Map with `x` and `y` keys.
-	 */
-
-	function getUnboundedScrollPosition(scrollable) {
-	  if (scrollable.Window && scrollable instanceof scrollable.Window) {
-	    return {
-	      x: scrollable.pageXOffset || scrollable.document.documentElement.scrollLeft,
-	      y: scrollable.pageYOffset || scrollable.document.documentElement.scrollTop
-	    };
-	  }
-	  return {
-	    x: scrollable.scrollLeft,
-	    y: scrollable.scrollTop
-	  };
-	}
-
-	module.exports = getUnboundedScrollPosition;
-
-/***/ },
-/* 127 */
-/***/ function(module, exports, require) {
-
-	'use strict';
-
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 *
-	 * @typechecks
-	 */
-
-	/* eslint-disable fb-www/typeof-undefined */
-
-	/**
-	 * Same as document.activeElement but wraps in a try-catch block. In IE it is
-	 * not safe to call document.activeElement if there is nothing focused.
-	 *
-	 * The activeElement will be null only if the document or document body is not
-	 * yet defined.
-	 *
-	 * @param {?DOMDocument} doc Defaults to current document.
-	 * @return {?DOMElement}
-	 */
-
-	function getActiveElement(doc) /*?DOMElement*/{
-	  doc = doc || (typeof document !== 'undefined' ? document : undefined);
-	  if (typeof doc === 'undefined') {
-	    return null;
-	  }
-	  try {
-	    return doc.activeElement || doc.body;
-	  } catch (e) {
-	    return doc.body;
-	  }
-	}
-
-	module.exports = getActiveElement;
-
-/***/ },
-/* 128 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32186,7 +32140,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
 	/**
 	 * @interface Event
@@ -32214,7 +32168,7 @@
 	module.exports = SyntheticAnimationEvent;
 
 /***/ },
-/* 129 */
+/* 127 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32230,7 +32184,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
 	/**
 	 * @interface Event
@@ -32257,7 +32211,7 @@
 	module.exports = SyntheticClipboardEvent;
 
 /***/ },
-/* 130 */
+/* 128 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32273,7 +32227,7 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = require(135);
+	var SyntheticUIEvent = require(133);
 
 	/**
 	 * @interface FocusEvent
@@ -32298,7 +32252,7 @@
 	module.exports = SyntheticFocusEvent;
 
 /***/ },
-/* 131 */
+/* 129 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32314,11 +32268,11 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = require(135);
+	var SyntheticUIEvent = require(133);
 
-	var getEventCharCode = require(137);
+	var getEventCharCode = require(135);
 	var getEventKey = require(174);
-	var getEventModifierState = require(153);
+	var getEventModifierState = require(157);
 
 	/**
 	 * @interface KeyboardEvent
@@ -32387,7 +32341,7 @@
 	module.exports = SyntheticKeyboardEvent;
 
 /***/ },
-/* 132 */
+/* 130 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32403,7 +32357,7 @@
 
 	'use strict';
 
-	var SyntheticMouseEvent = require(94);
+	var SyntheticMouseEvent = require(102);
 
 	/**
 	 * @interface DragEvent
@@ -32428,7 +32382,7 @@
 	module.exports = SyntheticDragEvent;
 
 /***/ },
-/* 133 */
+/* 131 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32444,9 +32398,9 @@
 
 	'use strict';
 
-	var SyntheticUIEvent = require(135);
+	var SyntheticUIEvent = require(133);
 
-	var getEventModifierState = require(153);
+	var getEventModifierState = require(157);
 
 	/**
 	 * @interface TouchEvent
@@ -32478,7 +32432,7 @@
 	module.exports = SyntheticTouchEvent;
 
 /***/ },
-/* 134 */
+/* 132 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32494,7 +32448,7 @@
 
 	'use strict';
 
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
 	/**
 	 * @interface Event
@@ -32522,7 +32476,7 @@
 	module.exports = SyntheticTransitionEvent;
 
 /***/ },
-/* 135 */
+/* 133 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32538,9 +32492,9 @@
 
 	'use strict';
 
-	var SyntheticEvent = require(116);
+	var SyntheticEvent = require(98);
 
-	var getEventTarget = require(117);
+	var getEventTarget = require(99);
 
 	/**
 	 * @interface UIEvent
@@ -32586,7 +32540,7 @@
 	module.exports = SyntheticUIEvent;
 
 /***/ },
-/* 136 */
+/* 134 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32602,7 +32556,7 @@
 
 	'use strict';
 
-	var SyntheticMouseEvent = require(94);
+	var SyntheticMouseEvent = require(102);
 
 	/**
 	 * @interface WheelEvent
@@ -32645,7 +32599,7 @@
 	module.exports = SyntheticWheelEvent;
 
 /***/ },
-/* 137 */
+/* 135 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32700,7 +32654,49 @@
 	module.exports = getEventCharCode;
 
 /***/ },
-/* 138 */
+/* 136 */
+/***/ function(module, exports, require) {
+
+	'use strict';
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 * @typechecks
+	 */
+
+	/* eslint-disable fb-www/typeof-undefined */
+
+	/**
+	 * Same as document.activeElement but wraps in a try-catch block. In IE it is
+	 * not safe to call document.activeElement if there is nothing focused.
+	 *
+	 * The activeElement will be null only if the document or document body is not
+	 * yet defined.
+	 *
+	 * @param {?DOMDocument} doc Defaults to current document.
+	 * @return {?DOMElement}
+	 */
+
+	function getActiveElement(doc) /*?DOMElement*/{
+	  doc = doc || (typeof document !== 'undefined' ? document : undefined);
+	  if (typeof doc === 'undefined') {
+	    return null;
+	  }
+	  try {
+	    return doc.activeElement || doc.body;
+	  } catch (e) {
+	    return doc.body;
+	  }
+	}
+
+	module.exports = getActiveElement;
+
+/***/ },
+/* 137 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32718,7 +32714,7 @@
 
 	var _prodInvariant = require(35);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * ReactOwners are capable of storing references to owned components.
@@ -32799,7 +32795,7 @@
 	module.exports = ReactOwner;
 
 /***/ },
-/* 139 */
+/* 138 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32836,7 +32832,7 @@
 	module.exports = createMicrosoftUnsafeLocalFunction;
 
 /***/ },
-/* 140 */
+/* 139 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32852,8 +32848,8 @@
 
 	'use strict';
 
-	var ExecutionEnvironment = require(80);
-	var escapeTextContentForBrowser = require(112);
+	var ExecutionEnvironment = require(84);
+	var escapeTextContentForBrowser = require(116);
 	var setInnerHTML = require(69);
 
 	/**
@@ -32889,7 +32885,7 @@
 	module.exports = setTextContent;
 
 /***/ },
-/* 141 */
+/* 140 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32905,7 +32901,7 @@
 
 	'use strict';
 
-	var EventPluginHub = require(104);
+	var EventPluginHub = require(97);
 
 	function runEventQueueInBatch(events) {
 	  EventPluginHub.enqueueEvents(events);
@@ -32927,7 +32923,7 @@
 	module.exports = ReactEventEmitterMixin;
 
 /***/ },
-/* 142 */
+/* 141 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32959,7 +32955,7 @@
 	module.exports = ViewportMetrics;
 
 /***/ },
-/* 143 */
+/* 142 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -32975,7 +32971,7 @@
 
 	'use strict';
 
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 
 	/**
 	 * Generate a mapping of standard vendor prefixes using the defined style property and event name.
@@ -33065,7 +33061,7 @@
 	module.exports = getVendorPrefixedEventName;
 
 /***/ },
-/* 144 */
+/* 143 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -33114,7 +33110,7 @@
 	module.exports = adler32;
 
 /***/ },
-/* 145 */
+/* 144 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -33135,22 +33131,22 @@
 	var _prodInvariant = require(35),
 	    _assign = require(34);
 
-	var ReactComponentEnvironment = require(120);
+	var ReactComponentEnvironment = require(123);
 	var ReactCurrentOwner = require(62);
 	var ReactElement = require(30);
-	var ReactErrorUtils = require(168);
+	var ReactErrorUtils = require(156);
 	var ReactInstanceMap = require(65);
 	var ReactInstrumentation = require(22);
 	var ReactNodeTypes = require(71);
-	var ReactPropTypeLocations = require(84);
+	var ReactPropTypeLocations = require(78);
 	var ReactReconciler = require(16);
 
-	var checkReactTypeSpec = require(88);
-	var emptyObject = require(82);
-	var invariant = require(81);
-	var shallowEqual = require(114);
+	var checkReactTypeSpec = require(91);
+	var emptyObject = require(86);
+	var invariant = require(85);
+	var shallowEqual = require(117);
 	var shouldUpdateReactComponent = require(70);
-	var warning = require(79);
+	var warning = require(83);
 
 	var CompositeTypes = {
 	  ImpureClass: 0,
@@ -34025,7 +34021,185 @@
 	module.exports = ReactCompositeComponent;
 
 /***/ },
+/* 145 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2016-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactInvalidSetStateWarningHook
+	 */
+
+	'use strict';
+
+	var warning = require(83);
+
+	if (true) {
+	  var processingChildContext = false;
+
+	  var warnInvalidSetState = function warnInvalidSetState() {
+	    true ? warning(!processingChildContext, 'setState(...): Cannot call setState() inside getChildContext()') : void 0;
+	  };
+	}
+
+	var ReactInvalidSetStateWarningHook = {
+	  onBeginProcessingChildContext: function onBeginProcessingChildContext() {
+	    processingChildContext = true;
+	  },
+	  onEndProcessingChildContext: function onEndProcessingChildContext() {
+	    processingChildContext = false;
+	  },
+	  onSetState: function onSetState() {
+	    warnInvalidSetState();
+	  }
+	};
+
+	module.exports = ReactInvalidSetStateWarningHook;
+
+/***/ },
 /* 146 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2016-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactHostOperationHistoryHook
+	 */
+
+	'use strict';
+
+	var history = [];
+
+	var ReactHostOperationHistoryHook = {
+	  onHostOperation: function onHostOperation(debugID, type, payload) {
+	    history.push({
+	      instanceID: debugID,
+	      type: type,
+	      payload: payload
+	    });
+	  },
+	  clearHistory: function clearHistory() {
+	    if (ReactHostOperationHistoryHook._preventClearing) {
+	      // Should only be used for tests.
+	      return;
+	    }
+
+	    history = [];
+	  },
+	  getHistory: function getHistory() {
+	    return history;
+	  }
+	};
+
+	module.exports = ReactHostOperationHistoryHook;
+
+/***/ },
+/* 147 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactChildrenMutationWarningHook
+	 */
+
+	'use strict';
+
+	var ReactComponentTreeHook = require(74);
+
+	var warning = require(83);
+
+	function handleElement(debugID, element) {
+	  if (element == null) {
+	    return;
+	  }
+	  if (element._shadowChildren === undefined) {
+	    return;
+	  }
+	  if (element._shadowChildren === element.props.children) {
+	    return;
+	  }
+	  var isMutated = false;
+	  if (Array.isArray(element._shadowChildren)) {
+	    if (element._shadowChildren.length === element.props.children.length) {
+	      for (var i = 0; i < element._shadowChildren.length; i++) {
+	        if (element._shadowChildren[i] !== element.props.children[i]) {
+	          isMutated = true;
+	        }
+	      }
+	    } else {
+	      isMutated = true;
+	    }
+	  }
+	  if (!Array.isArray(element._shadowChildren) || isMutated) {
+	    true ? warning(false, 'Component\'s children should not be mutated.%s', ReactComponentTreeHook.getStackAddendumByID(debugID)) : void 0;
+	  }
+	}
+
+	var ReactChildrenMutationWarningHook = {
+	  onMountComponent: function onMountComponent(debugID) {
+	    handleElement(debugID, ReactComponentTreeHook.getElement(debugID));
+	  },
+	  onUpdateComponent: function onUpdateComponent(debugID) {
+	    handleElement(debugID, ReactComponentTreeHook.getElement(debugID));
+	  }
+	};
+
+	module.exports = ReactChildrenMutationWarningHook;
+
+/***/ },
+/* 148 */
+/***/ function(module, exports, require) {
+
+	'use strict';
+
+	/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 *
+	 * This source code is licensed under the MIT license found in the
+	 * LICENSE file in the root directory of this source tree.
+	 *
+	 * @typechecks
+	 */
+
+	var performance = require(175);
+
+	var performanceNow;
+
+	/**
+	 * Detect if we can use `window.performance.now()` and gracefully fallback to
+	 * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
+	 * because of Facebook's testing infrastructure.
+	 */
+	if (performance.now) {
+	  performanceNow = function performanceNow() {
+	    return performance.now();
+	  };
+	} else {
+	  performanceNow = function performanceNow() {
+	    return Date.now();
+	  };
+	}
+
+	module.exports = performanceNow;
+
+/***/ },
+/* 149 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -34089,182 +34263,14 @@
 	module.exports = KeyEscapeUtils;
 
 /***/ },
-/* 147 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2016-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactInvalidSetStateWarningHook
-	 */
-
-	'use strict';
-
-	var warning = require(79);
-
-	if (true) {
-	  var processingChildContext = false;
-
-	  var warnInvalidSetState = function warnInvalidSetState() {
-	    true ? warning(!processingChildContext, 'setState(...): Cannot call setState() inside getChildContext()') : void 0;
-	  };
-	}
-
-	var ReactInvalidSetStateWarningHook = {
-	  onBeginProcessingChildContext: function onBeginProcessingChildContext() {
-	    processingChildContext = true;
-	  },
-	  onEndProcessingChildContext: function onEndProcessingChildContext() {
-	    processingChildContext = false;
-	  },
-	  onSetState: function onSetState() {
-	    warnInvalidSetState();
-	  }
-	};
-
-	module.exports = ReactInvalidSetStateWarningHook;
-
-/***/ },
-/* 148 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2016-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactHostOperationHistoryHook
-	 */
-
-	'use strict';
-
-	var history = [];
-
-	var ReactHostOperationHistoryHook = {
-	  onHostOperation: function onHostOperation(debugID, type, payload) {
-	    history.push({
-	      instanceID: debugID,
-	      type: type,
-	      payload: payload
-	    });
-	  },
-	  clearHistory: function clearHistory() {
-	    if (ReactHostOperationHistoryHook._preventClearing) {
-	      // Should only be used for tests.
-	      return;
-	    }
-
-	    history = [];
-	  },
-	  getHistory: function getHistory() {
-	    return history;
-	  }
-	};
-
-	module.exports = ReactHostOperationHistoryHook;
-
-/***/ },
-/* 149 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactChildrenMutationWarningHook
-	 */
-
-	'use strict';
-
-	var ReactComponentTreeHook = require(73);
-
-	var warning = require(79);
-
-	function handleElement(debugID, element) {
-	  if (element == null) {
-	    return;
-	  }
-	  if (element._shadowChildren === undefined) {
-	    return;
-	  }
-	  if (element._shadowChildren === element.props.children) {
-	    return;
-	  }
-	  var isMutated = false;
-	  if (Array.isArray(element._shadowChildren)) {
-	    if (element._shadowChildren.length === element.props.children.length) {
-	      for (var i = 0; i < element._shadowChildren.length; i++) {
-	        if (element._shadowChildren[i] !== element.props.children[i]) {
-	          isMutated = true;
-	        }
-	      }
-	    } else {
-	      isMutated = true;
-	    }
-	  }
-	  if (!Array.isArray(element._shadowChildren) || isMutated) {
-	    true ? warning(false, 'Component\'s children should not be mutated.%s', ReactComponentTreeHook.getStackAddendumByID(debugID)) : void 0;
-	  }
-	}
-
-	var ReactChildrenMutationWarningHook = {
-	  onMountComponent: function onMountComponent(debugID) {
-	    handleElement(debugID, ReactComponentTreeHook.getElement(debugID));
-	  },
-	  onUpdateComponent: function onUpdateComponent(debugID) {
-	    handleElement(debugID, ReactComponentTreeHook.getElement(debugID));
-	  }
-	};
-
-	module.exports = ReactChildrenMutationWarningHook;
-
-/***/ },
 /* 150 */
 /***/ function(module, exports, require) {
 
-	'use strict';
+	"use strict";
 
-	/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 *
-	 * This source code is licensed under the MIT license found in the
-	 * LICENSE file in the root directory of this source tree.
-	 *
-	 * @typechecks
-	 */
-
-	var performance = require(175);
-
-	var performanceNow;
-
-	/**
-	 * Detect if we can use `window.performance.now()` and gracefully fallback to
-	 * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
-	 * because of Facebook's testing infrastructure.
-	 */
-	if (performance.now) {
-	  performanceNow = function performanceNow() {
-	    return performance.now();
-	  };
-	} else {
-	  performanceNow = function performanceNow() {
-	    return Date.now();
-	  };
-	}
-
-	module.exports = performanceNow;
+	exports.createServer = exports.connect = exports.createConnection = exports.connect = exports.Server = exports.Socket = exports.isIP = exports.isIPv4 = exports.isIPv4 = function () {
+		throw new Error("net is not availible in browser.");
+	};
 
 /***/ },
 /* 151 */
@@ -34405,6 +34411,224 @@
 /***/ function(module, exports, require) {
 
 	/**
+	 * Copyright 2014-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule accumulateInto
+	 * 
+	 */
+
+	'use strict';
+
+	var _prodInvariant = require(35);
+
+	var invariant = require(85);
+
+	/**
+	 * Accumulates items that must not be null or undefined into the first one. This
+	 * is used to conserve memory by avoiding array allocations, and thus sacrifices
+	 * API cleanness. Since `current` can be null before being passed in and not
+	 * null after this function, make sure to assign it back to `current`:
+	 *
+	 * `a = accumulateInto(a, b);`
+	 *
+	 * This API should be sparingly used. Try `accumulate` for something cleaner.
+	 *
+	 * @return {*|array<*>} An accumulation of items.
+	 */
+
+	function accumulateInto(current, next) {
+	  !(next != null) ? true ? invariant(false, 'accumulateInto(...): Accumulated items must not be null or undefined.') : _prodInvariant('30') : void 0;
+
+	  if (current == null) {
+	    return next;
+	  }
+
+	  // Both are not empty. Warning: Never call x.concat(y) when you are not
+	  // certain that x is an Array (x could be a string with concat method).
+	  if (Array.isArray(current)) {
+	    if (Array.isArray(next)) {
+	      current.push.apply(current, next);
+	      return current;
+	    }
+	    current.push(next);
+	    return current;
+	  }
+
+	  if (Array.isArray(next)) {
+	    // A bit too dangerous to mutate `next`.
+	    return [current].concat(next);
+	  }
+
+	  return [current, next];
+	}
+
+	module.exports = accumulateInto;
+
+/***/ },
+/* 154 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule forEachAccumulated
+	 * 
+	 */
+
+	'use strict';
+
+	/**
+	 * @param {array} arr an "accumulation" of items which is either an Array or
+	 * a single item. Useful when paired with the `accumulate` module. This is a
+	 * simple utility that allows us to reason about a collection of items, but
+	 * handling the case when there is exactly one item (and we do not need to
+	 * allocate an array).
+	 */
+
+	function forEachAccumulated(arr, cb, scope) {
+	  if (Array.isArray(arr)) {
+	    arr.forEach(cb, scope);
+	  } else if (arr) {
+	    cb.call(scope, arr);
+	  }
+	}
+
+	module.exports = forEachAccumulated;
+
+/***/ },
+/* 155 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule getTextContentAccessor
+	 */
+
+	'use strict';
+
+	var ExecutionEnvironment = require(84);
+
+	var contentKey = null;
+
+	/**
+	 * Gets the key used to access text content on a DOM node.
+	 *
+	 * @return {?string} Key used to access text content.
+	 * @internal
+	 */
+	function getTextContentAccessor() {
+	  if (!contentKey && ExecutionEnvironment.canUseDOM) {
+	    // Prefer textContent to innerText because many browsers support both but
+	    // SVG <text> elements don't support innerText even when <div> does.
+	    contentKey = 'textContent' in document.documentElement ? 'textContent' : 'innerText';
+	  }
+	  return contentKey;
+	}
+
+	module.exports = getTextContentAccessor;
+
+/***/ },
+/* 156 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactErrorUtils
+	 */
+
+	'use strict';
+
+	var caughtError = null;
+
+	/**
+	 * Call a function while guarding against errors that happens within it.
+	 *
+	 * @param {?String} name of the guard to use for logging or debugging
+	 * @param {Function} func The function to invoke
+	 * @param {*} a First argument
+	 * @param {*} b Second argument
+	 */
+	function invokeGuardedCallback(name, func, a, b) {
+	  try {
+	    return func(a, b);
+	  } catch (x) {
+	    if (caughtError === null) {
+	      caughtError = x;
+	    }
+	    return undefined;
+	  }
+	}
+
+	var ReactErrorUtils = {
+	  invokeGuardedCallback: invokeGuardedCallback,
+
+	  /**
+	   * Invoked by ReactTestUtils.Simulate so that any errors thrown by the event
+	   * handler are sure to be rethrown by rethrowCaughtError.
+	   */
+	  invokeGuardedCallbackWithCatch: invokeGuardedCallback,
+
+	  /**
+	   * During execution of guarded functions we will capture the first error which
+	   * we will rethrow to be handled by the top level error handler.
+	   */
+	  rethrowCaughtError: function rethrowCaughtError() {
+	    if (caughtError) {
+	      var error = caughtError;
+	      caughtError = null;
+	      throw error;
+	    }
+	  }
+	};
+
+	if (true) {
+	  /**
+	   * To help development we can get better devtools integration by simulating a
+	   * real browser event.
+	   */
+	  if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof document !== 'undefined' && typeof document.createEvent === 'function') {
+	    var fakeNode = document.createElement('react');
+	    ReactErrorUtils.invokeGuardedCallback = function (name, func, a, b) {
+	      var boundFunc = func.bind(null, a, b);
+	      var evtType = 'react-' + name;
+	      fakeNode.addEventListener(evtType, boundFunc, false);
+	      var evt = document.createEvent('Event');
+	      evt.initEvent(evtType, false, false);
+	      fakeNode.dispatchEvent(evt);
+	      fakeNode.removeEventListener(evtType, boundFunc, false);
+	    };
+	  }
+	}
+
+	module.exports = ReactErrorUtils;
+
+/***/ },
+/* 157 */
+/***/ function(module, exports, require) {
+
+	/**
 	 * Copyright 2013-present, Facebook, Inc.
 	 * All rights reserved.
 	 *
@@ -34449,144 +34673,7 @@
 	module.exports = getEventModifierState;
 
 /***/ },
-/* 154 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule getTextContentAccessor
-	 */
-
-	'use strict';
-
-	var ExecutionEnvironment = require(80);
-
-	var contentKey = null;
-
-	/**
-	 * Gets the key used to access text content on a DOM node.
-	 *
-	 * @return {?string} Key used to access text content.
-	 * @internal
-	 */
-	function getTextContentAccessor() {
-	  if (!contentKey && ExecutionEnvironment.canUseDOM) {
-	    // Prefer textContent to innerText because many browsers support both but
-	    // SVG <text> elements don't support innerText even when <div> does.
-	    contentKey = 'textContent' in document.documentElement ? 'textContent' : 'innerText';
-	  }
-	  return contentKey;
-	}
-
-	module.exports = getTextContentAccessor;
-
-/***/ },
-/* 155 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2014-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule accumulateInto
-	 * 
-	 */
-
-	'use strict';
-
-	var _prodInvariant = require(35);
-
-	var invariant = require(81);
-
-	/**
-	 * Accumulates items that must not be null or undefined into the first one. This
-	 * is used to conserve memory by avoiding array allocations, and thus sacrifices
-	 * API cleanness. Since `current` can be null before being passed in and not
-	 * null after this function, make sure to assign it back to `current`:
-	 *
-	 * `a = accumulateInto(a, b);`
-	 *
-	 * This API should be sparingly used. Try `accumulate` for something cleaner.
-	 *
-	 * @return {*|array<*>} An accumulation of items.
-	 */
-
-	function accumulateInto(current, next) {
-	  !(next != null) ? true ? invariant(false, 'accumulateInto(...): Accumulated items must not be null or undefined.') : _prodInvariant('30') : void 0;
-
-	  if (current == null) {
-	    return next;
-	  }
-
-	  // Both are not empty. Warning: Never call x.concat(y) when you are not
-	  // certain that x is an Array (x could be a string with concat method).
-	  if (Array.isArray(current)) {
-	    if (Array.isArray(next)) {
-	      current.push.apply(current, next);
-	      return current;
-	    }
-	    current.push(next);
-	    return current;
-	  }
-
-	  if (Array.isArray(next)) {
-	    // A bit too dangerous to mutate `next`.
-	    return [current].concat(next);
-	  }
-
-	  return [current, next];
-	}
-
-	module.exports = accumulateInto;
-
-/***/ },
-/* 156 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule forEachAccumulated
-	 * 
-	 */
-
-	'use strict';
-
-	/**
-	 * @param {array} arr an "accumulation" of items which is either an Array or
-	 * a single item. Useful when paired with the `accumulate` module. This is a
-	 * simple utility that allows us to reason about a collection of items, but
-	 * handling the case when there is exactly one item (and we do not need to
-	 * allocate an array).
-	 */
-
-	function forEachAccumulated(arr, cb, scope) {
-	  if (Array.isArray(arr)) {
-	    arr.forEach(cb, scope);
-	  } else if (arr) {
-	    cb.call(scope, arr);
-	  }
-	}
-
-	module.exports = forEachAccumulated;
-
-/***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -34615,7 +34702,38 @@
 	module.exports = focusNode;
 
 /***/ },
-/* 158 */
+/* 159 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule quoteAttributeValueForBrowser
+	 */
+
+	'use strict';
+
+	var escapeTextContentForBrowser = require(116);
+
+	/**
+	 * Escapes attribute value to prevent scripting attacks.
+	 *
+	 * @param {*} value Value to escape.
+	 * @return {string} An escaped string.
+	 */
+	function quoteAttributeValueForBrowser(value) {
+	  return '"' + escapeTextContentForBrowser(value) + '"';
+	}
+
+	module.exports = quoteAttributeValueForBrowser;
+
+/***/ },
+/* 160 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -34634,11 +34752,11 @@
 	var _prodInvariant = require(35);
 
 	var DOMLazyTree = require(60);
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 
 	var createNodesFromMarkup = require(179);
-	var emptyFunction = require(83);
-	var invariant = require(81);
+	var emptyFunction = require(87);
+	var invariant = require(85);
 
 	var Danger = {
 
@@ -34668,7 +34786,7 @@
 	module.exports = Danger;
 
 /***/ },
-/* 159 */
+/* 161 */
 /***/ function(module, exports, require) {
 
 	/**
@@ -34684,7 +34802,7 @@
 
 	'use strict';
 
-	var keyMirror = require(86);
+	var keyMirror = require(88);
 
 	/**
 	 * When a component's children are updated, a series of update configuration
@@ -34703,92 +34821,6 @@
 	});
 
 	module.exports = ReactMultiChildUpdateTypes;
-
-/***/ },
-/* 160 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule DisabledInputUtils
-	 */
-
-	'use strict';
-
-	var disableableMouseListenerNames = {
-	  onClick: true,
-	  onDoubleClick: true,
-	  onMouseDown: true,
-	  onMouseMove: true,
-	  onMouseUp: true,
-
-	  onClickCapture: true,
-	  onDoubleClickCapture: true,
-	  onMouseDownCapture: true,
-	  onMouseMoveCapture: true,
-	  onMouseUpCapture: true
-	};
-
-	/**
-	 * Implements a host component that does not receive mouse events
-	 * when `disabled` is set.
-	 */
-	var DisabledInputUtils = {
-	  getHostProps: function getHostProps(inst, props) {
-	    if (!props.disabled) {
-	      return props;
-	    }
-
-	    // Copy the props, except the mouse listeners
-	    var hostProps = {};
-	    for (var key in props) {
-	      if (!disableableMouseListenerNames[key] && props.hasOwnProperty(key)) {
-	        hostProps[key] = props[key];
-	      }
-	    }
-
-	    return hostProps;
-	  }
-	};
-
-	module.exports = DisabledInputUtils;
-
-/***/ },
-/* 161 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule quoteAttributeValueForBrowser
-	 */
-
-	'use strict';
-
-	var escapeTextContentForBrowser = require(112);
-
-	/**
-	 * Escapes attribute value to prevent scripting attacks.
-	 *
-	 * @param {*} value Value to escape.
-	 * @return {string} An escaped string.
-	 */
-	function quoteAttributeValueForBrowser(value) {
-	  return '"' + escapeTextContentForBrowser(value) + '"';
-	}
-
-	module.exports = quoteAttributeValueForBrowser;
 
 /***/ },
 /* 162 */
@@ -35003,7 +35035,7 @@
 	'use strict';
 
 	var CSSProperty = require(162);
-	var warning = require(79);
+	var warning = require(83);
 
 	var isUnitlessNumber = CSSProperty.isUnitlessNumber;
 	var styleWarnings = {};
@@ -35154,6 +35186,61 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
+	 * @providesModule DisabledInputUtils
+	 */
+
+	'use strict';
+
+	var disableableMouseListenerNames = {
+	  onClick: true,
+	  onDoubleClick: true,
+	  onMouseDown: true,
+	  onMouseMove: true,
+	  onMouseUp: true,
+
+	  onClickCapture: true,
+	  onDoubleClickCapture: true,
+	  onMouseDownCapture: true,
+	  onMouseMoveCapture: true,
+	  onMouseUpCapture: true
+	};
+
+	/**
+	 * Implements a host component that does not receive mouse events
+	 * when `disabled` is set.
+	 */
+	var DisabledInputUtils = {
+	  getHostProps: function getHostProps(inst, props) {
+	    if (!props.disabled) {
+	      return props;
+	    }
+
+	    // Copy the props, except the mouse listeners
+	    var hostProps = {};
+	    for (var key in props) {
+	      if (!disableableMouseListenerNames[key] && props.hasOwnProperty(key)) {
+	        hostProps[key] = props[key];
+	      }
+	    }
+
+	    return hostProps;
+	  }
+	};
+
+	module.exports = DisabledInputUtils;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, require) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
 	 * @providesModule LinkedValueUtils
 	 */
 
@@ -35162,11 +35249,11 @@
 	var _prodInvariant = require(35);
 
 	var ReactPropTypes = require(31);
-	var ReactPropTypeLocations = require(84);
-	var ReactPropTypesSecret = require(90);
+	var ReactPropTypeLocations = require(78);
+	var ReactPropTypesSecret = require(81);
 
-	var invariant = require(81);
-	var warning = require(79);
+	var invariant = require(85);
+	var warning = require(83);
 
 	var hasReadOnlyValue = {
 	  'button': true,
@@ -35284,87 +35371,6 @@
 	module.exports = LinkedValueUtils;
 
 /***/ },
-/* 168 */
-/***/ function(module, exports, require) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactErrorUtils
-	 */
-
-	'use strict';
-
-	var caughtError = null;
-
-	/**
-	 * Call a function while guarding against errors that happens within it.
-	 *
-	 * @param {?String} name of the guard to use for logging or debugging
-	 * @param {Function} func The function to invoke
-	 * @param {*} a First argument
-	 * @param {*} b Second argument
-	 */
-	function invokeGuardedCallback(name, func, a, b) {
-	  try {
-	    return func(a, b);
-	  } catch (x) {
-	    if (caughtError === null) {
-	      caughtError = x;
-	    }
-	    return undefined;
-	  }
-	}
-
-	var ReactErrorUtils = {
-	  invokeGuardedCallback: invokeGuardedCallback,
-
-	  /**
-	   * Invoked by ReactTestUtils.Simulate so that any errors thrown by the event
-	   * handler are sure to be rethrown by rethrowCaughtError.
-	   */
-	  invokeGuardedCallbackWithCatch: invokeGuardedCallback,
-
-	  /**
-	   * During execution of guarded functions we will capture the first error which
-	   * we will rethrow to be handled by the top level error handler.
-	   */
-	  rethrowCaughtError: function rethrowCaughtError() {
-	    if (caughtError) {
-	      var error = caughtError;
-	      caughtError = null;
-	      throw error;
-	    }
-	  }
-	};
-
-	if (true) {
-	  /**
-	   * To help development we can get better devtools integration by simulating a
-	   * real browser event.
-	   */
-	  if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof document !== 'undefined' && typeof document.createEvent === 'function') {
-	    var fakeNode = document.createElement('react');
-	    ReactErrorUtils.invokeGuardedCallback = function (name, func, a, b) {
-	      var boundFunc = func.bind(null, a, b);
-	      var evtType = 'react-' + name;
-	      fakeNode.addEventListener(evtType, boundFunc, false);
-	      var evt = document.createEvent('Event');
-	      evt.initEvent(evtType, false, false);
-	      fakeNode.dispatchEvent(evt);
-	      fakeNode.removeEventListener(evtType, boundFunc, false);
-	    };
-	  }
-	}
-
-	module.exports = ReactErrorUtils;
-
-/***/ },
 /* 169 */
 /***/ function(module, exports, require) {
 
@@ -35390,7 +35396,7 @@
 
 	var ReactUpdateQueue = require(67);
 	var Transaction = require(59);
-	var warning = require(79);
+	var warning = require(83);
 
 	function warnNoop(publicInstance, callerName) {
 	  if (true) {
@@ -35529,10 +35535,10 @@
 	var ReactReconciler = require(16);
 
 	var instantiateReactComponent = require(68);
-	var KeyEscapeUtils = require(146);
+	var KeyEscapeUtils = require(149);
 	var shouldUpdateReactComponent = require(70);
-	var traverseAllChildren = require(74);
-	var warning = require(79);
+	var traverseAllChildren = require(75);
+	var warning = require(83);
 
 	var ReactComponentTreeHook;
 
@@ -35542,7 +35548,7 @@
 	  // https://github.com/facebook/react/issues/7240
 	  // Remove the inline requires when we don't need them anymore:
 	  // https://github.com/facebook/react/pull/7178
-	  ReactComponentTreeHook = require(73);
+	  ReactComponentTreeHook = require(74);
 	}
 
 	function instantiateChild(childInstances, child, name, selfDebugID) {
@@ -35550,7 +35556,7 @@
 	  var keyUnique = childInstances[name] === undefined;
 	  if (true) {
 	    if (!ReactComponentTreeHook) {
-	      ReactComponentTreeHook = require(73);
+	      ReactComponentTreeHook = require(74);
 	    }
 	    if (!keyUnique) {
 	      true ? warning(false, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.%s', KeyEscapeUtils.unescape(name), ReactComponentTreeHook.getStackAddendumByID(selfDebugID)) : void 0;
@@ -35689,9 +35695,9 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-	var KeyEscapeUtils = require(146);
-	var traverseAllChildren = require(74);
-	var warning = require(79);
+	var KeyEscapeUtils = require(149);
+	var traverseAllChildren = require(75);
+	var warning = require(83);
 
 	var ReactComponentTreeHook;
 
@@ -35701,7 +35707,7 @@
 	  // https://github.com/facebook/react/issues/7240
 	  // Remove the inline requires when we don't need them anymore:
 	  // https://github.com/facebook/react/pull/7178
-	  ReactComponentTreeHook = require(73);
+	  ReactComponentTreeHook = require(74);
 	}
 
 	/**
@@ -35717,7 +35723,7 @@
 	    var keyUnique = result[name] === undefined;
 	    if (true) {
 	      if (!ReactComponentTreeHook) {
-	        ReactComponentTreeHook = require(73);
+	        ReactComponentTreeHook = require(74);
 	      }
 	      if (!keyUnique) {
 	        true ? warning(false, 'flattenChildren(...): Encountered two children with the same key, ' + '`%s`. Child keys must be unique; when two children share a key, only ' + 'the first child will be used.%s', KeyEscapeUtils.unescape(name), ReactComponentTreeHook.getStackAddendumByID(selfDebugID)) : void 0;
@@ -35770,10 +35776,10 @@
 
 	'use strict';
 
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 
 	var getNodeForCharacterOffset = require(182);
-	var getTextContentAccessor = require(154);
+	var getTextContentAccessor = require(155);
 
 	/**
 	 * While `isCollapsed` is available on the Selection object and `collapsed`
@@ -36029,7 +36035,7 @@
 
 	'use strict';
 
-	var getEventCharCode = require(137);
+	var getEventCharCode = require(135);
 
 	/**
 	 * Normalization of deprecated HTML5 `key` values
@@ -36134,7 +36140,7 @@
 
 	'use strict';
 
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 
 	var performance;
 
@@ -36522,11 +36528,11 @@
 
 	/*eslint-disable fb-www/unsafe-html*/
 
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 
 	var createArrayFromMixed = require(189);
 	var getMarkupWrap = require(190);
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Dummy container used to render all markup.
@@ -36972,7 +36978,7 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Convert array-like objects to arrays.
@@ -37102,9 +37108,9 @@
 
 	/*eslint-disable fb-www/unsafe-html */
 
-	var ExecutionEnvironment = require(80);
+	var ExecutionEnvironment = require(84);
 
-	var invariant = require(81);
+	var invariant = require(85);
 
 	/**
 	 * Dummy container used to detect which wraps are necessary.
