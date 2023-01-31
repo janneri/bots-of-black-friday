@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Item {
 
+    public static final int POTION_HEALTH_RESTORE_AMOUNT = 20;
+
     public final int price;
     public final int discountPercent;
     public final Position position;
