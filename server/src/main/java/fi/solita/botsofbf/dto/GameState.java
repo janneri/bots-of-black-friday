@@ -196,6 +196,9 @@ public class GameState {
     }
 
     public GameState spawnItems() {
+        if (items.size() < map.maxItemCount && Math.random() < 0.1) {
+            return addItem(Item.createPotion(100, 0, map.randomFloorPosition()));
+        }
         if (items.size() < map.maxItemCount && Math.random() > 0.9) {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
