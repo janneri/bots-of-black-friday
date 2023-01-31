@@ -16,7 +16,8 @@ public class Item {
 
     public enum Type {
         JUST_SOME_JUNK,
-        WEAPON
+        WEAPON,
+        POTION
     }
 
     private Item(int price, int discountPercent, Position position, Type type, boolean isUsable) {
@@ -37,6 +38,11 @@ public class Item {
     public static Item createWeapon(int price, int discountPercent, Position position) {
         final boolean isUsable = true;
         return new Item(price, discountPercent, position, Type.WEAPON, isUsable);
+    }
+
+    public static Item createPotion(int price, int discountPercent, Position position) {
+        final boolean isUsable = false;
+        return new Item(price, discountPercent, position, Type.POTION, isUsable);
     }
 
     @JsonIgnore
