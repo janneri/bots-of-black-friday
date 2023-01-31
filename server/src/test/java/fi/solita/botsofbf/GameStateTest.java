@@ -218,6 +218,19 @@ public class GameStateTest {
     }
 
     @Test
+    public void pickingUpPotionRestoresHealth() {
+        Map map = Map.createMapFromLines(mapLines);
+        Player player = createPlayerToMap(map).decreaseHealth(50);
+
+        GameState state = new GameState(map)
+                .addPlayer(player)
+                .addItem(Item.createPotion(1, 1, player.position))
+                .movePlayer(player.id, Move.PICK);
+
+        assertEquals(70, state.getPlayer(player.id).health);
+    }
+
+    @Test
     public void usingAWeaponRecordsAShootingLineToBeDisplayedAtMap() {
         Map map = Map.createMapFromLines(mapLines);
         Player drainer = createPlayerToMap(map);
