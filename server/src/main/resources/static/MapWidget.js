@@ -192,8 +192,19 @@ var MapWidget = React.createClass({
         );
     };
 
+    var getItemColor = function(item) {
+        switch (item.type) {
+            case "WEAPON":
+                return "#5e5e05";
+            case "POTION":
+                return "#0b055e"
+            default:
+                return "#00ff00";
+        }
+    }
+
     var drawItem = function(item) {
-      var color = item.type === "WEAPON" ? "#ffff00" : "#00ff00";
+      var color = getItemColor(item);
       var text = item.type === "WEAPON" ? item.price + ' \u20ac' : item.price + ' \u20ac -' + item.discountPercent + '%';
       return (
         <G key={"item_" + item.position.x + "." + item.position.y}>
