@@ -192,27 +192,30 @@ var MapWidget = React.createClass({
         );
     };
 
-    var getItemColor = function(item) {
+    var getItemEmoji = function(item) {
         switch (item.type) {
             case "WEAPON":
-                return "#5e5e05";
+                // 🪄
+                return "\u{1FA84}";
             case "POTION":
-                return "#0b055e"
+                // 🍺
+                return "\u{1F37A}";
             default:
-                return "#00ff00";
+                // 🎁
+                return  "\u{1F381}";
         }
     }
 
     var drawItem = function(item) {
-      var color = getItemColor(item);
       var text = item.type === "WEAPON" ? item.price + ' \u20ac' : item.price + ' \u20ac -' + item.discountPercent + '%';
       return (
         <G key={"item_" + item.position.x + "." + item.position.y}>
-          <Circle
-            cx={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
-            cy={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + (TILE_WIDTH_IN_PIXELS >> 1)}
-            r={(TILE_WIDTH_IN_PIXELS >> 1) - 1}
-            style={{fill: color, filter: 'url(#shadow)'}}/>
+          <Text
+            x={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT)}
+            y={(item.position.y << TILE_WIDTH_SHIFT_AMOUNT) + TILE_WIDTH_IN_PIXELS}
+            r={(TILE_WIDTH_IN_PIXELS >> 1) - 1}>
+              {getItemEmoji(item)}
+          </Text>
           <Text
             x={(item.position.x << TILE_WIDTH_SHIFT_AMOUNT) + 1}
             y={((item.position.y << TILE_WIDTH_SHIFT_AMOUNT) - TILE_WIDTH_IN_PIXELS) + 1}
