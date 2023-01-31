@@ -4,6 +4,6 @@ export interface Item {
   price: number;
   discountPercent: number;
   position: Position;
-  type: "JUST_SOME_JUNK" | "WEAPON";
+  type: "JUST_SOME_JUNK" | "WEAPON" | "POTION";
   isUsable: boolean;
 }
