@@ -119,7 +119,11 @@ public class GameState {
         final List<ShootingLine> newShootingLines = new ArrayList(shootingLines);
         boolean itemWasPicked = false;
 
-        if ( move == Move.PICK ) {
+        if (move == null) {
+            throw new IllegalStateException(String.format("%s has not registered a move", player.name));
+        }
+
+        if (move == Move.PICK) {
             final Optional<Item> item = items.stream().filter(i -> i.position.equals(player.position)).findFirst();
             PickResult pickResult = player.pickItem(item.orElseThrow(() -> new IllegalStateException(
                     String.format("%s is trying to pick from invalid location", player.name))));
