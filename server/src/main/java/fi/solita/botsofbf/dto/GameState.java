@@ -85,6 +85,16 @@ public class GameState {
                 .filter(p -> p.health > 0)
                 .collect(Collectors.toSet());
 
+        players.removeAll(alivePlayers);
+
+        Set<String> deadPlayers = players.stream()
+                .dropWhile(alivePlayers::contains)
+                .map(p -> p.name)
+                .collect(Collectors.toSet());
+
+        if (!deadPlayers.isEmpty()) {
+            System.out.println("Removed dead players: " + deadPlayers);
+        }
         return new GameState(map, round, alivePlayers, finishedPlayers, items, shootingLines);
     }
 
