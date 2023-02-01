@@ -218,7 +218,7 @@ public class GameStateTest {
     }
 
     @Test
-    public void pickingUpPotionRestoresHealth() {
+    public void pickingUpPotionRestoresHealthAndPotionIsRemovedFromMap() {
         Map map = Map.createMapFromLines(mapLines);
         Player player = createPlayerToMap(map).decreaseHealth(50);
 
@@ -228,6 +228,7 @@ public class GameStateTest {
                 .movePlayer(player.id, Move.PICK);
 
         assertEquals(70, state.getPlayer(player.id).health);
+        assertEquals(0, state.items.size());
     }
 
     @Test
