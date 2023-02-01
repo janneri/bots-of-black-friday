@@ -75,8 +75,9 @@ var MapWidget = React.createClass({
     var drawPlayer = function(player) {
       var color = player.state === "MOVE" ? "#ff0000" : "#0000ff";
       var text = player.name + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "");
+
       return (
-      <G key={player.id}>
+      <G key={"player_" + player.name}>
         <Rectangle
           x={player.position.x << TILE_WIDTH_SHIFT_AMOUNT}
           y={player.position.y << TILE_WIDTH_SHIFT_AMOUNT}
@@ -234,7 +235,7 @@ var MapWidget = React.createClass({
 
     var printPlayer = function(player) {
       return (
-        <tr>
+        <tr key={"leaderboard_" + player.name}>
           <td>{player.name}</td>
           <td>{player.actionCount + (player.timeInState != 0 ? " (" + player.timeInState + ")" : "") }</td>
           <td>{player.health}</td>
