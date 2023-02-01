@@ -224,7 +224,7 @@ public class GameStateTest {
 
         GameState state = new GameState(map)
                 .addPlayer(player)
-                .addItem(Item.createPotion(1, 1, player.position))
+                .addItem(Item.createPotion(player.position))
                 .movePlayer(player.id, Move.PICK);
 
         assertEquals(70, state.getPlayer(player.id).health);

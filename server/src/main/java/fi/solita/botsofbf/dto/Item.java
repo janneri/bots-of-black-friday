@@ -42,9 +42,9 @@ public class Item {
         return new Item(price, discountPercent, position, Type.WEAPON, isUsable);
     }
 
-    public static Item createPotion(int price, int discountPercent, Position position) {
+    public static Item createPotion(Position position) {
         final boolean isUsable = false;
-        return new Item(price, discountPercent, position, Type.POTION, isUsable);
+        return new Item(0, 0, position, Type.POTION, isUsable);
     }
 
     @JsonIgnore
