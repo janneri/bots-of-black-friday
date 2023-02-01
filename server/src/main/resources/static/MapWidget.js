@@ -207,7 +207,7 @@ var MapWidget = React.createClass({
     }
 
     var drawItem = function(item) {
-      var text = item.type === "WEAPON" ? item.price + ' \u20ac' : item.price + ' \u20ac -' + item.discountPercent + '%';
+      var text = item.type === "WEAPON" || item.type === "POTION" ? item.price + ' \u20ac' : item.price + ' \u20ac -' + item.discountPercent + '%';
       return (
         <G key={"item_" + item.position.x + "." + item.position.y}>
           <Text
