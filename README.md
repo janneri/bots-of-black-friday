@@ -39,9 +39,11 @@ Bots of Black Friday is a game for code camp events. This repo contains the serv
 
 ``templates/`` directory has two project templates that you can use to get started: One for TypeScript and one for Clojure. Even if you don't end up using either one, it is recommended to look through the TypeScript template to see all the available API calls, their parameters, and return types.
 
-### Basic bot usage
+### Bot implementation basics
 
-First, register your bot:
+Get the server URL from the moderator.
+
+Register your bot:
 ```
 POST {{url}}/register
 Content-Type: application/json
@@ -57,7 +59,7 @@ Then get the current game state:
 GET {{url}}/gamestate
 ```
 
-And register your next move:
+If your bot is accepted and found in the game state, calculate and register your next move:
 ```
 PUT {{url}}/{{playerId}}/move
 Content-Type: application/json
