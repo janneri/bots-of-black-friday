@@ -11,7 +11,7 @@ az login
 Follow Solita Azure sandbox conventions. Resource group name for instance janne_rintanen_rg.
 
 Note. If the app name is bots-of-black-friday, the url will be https://bots-of-black-friday.azurewebsites.net
-When running multiple instances of the game, use bots-of-black-friday, bots-of-black-friday-2. Check WebSocketConfig.
+When running multiple instances of the game, use bots-of-black-friday-tampere, bots-of-black-friday-helsinki, ... Check WebSocketConfig.
 
 ```
 export BOTS_OF_BLACK_FRIDAY_AZURE_APP_NAME=...<must be unique, for example bots-of-black-friday>
@@ -62,7 +62,11 @@ If needed, the deployment will create two resources:
 - an app service named bots-of-black-friday 
 
 After the first deployment, go to app service configuration -> General settings and turn Websockets on in https://portal.azure.com/.
-Also turn on File System logging from App Service logs.
+
+Check the logs with
+```
+az webapp log tail --name $BOTS_OF_BLACK_FRIDAY_AZURE_APP_NAME --resource-group $BOTS_OF_BLACK_FRIDAY_AZURE_RG
+```
 
 ## Clean up
 
