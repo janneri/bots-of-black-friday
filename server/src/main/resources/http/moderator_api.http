@@ -13,4 +13,4 @@ Content-Type: application/json
 POST {{url}}/changemap
 Content-Type: application/json
 
-"split_trap.map"
+"default.map"
