@@ -5,8 +5,7 @@ POST {{url}}/register
 Content-Type: application/json
 
 {
-    "playerName": "testbot2",
-    "url": "does not matter"
+    "playerName": "testbot2"
 }
 
 > {% client.global.set("playerId", response.body.id); %}
