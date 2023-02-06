@@ -59,7 +59,7 @@ Then get the current game state:
 GET {{url}}/gamestate
 ```
 
-If your bot is accepted and found in the game state, calculate and register your next move:
+If your bot is accepted and found in the player list of the game state, calculate and register your next move:
 ```
 PUT {{url}}/{{playerId}}/move
 Content-Type: application/json
@@ -67,7 +67,10 @@ Content-Type: application/json
 "LEFT"
 ```
 
-The game ticks in 1 second, so your bot needs to wait a second between each move you make.
+The game ticks in 1 second, and your bot needs to be in sync with that. 
+For a 1s tick, you probably want to register your next move every 500ms.
+As the quality of the bots improve, the game moderator can shorten the cycle. Network quality matters. 
+
 
 ## Running the server
 
@@ -97,8 +100,9 @@ Copy and paste existing maps, such as the default.map. You need to package and r
 
 #### How to increase or decrease game speed
 
-Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and reboot. The best
-value depends on network latency, bot count, and bot quality.
+Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and rebuild&redeploy. 
+
+The best value depends on network latency, bot count, and bot quality.
 
 #### Developing the server
 
