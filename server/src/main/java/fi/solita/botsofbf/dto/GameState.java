@@ -1,6 +1,7 @@
 package fi.solita.botsofbf.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fi.solita.botsofbf.exception.InvalidPlayerNameException;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -48,10 +49,10 @@ public class GameState {
         boolean nameReserved = players.stream().anyMatch(p -> p.name.equals(playerName));
         int nameLenght = playerName == null ? 0 : playerName.length();
         if (nameLenght < 1 || nameLenght > 20) {
-            throw new IllegalArgumentException("Registered name " + playerName + " length " + nameLenght + " is invalid");
+            throw new InvalidPlayerNameException("Registered name " + playerName + " length " + nameLenght + " is invalid");
         }
         if ( nameReserved ) {
-            throw new IllegalArgumentException("Player already exists.");
+            throw new InvalidPlayerNameException("Player already exists.");
         }
     }
 
