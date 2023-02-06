@@ -14,6 +14,7 @@ public class GameState {
     /** Every N moves causes health to decrease. */
     public static final int AGING_MOVE_COUNT = 50;
     public static final int HEALTH_LOST_WHEN_AGED = 10;
+    public static final int HEALTH_LOST_WHEN_TRAPPED = 10;
     public static final int HEALTH_LOST_WHEN_INVALID_MOVE = 20;
 
     @JsonIgnore
@@ -191,7 +192,7 @@ public class GameState {
         if (map.isMovablePosition(newPos) ) {
             final Player newPlayer = player.move(newPos);
             if (map.isTrap(newPos)) {
-                return newPlayer.decreaseHealth(10);
+                return newPlayer.decreaseHealth(HEALTH_LOST_WHEN_TRAPPED);
             }
             return newPlayer;
         }
