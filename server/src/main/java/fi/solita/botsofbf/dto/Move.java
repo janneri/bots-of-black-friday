@@ -5,6 +5,6 @@ public enum Move {
     DOWN,
     RIGHT,
     LEFT,
-    randomMove, PICK,
+    PICK,
     USE
 }
