@@ -44,17 +44,28 @@ public class GameState {
         this.shootingLines = shootingLines;
     }
 
-    public void throwIfNameReserved(final String playerName) {
+    public void throwIfNameInvalid(final String playerName) {
         boolean nameReserved = players.stream().anyMatch(p -> p.name.equals(playerName));
+        int nameLenght = playerName == null ? 0 : playerName.length();
+        if (nameLenght < 1 || nameLenght > 20) {
+            throw new IllegalArgumentException("Registered name " + playerName + " length " + nameLenght + " is invalid");
+        }
         if ( nameReserved ) {
             throw new IllegalArgumentException("Player already exists.");
         }
     }
 
     public GameState addPlayer(final Player player) {
-        throwIfNameReserved(player.name);
+        boolean nameReserved = players.stream().anyMatch(p -> p.name.equals(player.name));
         Set<Player> newPlayers = new HashSet<>(players);
-        newPlayers.add(player);
+
+        if (nameReserved) {
+            System.out.println(player.name + "already exists");
+        }
+        else {
+            newPlayers.add(player);
+        }
+
         return new GameState(map, round, newPlayers, finishedPlayers, items, shootingLines);
     }
 

@@ -43,7 +43,7 @@ Bots of Black Friday is a game for code camp events. This repo contains the serv
 
 Get the server URL from the moderator.
 
-Register your bot:
+Register your bot (name must be unique and name length between 1 and 20):
 ```
 POST {{url}}/register
 Content-Type: application/json

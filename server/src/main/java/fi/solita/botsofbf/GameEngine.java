@@ -26,7 +26,7 @@ public final class GameEngine {
     }
 
     public RegisterResponse registerPlayer(String playerName) {
-        currentState.throwIfNameReserved(playerName);
+        currentState.throwIfNameInvalid(playerName);
         Position randomValidPosition = currentState.map.randomFloorPosition();
         Player player = Player.create(playerName, randomValidPosition);
         registeredPlayers.add(player);
