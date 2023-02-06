@@ -188,7 +188,7 @@ public class GameStateTest {
     @Test
     public void drainingIncreasesPlayersHealth() {
         Map map = Map.createMapFromLines(mapLines);
-        Player drainer = createPlayerToMap(map).decreaseHealth(10);
+        Player drainer = createPlayerToMap(map).decreaseHealth(50);
         Player targetPlayer = createPlayerToMap(map);
 
         GameState state = new GameState(map)

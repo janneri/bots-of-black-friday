@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class GameState {
 
     public static final int HEALTH_LOST_WHEN_ATTACKED = 50;
-    public static final int HEALTH_GAINED_WHEN_ATTACKING = 10;
+    public static final int HEALTH_GAINED_WHEN_ATTACKING = 50;
     /** Every N moves causes health to decrease. */
     public static final int AGING_MOVE_COUNT = 50;
     public static final int HEALTH_LOST_WHEN_AGED = 10;
