@@ -1,0 +1,57 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "tsc --noEmit && eslint .",
+    "lint:fix": "tsc --noEmit && eslint --fix .",
+    "dev": "vite",
+    "prebuild": "npm run lint",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "e2e": "npx playwright test",
+    "e2e:update-snapshots": "npx playwright test --update-snapshots",
+    "e2e:ui": "npx playwright test --ui",
+    "e2e:show-report": "npx playwright show-report",
+    "e2e:install": "npx playwright install firefox"
+  },
+  "engines": {
+    "npm": "^9.0.0",
+    "node": "^18.0.0"
+  },
+  "dependencies": {
+    "@pixi/assets": "^7.2.4",
+    "@pixi/react": "^7.1.0",
+    "@pixi/react-animated": "^7.1.0",
+    "@stomp/stompjs": "^7.0.0",
+    "lodash": "^4.17.21",
+    "pixi-filters": "^5.2.1",
+    "pixi.js": "^7.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-resize-detector": "^9.1.0",
+    "react-spring": "^9.7.1",
+    "yy-fps": "^2.0.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.33.0",
+    "@types/lodash": "^4.14.194",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.3",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.39.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.6",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.0",
+    "vite-plugin-glsl": "^1.1.2"
+  }
+}
