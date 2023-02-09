@@ -5,24 +5,30 @@ import fi.solita.botsofbf.dto.Map;
 import fi.solita.botsofbf.dto.Position;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MapTest {
 
-    private List<String> mapLines = Arrays.asList(
+    private final List<String> mapLines = Arrays.asList(
             "halpahalli",
-            "5",
+            "4",
             "xxxxxxx",
             "x__o__x ",
             "xxxxxxx");
+
+    private final Set<Position> mapMovablePositions = Set.of(
+            Position.of(1, 1),
+            Position.of(2, 1),
+            Position.of(4, 1),
+            Position.of(5, 1));
 
     @Test
     public void parseMapName() {
@@ -33,29 +39,51 @@ public class MapTest {
     @Test
     public void parseMaxItemCount() {
         Map map = Map.createMapFromLines(mapLines);
-        assertEquals(5, map.maxItemCount);
+        assertEquals(4, map.maxItemCount);
     }
 
     @Test
     public void wallDetection() {
         Map map = Map.createMapFromLines(mapLines);
         List<Position> walls = Arrays.asList(Position.of(0, 0), Position.of(0, 1), Position.of(1, 0));
-        List<Position> floor = Arrays.asList(Position.of(1, 1), Position.of(2, 1), Position.of(4, 1));
 
-        assertTrue(walls.stream().allMatch(pos -> !map.isMovablePosition(pos)));
-        assertTrue(floor.stream().allMatch(pos -> map.isMovablePosition(pos)));
+        assertTrue(walls.stream().noneMatch(map::isMovablePosition));
+        assertTrue(mapMovablePositions.stream().allMatch(map::isMovablePosition));
     }
 
     @Test
     public void randomMovablePosition() {
         Map map = Map.createMapFromLines(mapLines);
-        List<Position> positions = IntStream.range(0, 20).boxed()
-                .map(n -> map.randomFloorPosition())
-                .collect(Collectors.toList());
-        Set<Position> uniquePositions = new HashSet<>(positions);
+        Position randomPosition = map.randomFloorPosition();
 
-        assertTrue(positions.stream().allMatch(pos -> map.isMovablePosition(pos)));
-        assertTrue(uniquePositions.size() > 2);
+        assertTrue(map.isMovablePosition(randomPosition));
+        assertThat(mapMovablePositions).contains(randomPosition);
     }
 
+    @Test
+    public void randomMovablePositionShouldReturnNullIfNoneFound() {
+        Map map = Map.createMapFromLines(mapLines);
+
+        assertThat(map.randomFloorPosition(mapMovablePositions)).isNull();
+    }
+
+    @Test
+    public void creatingMapWithLessFloorSpaceThanMaxItemCountShouldFail() {
+        assertThatThrownBy(() -> {
+            Map.createMapFromLines(
+                    Arrays.asList("nimi", "2", "x_o")
+            );
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("The map does not have enough floor tiles for max items.");
+    }
+
+    @Test
+    public void creatingMapWithoutExitShouldFail() {
+        assertThatThrownBy(() -> {
+            Map.createMapFromLines(
+                    Arrays.asList("nimi", "1", "x_")
+            );
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Position of o not found");
+    }
 }

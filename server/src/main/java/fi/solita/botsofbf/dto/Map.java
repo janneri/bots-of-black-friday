@@ -1,5 +1,7 @@
 package fi.solita.botsofbf.dto;
 
+import org.apache.commons.collections4.SetUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,10 +28,10 @@ public class Map {
     public static final char FLOOR = '_';
     public static final char TRAP = '#';
 
-    private final List<Position> movablePositions;
+    private final Set<Position> movablePositions;
 
     private Map(String name, int width, int height, int maxItemCount, List<String> tiles,
-                Position exit, List<Position> movablePositions) {
+                Position exit, Set<Position> movablePositions) {
         this.width = width;
         this.height = height;
         this.maxItemCount = maxItemCount;
@@ -39,9 +41,21 @@ public class Map {
         this.movablePositions = movablePositions;
     }
 
+    public Position randomFloorPosition(Set<Position> avoid) {
+        final SetUtils.SetView<Position> freePositions = SetUtils.difference(movablePositions, avoid);
+
+        if (freePositions.isEmpty()) {
+            return null;
+        }
+
+        return freePositions.stream()
+                .skip(new Random().nextInt(freePositions.size()))
+                .findFirst()
+                .orElse(null);
+    }
+
     public Position randomFloorPosition() {
-        Random rand = new Random();
-        return movablePositions.get(rand.nextInt(movablePositions.size()));
+        return randomFloorPosition(Collections.emptySet());
     }
 
     public boolean isMovablePosition(Position pos) {
@@ -89,8 +103,8 @@ public class Map {
     }
 
     // todo map to Tile and use Stream::filter
-    private static List<Position> filterPositionsOfType(List<String> lines, Set<Character> tiles) {
-        List<Position> positions = new ArrayList();
+    private static Set<Position> filterPositionsOfType(List<String> lines, Set<Character> tiles) {
+        Set<Position> positions = new HashSet<Position>();
         for (int y = 0; y < lines.size(); y++) {
             for (int x = 0; x < lines.get(y).length(); x++) {
                 if (tiles.contains(Character.valueOf(lines.get(y).charAt(x)))) {
@@ -114,13 +128,14 @@ public class Map {
         final Set<Character> movable = new HashSet<>();
         movable.add(FLOOR);
         movable.add(TRAP);
-        final List<Position> floorTiles = filterPositionsOfType(tiles, movable);
-        if ( floorTiles.size() == 0) {
-            throw new IllegalStateException("The map must contain movable tiles.");
+        final Set<Position> floorTiles = filterPositionsOfType(tiles, movable);
+        if (floorTiles.isEmpty()) {
+            throw new IllegalStateException("The map does not have any floor tiles.");
+        }
+        if (floorTiles.size() < maxItemCount) {
+            throw new IllegalStateException("The map does not have enough floor tiles for max items.");
         }
 
         return new Map(mapName, width, height, maxItemCount, tiles, getPositionOf(tiles, EXIT), floorTiles);
     }
-
-
 }
