@@ -29,7 +29,7 @@ public class GameEngineTest {
     @Test
     public void healthDecreasesBecauseOfInvalidMoves() {
         Player player = createPlayerToPos(1, 0);
-        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "5", "x_o")))
+        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "1", "x_o")))
                 .addPlayer(player);
 
         GameEngine gameEngine = new GameEngine(state, uiClient);
@@ -43,7 +43,7 @@ public class GameEngineTest {
     @Test
     public void deadPlayersAreRemoved() {
         Player player = createPlayerToPos(1, 0);
-        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "5", "x_o")))
+        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "1", "x_o")))
                 .addPlayer(createPlayerToPos(1, 0))
                 .addPlayer(player.decreaseHealth(99))
                 .addPlayer(createPlayerToPos(1, 0));

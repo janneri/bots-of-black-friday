@@ -71,6 +71,18 @@ public class GameState {
     }
 
     public GameState addItem(final Item item) {
+        if (!map.isMovablePosition(item.position)) {
+            throw new IllegalArgumentException(
+                    String.format("Item position %s is not movable.", item.position)
+            );
+        }
+        boolean conflictingPosition = items.stream()
+                .anyMatch(oldItem -> oldItem.position.equals(item.position));
+        if (conflictingPosition) {
+            throw new IllegalArgumentException(
+                    String.format("Item position %s already taken.", item.position)
+            );
+        }
         Set<Item> newItems = new HashSet<>(items);
         newItems.add(item);
         return new GameState(map, round, players, finishedPlayers, newItems, shootingLines);
@@ -220,17 +232,28 @@ public class GameState {
         return otherPlayers;
     }
 
+    private Position randomFreeFloorPosition() {
+        final Set<Position> takenPositions = items.stream()
+                .map(item -> item.position).collect(Collectors.toSet());
+        return map.randomFloorPosition(takenPositions);
+    }
+
     public GameState spawnItems() {
+        final Position randomFloorPosition = randomFreeFloorPosition();
+        if (randomFloorPosition == null) {
+            System.out.println("Could not find free floor space for new items.");
+            return this;
+        }
+
         if (items.size() < map.maxItemCount && Math.random() < 0.1) {
-            return addItem(Item.createPotion(map.randomFloorPosition()));
+            return addItem(Item.createPotion(randomFloorPosition));
         }
         if (items.size() < map.maxItemCount && Math.random() > 0.9) {
             int price = randomBetween(100, Player.INITIAL_MONEY_LEFT);
             int discountPercent = randomBetween(10, 90);
-            Position pos = map.randomFloorPosition();
             Item newItem = discountPercent > 70 ?
-                    Item.createWeapon(price, discountPercent, pos) :
-                    Item.create(price, discountPercent, pos);
+                    Item.createWeapon(price, discountPercent, randomFloorPosition) :
+                    Item.create(price, discountPercent, randomFloorPosition);
             return addItem(newItem);
         } else {
             return this;
