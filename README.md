@@ -37,7 +37,13 @@ Bots of Black Friday is a game for code camp events. This repo contains the serv
 
 ## Creating a bot
 
-``templates/`` directory has two project templates that you can use to get started: One for TypeScript and one for Clojure. Even if you don't end up using either one, it is recommended to look through the TypeScript template to see all the available API calls, their parameters, and return types.
+``templates/`` directory contains project templates that you can use to get started:
+
+* Clojure
+* Java
+* TypeScript (requires Node.js 18)
+
+* Even if you don't end up using a template, it is recommended to look through the TypeScript template to see all the available API calls, their parameters, and return types.
 
 ### Bot implementation basics
 
@@ -68,9 +74,8 @@ Content-Type: application/json
 ```
 
 The game ticks in 1 second, and your bot needs to be in sync with that. 
-For a 1s tick, you probably want to register your next move every 500ms.
+Because of the 1-second tick rate, you probably want to register your next move every 500ms.
 As the quality of the bots improve, the game moderator can shorten the cycle. Network quality matters. 
-
 
 ## Running the server
 
@@ -78,12 +83,16 @@ You can run the server locally for developing your bot. It's not needed though, 
 
 ### How to start
 
-1. `cd server/`
-2. Prepare the frontend: `npm install && npm run-script build`
-3. Run the backend: `mvn spring-boot:run`
+Requirements:
+
+* Java 11
+
+To package and execute Jar, run in the root directory:
+
+- Build the server: `./mvnw clean package -pl server -P production`
+- Run the server: `java -jar server/target/server-1.0-SNAPSHOT.jar`
 
 After this, the GUI can be accessed from http://localhost:8080/
-
 
 ### Admin instructions
 
@@ -100,11 +109,36 @@ Copy and paste existing maps, such as the default.map. You need to package and r
 
 #### How to increase or decrease game speed
 
-Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS and rebuild&redeploy. 
+Change the GameEngine.PAUSE_BETWEEN_ROUNDS_MILLIS in [server/src/main/java/fi/solita/botsofbf/GameEngine.java](server/src/main/java/fi/solita/botsofbf/GameEngine.java) and rebuild & redeploy. 
 
 The best value depends on network latency, bot count, and bot quality.
 
 #### Developing the server
 
-You can develop the frontend with `npm run watch`.
-You can run the backend with your IDE.
+Requirements:
+
+* Java 11
+* Node.js 18
+
+To start the backend (Spring Boot), run in the root directory:
+
+- Run the backend: `./mvnw spring-boot:run -pl server`
+
+Note! You can also run Maven tasks from your IDE.
+
+To start the frontend (Node.js / Vite), run in the root directory:
+
+- Install packages: `npm ci --prefix="frontend"`
+- Check addresses in [frontend/.env.local](frontend/.env.local)
+- Start dev server: `npm run dev --prefix="frontend"`
+- Access frontend at: http://localhost:5173/
+- The frontend should be talking with the server at http://localhost:8080/
+
+Note! You can also run NPM tasks from your IDE.
+
+To create a development build:
+
+- Check addresses in [frontend/.env.production](frontend/.env.production)
+- Build the server: `./mvnw clean package -pl server -P production`
+- Run the server: `java -jar server/target/server-1.0-SNAPSHOT.jar`
+- The server should be available at http://localhost:8080/
