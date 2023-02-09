@@ -83,8 +83,13 @@ public final class GameEngine {
     }
 
     public void changeMap(String map) {
-        currentState = new GameState(Map.readMapFromFile(map));
-        uiClient.resetMap(currentState.map);
+        try {
+            Map newMap = Map.readMapFromFile(map);
+            currentState = new GameState(newMap);
+            uiClient.resetMap(currentState.map);
+        } catch (Exception e) {
+            System.out.println("Change map failed: " + e.getMessage());
+        }
     }
 
     public GameState getCurrentState() {

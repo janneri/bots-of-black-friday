@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,13 +18,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class GameStateTest {
 
-    private List<String> mapLines = Arrays.asList(
+    private final List<String> mapLines = Arrays.asList(
             "halpahalli",
-            "5",
+            "4",
             "xxxxxxx",
             "x__o__x ",
             "xxxxxxx");
-
 
     @Test
     public void invalidMoveThrows() {
@@ -38,7 +39,7 @@ public class GameStateTest {
     @Test
     public void movingAroundDecreasesHealth() {
         Player player = createPlayerToPos(0, 0);
-        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "5", "__o")))
+        GameState state = new GameState(Map.createMapFromLines(Arrays.asList("nimi", "2", "__o")))
                 .addPlayer(player);
 
         final int healthDecreasedWhenAging = GameState.HEALTH_LOST_WHEN_AGED;
@@ -269,6 +270,61 @@ public class GameStateTest {
         assertFalse(state.getPlayer(drainer.id).hasUnusedWeapon());
     }
 
+    @Test
+    public void addingItemToNonMovablePositionShouldFail() {
+        Map map = Map.createMapFromLines(
+                Arrays.asList("nimi", "1", "x_o")
+        );
+
+        Position position = Position.of(0, 0);
+
+        assertThat(map.isMovablePosition(position)).isFalse();
+
+        assertThatThrownBy(() -> {
+            new GameState(map).addItem(Item.createPotion(position));
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Item position [0, 0] is not movable.");
+    }
+
+    @Test
+    public void addingItemToPositionWhereItemExistsShouldFail() {
+        Map map = Map.createMapFromLines(
+                Arrays.asList("nimi", "1", "x_o")
+        );
+
+        assertThat(map.maxItemCount).isEqualTo(1);
+
+        Position position = Position.of(1, 0);
+
+        GameState state = new GameState(map)
+                .addItem(Item.createPotion(position));
+
+        assertThat(state.items).hasSize(1);
+
+        assertThatThrownBy(() -> {
+            state.addItem(Item.createPotion(position));
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Item position [1, 0] already taken.");
+    }
+
+    @Test
+    public void spawningItemsWhenAllPositionsContainItemsShouldNotFail() {
+        Map map = Map.createMapFromLines(
+                Arrays.asList("nimi", "1", "x_o")
+        );
+
+        assertThat(map.maxItemCount).isEqualTo(1);
+
+        GameState state = new GameState(map)
+                .addItem(Item.createPotion(new Position(1, 0)));
+
+        assertThat(state.items).hasSize(1);
+
+        state = state.spawnItems();
+
+        assertThat(state.items).hasSize(1);
+    }
+
     private void assertMoveThrows(GameState state, Player player, Move move) {
         try {
             state.movePlayer(player.id, move);
@@ -288,6 +344,4 @@ public class GameStateTest {
         Position pos = map.randomFloorPosition();
         return createPlayerToPos(pos.x, pos.y);
     }
-
-
 }
