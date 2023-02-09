@@ -34,28 +34,28 @@ az group create --name $BOTS_OF_BLACK_FRIDAY_AZURE_RG \
 
 See the settings in server/pom.xml. They should be fine and use the environment variables above. 
 
-Note: free tier linux does not support websockets: https://docs.microsoft.com/en-us/answers/questions/492517/websocket-connection-failed-azure.html
+Note: Free tier linux should support websockets: https://learn.microsoft.com/en-us/troubleshoot/azure/app-service/faqs-app-service-linux#web-sockets
 
-Details of the Azure maven plugin details here: 
-https://github.com/microsoft/azure-maven-plugins/tree/develop/azure-webapp-maven-plugin
+Old information related to the websockets: https://learn.microsoft.com/en-us/answers/questions/492517/websocket-connection-failed-azure
 
+Details of the Azure maven plugin details here: https://github.com/microsoft/azure-maven-plugins/tree/develop/azure-webapp-maven-plugin
 
-## Build
+## Production build
 
-In the server directory, build and run tests with: 
-```mvn clean package```
+Build and run tests in the server directory with: 
+```./mvnw clean package -pl server -P production```
 
-Probably a good idea to check it's working fine in localhost:
+Check that build starts fine on localhost:
 ```
-java -jar target/bots-of-black-friday-0.1.0.jar
+java -jar server/target/server-1.0-SNAPSHOT.jar
 ```
 
-And then open `http://localhost:8080/`
+And then open `http://localhost:8080/`, the frontend should fail because it tries to connect to the production addresses.
 
 ## Deploy to Azure
 
 Deploy with:
-```mvn azure-webapp:deploy```
+```./mvnw azure-webapp:deploy -pl server```
 
 If needed, the deployment will create two resources:
 - an appservice plan 
