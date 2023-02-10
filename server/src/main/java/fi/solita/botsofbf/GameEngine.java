@@ -4,6 +4,8 @@ import fi.solita.botsofbf.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,12 +41,24 @@ public final class GameEngine {
     }
 
     public void tick() {
+        Instant start = Instant.now();
+        int round = currentState.round;
+
         for (Player p : registeredPlayers) {
             currentState = currentState.addPlayer(p);
         }
         registeredPlayers = new ConcurrentLinkedQueue<>();
+
         playRound();
         endRound();
+
+        Instant finish = Instant.now();
+
+        long timeElapsed = Duration.between(start, finish).toMillis();
+        double ratio = (double) timeElapsed / (double) PAUSE_BETWEEN_ROUNDS_MILLIS;
+        if (ratio > 0.8) {
+            System.out.println("Processing round " + round + " took " + timeElapsed + " ms.");
+        }
     }
 
     private void playRound() {
