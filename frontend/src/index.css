@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@tailwind base;
+
+@layer base {
+    body {
+        @apply font-bots text-zinc-50 tracking-wider;
+    }
+}
+
+@tailwind components;
+
+@tailwind utilities;
+
+/* CHECKBOX TOGGLE SWITCH */
+/* @apply rules for documentation, these do not work as inline style */
+/* Source: https://tailwindcomponents.com/component/toggle-switch */
+.toggle-checkbox:checked {
+    @apply: right-0 border-green-400;
+    right: 0;
+    border-color: #68D391;
+}
+.toggle-checkbox:checked + .toggle-label {
+    @apply: bg-green-400;
+    background-color: #68D391;
+}
