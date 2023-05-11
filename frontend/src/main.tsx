@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import '@src/index.css'
 import { Stage } from '@pixi/react'
 import ReactDOM from 'react-dom/client'
@@ -45,12 +45,13 @@ function MapContainer ({
   showItemLabels: boolean
 }): JSX.Element {
   const { width: containerWidth, ref } = useResizeDetector()
-
-  const mapDimensions = calculateMapDimensions(
-    gameMap.ok ? gameMap.value.width : undefined,
-    gameMap.ok ? gameMap.value.height : undefined,
-    containerWidth
-  )
+  const mapDimensions = useMemo(() => {
+    return calculateMapDimensions(
+      gameMap.ok ? gameMap.value.width : undefined,
+      gameMap.ok ? gameMap.value.height : undefined,
+      containerWidth
+    )
+  }, [gameMap, containerWidth])
 
   return <div ref={ref}>
     {!gameMap.ok && <ErrorMessage
@@ -146,7 +147,7 @@ class App extends React.Component<unknown, {
   }
 
   async componentDidMount (): Promise<void> {
-    const gameMap = await fetch(getMapEndpoint(location.href, location.protocol))
+    const gameMap = await fetch(getMapEndpoint(location.href, import.meta.env.DEV))
       .then(async (response) => {
         if (!response.ok) {
           throw new Error(`Fetching map failed: ${response.status}`)
@@ -167,7 +168,7 @@ class App extends React.Component<unknown, {
     //       * A complex fix could be a cancellable promise.
     //       * A simpler fix could be extracting a function component and separate stomp client to a hook.
     const stompClient = new Client({
-      brokerURL: getWebsocketEndpoint(location.href, location.protocol === 'https' ? 'wss' : 'ws'),
+      brokerURL: getWebsocketEndpoint(location.href, import.meta.env.DEV),
       connectionTimeout: 10_000,
       reconnectDelay: 10_000
     })

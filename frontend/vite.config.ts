@@ -31,5 +31,12 @@ export default defineConfig({
   plugins: [
     react(),
     glsl()
-  ]
+  ],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: resolve(srcDir, 'tests', 'unitTestSetup.ts'),
+    // Disable CSS if tests get slow
+    css: true
+  }
 })

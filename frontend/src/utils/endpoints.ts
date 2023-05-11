@@ -1,4 +1,11 @@
-import { isEmpty, isString } from 'lodash'
+function getProtocol (url: string): string {
+  const protocol = url.split('//')
+  if (Array.isArray(protocol) && protocol.length > 0) {
+    return protocol[0]
+  }
+
+  return 'http:'
+}
 
 function getRelativeUrl (relativePath: string, currentLocation: string, endpointProtocol: string): string {
   const url = new URL(relativePath, currentLocation)
@@ -7,28 +14,19 @@ function getRelativeUrl (relativePath: string, currentLocation: string, endpoint
   return url.toString()
 }
 
-export function getMapEndpoint (currentLocation: string, endpointProtocol: string): string {
-  if (import.meta.env.DEV) {
-    const configured = import.meta.env.VITE_MAP_ENDPOINT
-    if (isString(configured) && !isEmpty(configured)) {
-      return configured
-    }
-
+export function getMapEndpoint (currentLocation: string, isDev: boolean): string {
+  if (isDev) {
     return 'http://localhost:8080/map'
   }
 
-  return getRelativeUrl('/map', currentLocation, endpointProtocol)
+  return getRelativeUrl('/map', currentLocation, getProtocol(currentLocation))
 }
 
-export function getWebsocketEndpoint (currentLocation: string, endpointProtocol: string): string {
-  if (import.meta.env.DEV) {
-    const configured = import.meta.env.VITE_WEBSOCKET_ENDPOINT
-    if (isString(configured) && !isEmpty(configured)) {
-      return configured
-    }
-
+export function getWebsocketEndpoint (currentLocation: string, isDev: boolean): string {
+  if (isDev) {
     return 'ws://localhost:8080/hello'
   }
 
+  const endpointProtocol = getProtocol(currentLocation) === 'https:' ? 'wss' : 'ws'
   return getRelativeUrl('/hello', currentLocation, endpointProtocol)
 }

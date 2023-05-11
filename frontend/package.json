@@ -10,11 +10,12 @@
     "prebuild": "npm run lint",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "e2e": "npx playwright test",
-    "e2e:update-snapshots": "npx playwright test --update-snapshots",
-    "e2e:ui": "npx playwright test --ui",
-    "e2e:show-report": "npx playwright show-report",
-    "e2e:install": "npx playwright install firefox"
+    "unit-tests": "vitest run",
+    "e2e-tests": "npx playwright test",
+    "e2e-tests:update-snapshots": "npx playwright test --update-snapshots",
+    "e2e-tests:ui": "npx playwright test --ui",
+    "e2e-tests:show-report": "npx playwright show-report",
+    "e2e-tests:install": "npx playwright install firefox"
   },
   "engines": {
     "npm": "^9.0.0",
@@ -36,6 +37,9 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.33.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/lodash": "^4.14.194",
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.3",
@@ -48,10 +52,12 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
+    "jsdom": "^22.0.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.6",
     "typescript": "^4.9.5",
     "vite": "^4.1.0",
-    "vite-plugin-glsl": "^1.1.2"
+    "vite-plugin-glsl": "^1.1.2",
+    "vitest": "^0.31.0"
   }
 }
