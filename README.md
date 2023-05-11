@@ -132,20 +132,11 @@ Note! You can also run Maven tasks from your IDE.
 To start the frontend (Node.js / Vite), run in the root directory:
 
 - Install packages: `npm ci --prefix="frontend"`
-- Check addresses in [frontend/.env.local](frontend/.env.local)
-  - `VITE_MAP_ENDPOINT=http://localhost:8080/map`
-  - `VITE_WEBSOCKET_ENDPOINT=ws://localhost:8080/hello`
 - Start dev server: `npm run dev --prefix="frontend"`
 - Access frontend at: http://localhost:5173/
 - The frontend should be talking with the server at http://localhost:8080/
 
 Note! You can also run NPM tasks from your IDE.
-
-To create a development build:
-
-- Build the server: `./mvnw clean package -pl server -P production`
-- Run the server: `java -jar server/target/server-1.0-SNAPSHOT.jar`
-- The server should be available at http://localhost:8080/
 
 ## Image asset sources
 
